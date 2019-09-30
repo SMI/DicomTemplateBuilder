@@ -33,19 +33,12 @@ namespace TemplateBuilder
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.olvDicoms = new BrightIdeasSoftware.ObjectListView();
             this.olvName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.label1 = new System.Windows.Forms.Label();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tpEditor = new System.Windows.Forms.TabPage();
-            this.tpSql = new System.Windows.Forms.TabPage();
             this.tbFilter = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.olvFileTags = new BrightIdeasSoftware.ObjectListView();
             this.olvTag = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tcDatagrids = new System.Windows.Forms.TabControl();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnAddDicom = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -57,18 +50,19 @@ namespace TemplateBuilder
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.ddDatabaseType = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.templateyamlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.templateSqlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pixelViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pFileTags = new System.Windows.Forms.Panel();
+            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvFileTags)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.pFileTags.SuspendLayout();
             this.SuspendLayout();
             // 
             // olvDicoms
@@ -83,10 +77,10 @@ namespace TemplateBuilder
             this.olvDicoms.FullRowSelect = true;
             this.olvDicoms.HideSelection = false;
             this.olvDicoms.IsSimpleDropSink = true;
-            this.olvDicoms.Location = new System.Drawing.Point(6, 22);
+            this.olvDicoms.Location = new System.Drawing.Point(131, 128);
             this.olvDicoms.Name = "olvDicoms";
             this.olvDicoms.ShowGroups = false;
-            this.olvDicoms.Size = new System.Drawing.Size(354, 187);
+            this.olvDicoms.Size = new System.Drawing.Size(372, 225);
             this.olvDicoms.TabIndex = 1;
             this.olvDicoms.UseCompatibleStateImageBehavior = false;
             this.olvDicoms.View = System.Windows.Forms.View.Details;
@@ -101,75 +95,13 @@ namespace TemplateBuilder
             this.olvName.FillsFreeSpace = true;
             this.olvName.Text = "File";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(186, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Example Dicom Files (Drop Files Here)";
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.tabControl1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.tbFilter);
-            this.splitContainer1.Panel2.Controls.Add(this.label3);
-            this.splitContainer1.Panel2.Controls.Add(this.label2);
-            this.splitContainer1.Panel2.Controls.Add(this.label1);
-            this.splitContainer1.Panel2.Controls.Add(this.olvFileTags);
-            this.splitContainer1.Panel2.Controls.Add(this.olvDicoms);
-            this.splitContainer1.Size = new System.Drawing.Size(1205, 482);
-            this.splitContainer1.SplitterDistance = 838;
-            this.splitContainer1.TabIndex = 6;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tpEditor);
-            this.tabControl1.Controls.Add(this.tpSql);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(838, 482);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // tpEditor
-            // 
-            this.tpEditor.Location = new System.Drawing.Point(4, 22);
-            this.tpEditor.Name = "tpEditor";
-            this.tpEditor.Padding = new System.Windows.Forms.Padding(3);
-            this.tpEditor.Size = new System.Drawing.Size(830, 456);
-            this.tpEditor.TabIndex = 0;
-            this.tpEditor.Text = "Template";
-            this.tpEditor.UseVisualStyleBackColor = true;
-            // 
-            // tpSql
-            // 
-            this.tpSql.Location = new System.Drawing.Point(4, 22);
-            this.tpSql.Name = "tpSql";
-            this.tpSql.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSql.Size = new System.Drawing.Size(830, 456);
-            this.tpSql.TabIndex = 1;
-            this.tpSql.Text = "Sql";
-            this.tpSql.UseVisualStyleBackColor = true;
-            // 
             // tbFilter
             // 
             this.tbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbFilter.Location = new System.Drawing.Point(44, 458);
+            this.tbFilter.Location = new System.Drawing.Point(41, 230);
             this.tbFilter.Name = "tbFilter";
-            this.tbFilter.Size = new System.Drawing.Size(310, 20);
+            this.tbFilter.Size = new System.Drawing.Size(387, 20);
             this.tbFilter.TabIndex = 5;
             this.tbFilter.TextChanged += new System.EventHandler(this.tbFilter_TextChanged);
             // 
@@ -177,20 +109,11 @@ namespace TemplateBuilder
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 461);
+            this.label3.Location = new System.Drawing.Point(3, 233);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Filter:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 212);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Selected File Tags";
             // 
             // olvFileTags
             // 
@@ -207,10 +130,10 @@ namespace TemplateBuilder
             this.olvFileTags.HideSelection = false;
             this.olvFileTags.IsSimpleDragSource = true;
             this.olvFileTags.IsSimpleDropSink = true;
-            this.olvFileTags.Location = new System.Drawing.Point(9, 228);
+            this.olvFileTags.Location = new System.Drawing.Point(0, 0);
             this.olvFileTags.Name = "olvFileTags";
             this.olvFileTags.ShowGroups = false;
-            this.olvFileTags.Size = new System.Drawing.Size(354, 224);
+            this.olvFileTags.Size = new System.Drawing.Size(431, 224);
             this.olvFileTags.TabIndex = 1;
             this.olvFileTags.UseCompatibleStateImageBehavior = false;
             this.olvFileTags.View = System.Windows.Forms.View.Details;
@@ -232,30 +155,11 @@ namespace TemplateBuilder
             // 
             // tcDatagrids
             // 
-            this.tcDatagrids.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tcDatagrids.Location = new System.Drawing.Point(0, 0);
+            this.tcDatagrids.Location = new System.Drawing.Point(60, 413);
             this.tcDatagrids.Name = "tcDatagrids";
             this.tcDatagrids.SelectedIndex = 0;
             this.tcDatagrids.Size = new System.Drawing.Size(1205, 333);
             this.tcDatagrids.TabIndex = 7;
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 25);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.splitContainer1);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.tcDatagrids);
-            this.splitContainer2.Size = new System.Drawing.Size(1205, 819);
-            this.splitContainer2.SplitterDistance = 482;
-            this.splitContainer2.TabIndex = 8;
             // 
             // toolStrip1
             // 
@@ -269,7 +173,9 @@ namespace TemplateBuilder
             this.btnNewTemplate,
             this.toolStripSeparator1,
             this.toolStripLabel1,
-            this.ddDatabaseType});
+            this.ddDatabaseType,
+            this.toolStripSeparator3,
+            this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1205, 25);
@@ -359,30 +265,94 @@ namespace TemplateBuilder
             this.ddDatabaseType.Size = new System.Drawing.Size(121, 25);
             this.ddDatabaseType.SelectedIndexChanged += new System.EventHandler(this.ddDatabaseType_SelectedIndexChanged);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.templateyamlToolStripMenuItem,
+            this.templateSqlToolStripMenuItem,
+            this.fileListToolStripMenuItem,
+            this.dataGridToolStripMenuItem,
+            this.pixelViewerToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
+            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            // 
+            // templateyamlToolStripMenuItem
+            // 
+            this.templateyamlToolStripMenuItem.Name = "templateyamlToolStripMenuItem";
+            this.templateyamlToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.templateyamlToolStripMenuItem.Text = "Template (yaml)";
+            // 
+            // templateSqlToolStripMenuItem
+            // 
+            this.templateSqlToolStripMenuItem.Name = "templateSqlToolStripMenuItem";
+            this.templateSqlToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.templateSqlToolStripMenuItem.Text = "Template (sql)";
+            // 
+            // fileListToolStripMenuItem
+            // 
+            this.fileListToolStripMenuItem.Name = "fileListToolStripMenuItem";
+            this.fileListToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.fileListToolStripMenuItem.Text = "Dicom File List";
+            this.fileListToolStripMenuItem.Click += new System.EventHandler(this.fileListToolStripMenuItem_Click);
+            // 
+            // dataGridToolStripMenuItem
+            // 
+            this.dataGridToolStripMenuItem.Name = "dataGridToolStripMenuItem";
+            this.dataGridToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.dataGridToolStripMenuItem.Text = "Table Viewer";
+            this.dataGridToolStripMenuItem.Click += new System.EventHandler(this.dataGridToolStripMenuItem_Click);
+            // 
+            // pixelViewerToolStripMenuItem
+            // 
+            this.pixelViewerToolStripMenuItem.Name = "pixelViewerToolStripMenuItem";
+            this.pixelViewerToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.pixelViewerToolStripMenuItem.Text = "Pixel Viewer";
+            // 
+            // pFileTags
+            // 
+            this.pFileTags.Controls.Add(this.label3);
+            this.pFileTags.Controls.Add(this.tbFilter);
+            this.pFileTags.Controls.Add(this.olvFileTags);
+            this.pFileTags.Location = new System.Drawing.Point(567, 114);
+            this.pFileTags.Name = "pFileTags";
+            this.pFileTags.Size = new System.Drawing.Size(431, 253);
+            this.pFileTags.TabIndex = 10;
+            // 
+            // dockPanel1
+            // 
+            this.dockPanel1.Location = new System.Drawing.Point(12, 28);
+            this.dockPanel1.Name = "dockPanel1";
+            this.dockPanel1.Size = new System.Drawing.Size(200, 100);
+            this.dockPanel1.TabIndex = 11;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1205, 844);
-            this.Controls.Add(this.splitContainer2);
+            this.Controls.Add(this.dockPanel1);
+            this.Controls.Add(this.olvDicoms);
+            this.Controls.Add(this.pFileTags);
+            this.Controls.Add(this.tcDatagrids);
             this.Controls.Add(this.toolStrip1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).EndInit();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.olvFileTags)).EndInit();
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.pFileTags.ResumeLayout(false);
+            this.pFileTags.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -392,14 +362,7 @@ namespace TemplateBuilder
 
         private ObjectListView olvDicoms;
         private OLVColumn olvName;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tpEditor;
-        private System.Windows.Forms.TabPage tpSql;
         private System.Windows.Forms.TabControl tcDatagrids;
-        private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.Label label2;
         private ObjectListView olvFileTags;
         private OLVColumn olvTag;
         private OLVColumn olvValue;
@@ -416,6 +379,15 @@ namespace TemplateBuilder
         private System.Windows.Forms.ToolStripButton btnSave;
         private System.Windows.Forms.ToolStripButton btnSaveAs;
         private System.Windows.Forms.ToolStripButton btnNewTemplate;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem templateyamlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem templateSqlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataGridToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pixelViewerToolStripMenuItem;
+        private System.Windows.Forms.Panel pFileTags;
+        private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
     }
 }
 

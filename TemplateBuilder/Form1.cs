@@ -16,6 +16,7 @@ using System.Text;
 using System.Windows.Forms;
 using FAnsi.Implementations.MySql;
 using FAnsi.Implementations.Oracle;
+using WeifenLuo.WinFormsUI.Docking;
 using DatabaseType = FAnsi.DatabaseType;
 
 namespace TemplateBuilder
@@ -31,6 +32,13 @@ namespace TemplateBuilder
         private ToolStripMenuItem miSaveTemplate;
         private ToolStripMenuItem miSaveAsTemplate;
         private ToolStripMenuItem miNewTemplate;
+
+
+        DockContent dcDicoms = new DockContent();
+        DockContent dcFileTags = new DockContent();
+        DockContent dcSql = new DockContent();
+        DockContent dcYaml = new DockContent();
+        DockContent dcTable = new DockContent();
 
         public Form1()
         {
@@ -70,11 +78,7 @@ namespace TemplateBuilder
                 autoComplete.AddItem(keyword);
             
             autoComplete.TargetControlWrapper = new ScintillaWrapper(_scintillaTemplate);
-
-            tpEditor.Controls.Add(_scintillaTemplate);
-            tpSql.Controls.Add(_scintillaSql);
-
-
+            
             ddDatabaseType.ComboBox.DataSource = Enum.GetValues(typeof(DatabaseType));
 
             var menu = new ContextMenuStrip();
@@ -94,6 +98,33 @@ namespace TemplateBuilder
             menu.Items.Add(miSaveAsTemplate);
 
             ContextMenuStrip = menu;
+
+            this.IsMdiContainer = true;
+
+            dockPanel1.Dock = DockStyle.Fill;
+            
+            olvDicoms.Dock = DockStyle.Fill;
+            dcDicoms.Controls.Add(olvDicoms);
+            dcDicoms.TabText = "Dicom Files";
+            dcDicoms.Show(dockPanel1,DockState.DockRight);
+
+            dcFileTags.Controls.Add(pFileTags);
+            dcFileTags.TabText = "Tags";
+            pFileTags.Dock = DockStyle.Fill;
+            dcFileTags.Show(dockPanel1,DockState.DockRight);
+            
+            
+            dcYaml.Controls.Add(_scintillaTemplate);
+            dcYaml.TabText = "Template (yaml)";
+            dcYaml.Show(dockPanel1,DockState.Document);
+
+            dcSql.Controls.Add(_scintillaSql);
+            dcSql.TabText = "Template (sql)";
+            dcSql.Show(dockPanel1,DockState.Document);
+
+            dcTable.Controls.Add(tcDatagrids);
+            tcDatagrids.Dock = DockStyle.Fill;
+            dcTable.Show(dockPanel1,DockState.DockBottom);
             
             _setupFinished = true;
             Check();
@@ -382,6 +413,16 @@ namespace TemplateBuilder
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             NewTemplate();
+        }
+
+        private void dataGridToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fileListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
