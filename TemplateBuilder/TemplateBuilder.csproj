@@ -5,7 +5,10 @@
     <AssemblyTitle>TemplateBuilder</AssemblyTitle>
     <Product>TemplateBuilder</Product>
     <Copyright>Copyright ©  2018</Copyright>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -47,6 +50,8 @@
     </None>
     <PackageReference Include="AutoCompleteMenu-ScintillaNET" Version="1.6.2" />
     <PackageReference Include="HIC.DicomTypeTranslation" Version="2.1.1" />
+    <PackageReference Include="HIC.FAnsiSql" Version="0.10.7" />
+    <PackageReference Include="MySql.Data" Version="8.0.15.0" />
     <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
     <PackageReference Include="ObjectListView.Official" Version="2.9.1" />
     

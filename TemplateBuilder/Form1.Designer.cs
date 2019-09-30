@@ -30,15 +30,10 @@ namespace TemplateBuilder
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.olvDicoms = new BrightIdeasSoftware.ObjectListView();
             this.olvName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.label1 = new System.Windows.Forms.Label();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpEditor = new System.Windows.Forms.TabPage();
@@ -51,9 +46,18 @@ namespace TemplateBuilder
             this.olvValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tcDatagrids = new System.Windows.Forms.TabControl();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.findTemplatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnAddDicom = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnOpenTemplate = new System.Windows.Forms.ToolStripButton();
+            this.btnOnlineTemplates = new System.Windows.Forms.ToolStripButton();
+            this.btnSave = new System.Windows.Forms.ToolStripButton();
+            this.btnSaveAs = new System.Windows.Forms.ToolStripButton();
+            this.btnNewTemplate = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.ddDatabaseType = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).BeginInit();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -64,6 +68,7 @@ namespace TemplateBuilder
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // olvDicoms
@@ -81,7 +86,7 @@ namespace TemplateBuilder
             this.olvDicoms.Location = new System.Drawing.Point(6, 22);
             this.olvDicoms.Name = "olvDicoms";
             this.olvDicoms.ShowGroups = false;
-            this.olvDicoms.Size = new System.Drawing.Size(342, 187);
+            this.olvDicoms.Size = new System.Drawing.Size(354, 187);
             this.olvDicoms.TabIndex = 1;
             this.olvDicoms.UseCompatibleStateImageBehavior = false;
             this.olvDicoms.View = System.Windows.Forms.View.Details;
@@ -105,61 +110,6 @@ namespace TemplateBuilder
             this.label1.TabIndex = 3;
             this.label1.Text = "Example Dicom Files (Drop Files Here)";
             // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1205, 24);
-            this.menuStrip1.TabIndex = 5;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findTemplatesToolStripMenuItem,
-            this.newToolStripMenuItem,
-            this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.newToolStripMenuItem.Text = "New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.openToolStripMenuItem.Text = "Open...";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // saveAsToolStripMenuItem
-            // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.S)));
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.saveAsToolStripMenuItem.Text = "SaveAs...";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
-            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -178,8 +128,8 @@ namespace TemplateBuilder
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Panel2.Controls.Add(this.olvFileTags);
             this.splitContainer1.Panel2.Controls.Add(this.olvDicoms);
-            this.splitContainer1.Size = new System.Drawing.Size(1166, 480);
-            this.splitContainer1.SplitterDistance = 811;
+            this.splitContainer1.Size = new System.Drawing.Size(1205, 482);
+            this.splitContainer1.SplitterDistance = 838;
             this.splitContainer1.TabIndex = 6;
             // 
             // tabControl1
@@ -190,7 +140,7 @@ namespace TemplateBuilder
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(811, 480);
+            this.tabControl1.Size = new System.Drawing.Size(838, 482);
             this.tabControl1.TabIndex = 0;
             // 
             // tpEditor
@@ -198,7 +148,7 @@ namespace TemplateBuilder
             this.tpEditor.Location = new System.Drawing.Point(4, 22);
             this.tpEditor.Name = "tpEditor";
             this.tpEditor.Padding = new System.Windows.Forms.Padding(3);
-            this.tpEditor.Size = new System.Drawing.Size(803, 454);
+            this.tpEditor.Size = new System.Drawing.Size(830, 456);
             this.tpEditor.TabIndex = 0;
             this.tpEditor.Text = "Template";
             this.tpEditor.UseVisualStyleBackColor = true;
@@ -208,7 +158,7 @@ namespace TemplateBuilder
             this.tpSql.Location = new System.Drawing.Point(4, 22);
             this.tpSql.Name = "tpSql";
             this.tpSql.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSql.Size = new System.Drawing.Size(803, 454);
+            this.tpSql.Size = new System.Drawing.Size(830, 456);
             this.tpSql.TabIndex = 1;
             this.tpSql.Text = "Sql";
             this.tpSql.UseVisualStyleBackColor = true;
@@ -217,9 +167,9 @@ namespace TemplateBuilder
             // 
             this.tbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbFilter.Location = new System.Drawing.Point(44, 456);
+            this.tbFilter.Location = new System.Drawing.Point(44, 458);
             this.tbFilter.Name = "tbFilter";
-            this.tbFilter.Size = new System.Drawing.Size(298, 20);
+            this.tbFilter.Size = new System.Drawing.Size(310, 20);
             this.tbFilter.TabIndex = 5;
             this.tbFilter.TextChanged += new System.EventHandler(this.tbFilter_TextChanged);
             // 
@@ -227,7 +177,7 @@ namespace TemplateBuilder
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 459);
+            this.label3.Location = new System.Drawing.Point(6, 461);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 4;
@@ -260,7 +210,7 @@ namespace TemplateBuilder
             this.olvFileTags.Location = new System.Drawing.Point(9, 228);
             this.olvFileTags.Name = "olvFileTags";
             this.olvFileTags.ShowGroups = false;
-            this.olvFileTags.Size = new System.Drawing.Size(342, 222);
+            this.olvFileTags.Size = new System.Drawing.Size(354, 224);
             this.olvFileTags.TabIndex = 1;
             this.olvFileTags.UseCompatibleStateImageBehavior = false;
             this.olvFileTags.View = System.Windows.Forms.View.Details;
@@ -276,6 +226,7 @@ namespace TemplateBuilder
             // olvValue
             // 
             this.olvValue.AspectName = "Value";
+            this.olvValue.FillsFreeSpace = true;
             this.olvValue.Text = "Value";
             this.olvValue.Width = 100;
             // 
@@ -285,15 +236,13 @@ namespace TemplateBuilder
             this.tcDatagrids.Location = new System.Drawing.Point(0, 0);
             this.tcDatagrids.Name = "tcDatagrids";
             this.tcDatagrids.SelectedIndex = 0;
-            this.tcDatagrids.Size = new System.Drawing.Size(1166, 330);
+            this.tcDatagrids.Size = new System.Drawing.Size(1205, 333);
             this.tcDatagrids.TabIndex = 7;
             // 
             // splitContainer2
             // 
-            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer2.Location = new System.Drawing.Point(36, 27);
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 25);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -304,16 +253,111 @@ namespace TemplateBuilder
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.tcDatagrids);
-            this.splitContainer2.Size = new System.Drawing.Size(1166, 814);
-            this.splitContainer2.SplitterDistance = 480;
+            this.splitContainer2.Size = new System.Drawing.Size(1205, 819);
+            this.splitContainer2.SplitterDistance = 482;
             this.splitContainer2.TabIndex = 8;
             // 
-            // findTemplatesToolStripMenuItem
+            // toolStrip1
             // 
-            this.findTemplatesToolStripMenuItem.Name = "findTemplatesToolStripMenuItem";
-            this.findTemplatesToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.findTemplatesToolStripMenuItem.Text = "Find Templates";
-            this.findTemplatesToolStripMenuItem.Click += new System.EventHandler(this.findTemplatesToolStripMenuItem_Click);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnAddDicom,
+            this.toolStripSeparator2,
+            this.btnOpenTemplate,
+            this.btnOnlineTemplates,
+            this.btnSave,
+            this.btnSaveAs,
+            this.btnNewTemplate,
+            this.toolStripSeparator1,
+            this.toolStripLabel1,
+            this.ddDatabaseType});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1205, 25);
+            this.toolStrip1.TabIndex = 9;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // btnAddDicom
+            // 
+            this.btnAddDicom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnAddDicom.Image = ((System.Drawing.Image)(resources.GetObject("btnAddDicom.Image")));
+            this.btnAddDicom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddDicom.Name = "btnAddDicom";
+            this.btnAddDicom.Size = new System.Drawing.Size(23, 22);
+            this.btnAddDicom.Text = "Open Dicom Files";
+            this.btnAddDicom.Click += new System.EventHandler(this.btnAddDicom_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnOpenTemplate
+            // 
+            this.btnOpenTemplate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnOpenTemplate.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenTemplate.Image")));
+            this.btnOpenTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnOpenTemplate.Name = "btnOpenTemplate";
+            this.btnOpenTemplate.Size = new System.Drawing.Size(23, 22);
+            this.btnOpenTemplate.Text = "Open Template";
+            this.btnOpenTemplate.Click += new System.EventHandler(this.openTemplate_Click);
+            // 
+            // btnOnlineTemplates
+            // 
+            this.btnOnlineTemplates.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnOnlineTemplates.Image = ((System.Drawing.Image)(resources.GetObject("btnOnlineTemplates.Image")));
+            this.btnOnlineTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnOnlineTemplates.Name = "btnOnlineTemplates";
+            this.btnOnlineTemplates.Size = new System.Drawing.Size(23, 22);
+            this.btnOnlineTemplates.Text = "Go to online templates";
+            this.btnOnlineTemplates.Click += new System.EventHandler(this.btnOnlineTemplates_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
+            this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(23, 22);
+            this.btnSave.Text = "Save";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnSaveAs
+            // 
+            this.btnSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAs.Image")));
+            this.btnSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSaveAs.Name = "btnSaveAs";
+            this.btnSaveAs.Size = new System.Drawing.Size(23, 22);
+            this.btnSaveAs.Text = "Save As";
+            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
+            // 
+            // btnNewTemplate
+            // 
+            this.btnNewTemplate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnNewTemplate.Image = ((System.Drawing.Image)(resources.GetObject("btnNewTemplate.Image")));
+            this.btnNewTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnNewTemplate.Name = "btnNewTemplate";
+            this.btnNewTemplate.Size = new System.Drawing.Size(23, 22);
+            this.btnNewTemplate.Text = "New (empty) template";
+            this.btnNewTemplate.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(86, 22);
+            this.toolStripLabel1.Text = "Database Type:";
+            // 
+            // ddDatabaseType
+            // 
+            this.ddDatabaseType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ddDatabaseType.Name = "ddDatabaseType";
+            this.ddDatabaseType.Size = new System.Drawing.Size(121, 25);
+            this.ddDatabaseType.SelectedIndexChanged += new System.EventHandler(this.ddDatabaseType_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -321,14 +365,11 @@ namespace TemplateBuilder
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1205, 844);
             this.Controls.Add(this.splitContainer2);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.toolStrip1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
@@ -340,6 +381,8 @@ namespace TemplateBuilder
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -350,11 +393,6 @@ namespace TemplateBuilder
         private ObjectListView olvDicoms;
         private OLVColumn olvName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tpEditor;
@@ -367,8 +405,17 @@ namespace TemplateBuilder
         private OLVColumn olvValue;
         private System.Windows.Forms.TextBox tbFilter;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem findTemplatesToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton btnAddDicom;
+        private System.Windows.Forms.ToolStripComboBox ddDatabaseType;
+        private System.Windows.Forms.ToolStripButton btnOpenTemplate;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btnOnlineTemplates;
+        private System.Windows.Forms.ToolStripButton btnSave;
+        private System.Windows.Forms.ToolStripButton btnSaveAs;
+        private System.Windows.Forms.ToolStripButton btnNewTemplate;
     }
 }
 

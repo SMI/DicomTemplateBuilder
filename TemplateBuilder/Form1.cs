@@ -13,9 +13,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Windows.Input;
+using FAnsi.Implementations.MySql;
+using FAnsi.Implementations.Oracle;
 using DatabaseType = FAnsi.DatabaseType;
 
 namespace TemplateBuilder
@@ -25,12 +25,18 @@ namespace TemplateBuilder
         private string _filename;
         private Scintilla _scintillaTemplate;
         private Scintilla _scintillaSql;
+        bool _setupFinished = false;
+        private ToolStripMenuItem miOpenDicoms;
+        private ToolStripMenuItem miOpenTemplate;
+        private ToolStripMenuItem miSaveTemplate;
+        private ToolStripMenuItem miSaveAsTemplate;
+        private ToolStripMenuItem miNewTemplate;
 
         public Form1()
         {
             InitializeComponent();
 
-            
+
             _scintillaTemplate = new Scintilla(){Dock = DockStyle.Fill};
             _scintillaSql = new Scintilla(){Dock = DockStyle.Fill};
 
@@ -47,9 +53,10 @@ namespace TemplateBuilder
                     scintilla.InsertText(scintilla.CurrentPosition, "fish");
                 }
             };
-                
 
             ImplementationManager.Load<MicrosoftSQLImplementation>();
+            ImplementationManager.Load<MySqlImplementation>();
+            ImplementationManager.Load<OracleImplementation>();
 
             var autoComplete = new AutocompleteMenu();
 
@@ -66,7 +73,30 @@ namespace TemplateBuilder
 
             tpEditor.Controls.Add(_scintillaTemplate);
             tpSql.Controls.Add(_scintillaSql);
+
+
+            ddDatabaseType.ComboBox.DataSource = Enum.GetValues(typeof(DatabaseType));
+
+            var menu = new ContextMenuStrip();
+            miOpenDicoms = new ToolStripMenuItem("Open Dicom", null, (s, e) => OpenDicoms())
+                {ShortcutKeys = Keys.Control | Keys.Shift | Keys.O};
+
+            miNewTemplate =  new ToolStripMenuItem("New (empty) template",null,(s,e)=>NewTemplate()){ShortcutKeys = Keys.Control | Keys.N};
+            miOpenTemplate = new ToolStripMenuItem("Open Template",null,(s,e)=>OpenTemplate()){ShortcutKeys = Keys.Control | Keys.O};
+            miSaveTemplate = new ToolStripMenuItem("Save", null, (s, e) => Save()) {ShortcutKeys = Keys.Control | Keys.S};
+            miSaveAsTemplate = new ToolStripMenuItem("Save As", null, (s, e) => SaveAs()){ShortcutKeys = Keys.Control | Keys.Shift | Keys.S};
+
+            menu.Items.Add(miOpenDicoms);
+            menu.Items.Add(miNewTemplate);
+            menu.Items.Add(miOpenTemplate);
+            menu.Items.Add(new ToolStripMenuItem("Navigate To Templates (Online)", null, (s, e) => GoToOnlineTemplates()));
+            menu.Items.Add(miSaveTemplate);
+            menu.Items.Add(miSaveAsTemplate);
+
+            ContextMenuStrip = menu;
             
+            _setupFinished = true;
+            Check();
         }
 
         private void olvDicoms_CanDrop(object sender, OlvDropEventArgs e)
@@ -90,18 +120,29 @@ namespace TemplateBuilder
                 }
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewTemplate()
         {
             _filename = null;
             _scintillaTemplate.ClearAll();
 
             var c = new ImageTableTemplateCollection();
+
             c.DatabaseType = DatabaseType.MicrosoftSQLServer;
+            c.Tables.Add(new ImageTableTemplate
+            {
+                TableName = "MyTable",
+                Columns = 
+                new[]
+            {
+                new ImageColumnTemplate(DicomTag.SOPInstanceUID){AllowNulls = false,IsPrimaryKey = true},
+                new ImageColumnTemplate(ImagingTableCreation.GetRelativeFileArchiveURIColumn(false,false))
+            } });
 
             _scintillaTemplate.Text = c.Serialize();
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void OpenTemplate()
         {
             var ofd = new OpenFileDialog();
             ofd.Filter = "Imaging Template|*.it";
@@ -117,7 +158,7 @@ namespace TemplateBuilder
             }
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Save()
         {
             if(!Check())
                 return;
@@ -143,8 +184,17 @@ namespace TemplateBuilder
 
         private bool Check()
         {
+            bool noTemplate = string.IsNullOrWhiteSpace(_scintillaTemplate.Text);
+
+            btnAddDicom.Enabled = !noTemplate;
+            miOpenDicoms.Enabled = !noTemplate;
+            
+            if (noTemplate)
+                return false;
+            
             try
             {
+                var dbType = (DatabaseType) ddDatabaseType.ComboBox.SelectedItem;
                 var oldLine = _scintillaTemplate.CurrentPosition;
                 var collection = ImageTableTemplateCollection.LoadFrom(_scintillaTemplate.Text);
                 var text = collection.Serialize();
@@ -155,7 +205,7 @@ namespace TemplateBuilder
                 StringBuilder sb = new StringBuilder();
 
                 var helper = ImplementationManager.GetImplementation(collection.DatabaseType).GetServerHelper();
-                var server = new DiscoveredServer(helper.GetConnectionStringBuilder("localhost", "MyDatabase",null,null).ConnectionString,collection.DatabaseType);
+                var server = new DiscoveredServer(helper.GetConnectionStringBuilder("localhost", "MyDatabase",null,null).ConnectionString,dbType);
                 var db = server.ExpectDatabase("MyDatabase");
 
                 tcDatagrids.Controls.Clear();
@@ -169,7 +219,7 @@ namespace TemplateBuilder
                     dg.Dock = DockStyle.Fill;
                     tp.Controls.Add(dg);
                     
-                    sb.AppendLine(db.Helper.GetCreateTableSql(db, template.TableName, template.GetColumns(collection.DatabaseType), null, false));
+                    sb.AppendLine(db.Helper.GetCreateTableSql(db, template.TableName, template.GetColumns(dbType), null, false));
 
                     if(olvDicoms.Objects != null)
                     {
@@ -178,6 +228,7 @@ namespace TemplateBuilder
                         foreach (var col in template.Columns)
                             dtAll.Columns.Add(col.ColumnName);
 
+                        
                         foreach (FileInfo fi in olvDicoms.Objects)
                         {
                             var dicom = DicomFile.Open(fi.FullName);
@@ -189,7 +240,7 @@ namespace TemplateBuilder
                                 var colName = DicomTypeTranslaterReader.GetColumnNameForTag(item.Tag,false);
                                 
                                 if(dtAll.Columns.Contains(colName))
-                                    dr[colName] = DicomTypeTranslaterReader.GetCSharpValue(dicom.Dataset, item);
+                                    dr[colName] = DicomTypeTranslater.Flatten(DicomTypeTranslaterReader.GetCSharpValue(dicom.Dataset, item));
                             }
                         }
                         
@@ -211,6 +262,9 @@ namespace TemplateBuilder
 
         private void olvDicoms_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if(!_setupFinished)
+                return;
+
             var fi = olvDicoms.SelectedObject as FileInfo;
 
             olvFileTags.ClearObjects();
@@ -223,7 +277,7 @@ namespace TemplateBuilder
 
                     foreach (DicomItem item in dicom.Dataset)
                     {
-                        var value = DicomTypeTranslaterReader.GetCSharpValue(dicom.Dataset, item);
+                        var value = DicomTypeTranslater.Flatten(DicomTypeTranslaterReader.GetCSharpValue(dicom.Dataset, item));
                     
                         olvFileTags.AddObject(new TagValueNode(item.Tag, value));
                     }
@@ -252,14 +306,82 @@ namespace TemplateBuilder
             olvFileTags.UseFiltering = !string.IsNullOrWhiteSpace(tbFilter.Text);
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void GoToOnlineTemplates()
+        {
+            Process.Start("https://github.com/HicServices/DicomTypeTranslation/tree/develop/Templates");
+        }
+
+        private void ddDatabaseType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(_setupFinished)
+                Check();
+        }
+
+        private void openTemplate_Click(object sender, EventArgs e)
+        {
+            OpenTemplate();
+        }
+
+        private void btnAddDicom_Click(object sender, EventArgs e)
+        {
+            OpenDicoms();
+        }
+
+
+        private void OpenDicoms()
+        {
+            var ofd = new OpenFileDialog();
+            ofd.Filter = "Dicom Files|*.dcm";
+            ofd.Multiselect = true;
+
+            
+            
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _setupFinished = false;
+                    olvDicoms.BeginUpdate();
+
+                    foreach (var f in ofd.FileNames)
+                    {
+                        var fi = new FileInfo(f);
+                        if (fi.Exists)
+                            olvDicoms.AddObject(fi);
+                    }
+                }
+                finally
+                {
+                    olvDicoms.EndUpdate();
+                    _setupFinished = true;
+                }
+                
+                Check();
+            }
+
+            
+        }
+
+        private void btnOnlineTemplates_Click(object sender, EventArgs e)
+        {
+            GoToOnlineTemplates();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void btnSaveAs_Click(object sender, EventArgs e)
         {
             SaveAs();
         }
 
-        private void findTemplatesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/HicServices/DicomTypeTranslation/tree/develop/Templates");
+            NewTemplate();
         }
     }
 
