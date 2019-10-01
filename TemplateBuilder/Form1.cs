@@ -8,12 +8,14 @@ using FAnsi.Implementation;
 using FAnsi.Implementations.MicrosoftSQL;
 using ScintillaNET;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Dicom.Imaging;
 using FAnsi.Implementations.MySql;
 using FAnsi.Implementations.Oracle;
 using WeifenLuo.WinFormsUI.Docking;
@@ -34,11 +36,12 @@ namespace TemplateBuilder
         private ToolStripMenuItem miNewTemplate;
 
 
-        DockContent dcDicoms = new DockContent();
-        DockContent dcFileTags = new DockContent();
-        DockContent dcSql = new DockContent();
-        DockContent dcYaml = new DockContent();
-        DockContent dcTable = new DockContent();
+        DockContent dcDicoms = new DockContent(){HideOnClose = true};
+        DockContent dcSql = new DockContent(){HideOnClose = true};
+        DockContent dcYaml = new DockContent(){HideOnClose = true};
+        DockContent dcTable = new DockContent(){HideOnClose = true};
+        
+        public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
         public Form1()
         {
@@ -65,6 +68,8 @@ namespace TemplateBuilder
             ImplementationManager.Load<MicrosoftSQLImplementation>();
             ImplementationManager.Load<MySqlImplementation>();
             ImplementationManager.Load<OracleImplementation>();
+            
+            ImageManager.SetImplementation(WinFormsImageManager.Instance);
 
             var autoComplete = new AutocompleteMenu();
 
@@ -99,6 +104,15 @@ namespace TemplateBuilder
 
             ContextMenuStrip = menu;
 
+            DefaultDockLocations = new Dictionary<DockContent, DockState>()
+            {
+                {dcTable, DockState.DockBottom},
+                {dcDicoms, DockState.DockRight},
+                {dcSql, DockState.Document},
+                {dcYaml, DockState.Document},
+            };
+
+
             this.IsMdiContainer = true;
 
             dockPanel1.Dock = DockStyle.Fill;
@@ -106,25 +120,21 @@ namespace TemplateBuilder
             olvDicoms.Dock = DockStyle.Fill;
             dcDicoms.Controls.Add(olvDicoms);
             dcDicoms.TabText = "Dicom Files";
-            dcDicoms.Show(dockPanel1,DockState.DockRight);
-
-            dcFileTags.Controls.Add(pFileTags);
-            dcFileTags.TabText = "Tags";
-            pFileTags.Dock = DockStyle.Fill;
-            dcFileTags.Show(dockPanel1,DockState.DockRight);
+            dcDicoms.Show(dockPanel1,DefaultDockLocations[dcDicoms]);
             
             
             dcYaml.Controls.Add(_scintillaTemplate);
             dcYaml.TabText = "Template (yaml)";
-            dcYaml.Show(dockPanel1,DockState.Document);
+            dcYaml.Show(dockPanel1,DefaultDockLocations[dcYaml]);
 
             dcSql.Controls.Add(_scintillaSql);
             dcSql.TabText = "Template (sql)";
-            dcSql.Show(dockPanel1,DockState.Document);
+            dcSql.Show(dockPanel1,DefaultDockLocations[dcSql]);
 
             dcTable.Controls.Add(tcDatagrids);
+            dcTable.TabText = "Tag Table(s)";
             tcDatagrids.Dock = DockStyle.Fill;
-            dcTable.Show(dockPanel1,DockState.DockBottom);
+            dcTable.Show(dockPanel1,DefaultDockLocations[dcTable]);
             
             _setupFinished = true;
             Check();
@@ -216,9 +226,6 @@ namespace TemplateBuilder
         private bool Check()
         {
             bool noTemplate = string.IsNullOrWhiteSpace(_scintillaTemplate.Text);
-
-            btnAddDicom.Enabled = !noTemplate;
-            miOpenDicoms.Enabled = !noTemplate;
             
             if (noTemplate)
                 return false;
@@ -235,8 +242,8 @@ namespace TemplateBuilder
 
                 StringBuilder sb = new StringBuilder();
 
-                var helper = ImplementationManager.GetImplementation(collection.DatabaseType).GetServerHelper();
-                var server = new DiscoveredServer(helper.GetConnectionStringBuilder("localhost", "MyDatabase",null,null).ConnectionString,dbType);
+                var helper = ImplementationManager.GetImplementation(dbType).GetServerHelper();
+                var server = new DiscoveredServer(helper.GetConnectionStringBuilder("localhost", null,null,null).ConnectionString,dbType);
                 var db = server.ExpectDatabase("MyDatabase");
 
                 tcDatagrids.Controls.Clear();
@@ -291,52 +298,27 @@ namespace TemplateBuilder
             }
         }
 
-        private void olvDicoms_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(!_setupFinished)
-                return;
-
-            var fi = olvDicoms.SelectedObject as FileInfo;
-
-            olvFileTags.ClearObjects();
-            
-            if (fi != null)
-            {
-                try
-                {
-                    var dicom = DicomFile.Open(fi.FullName);
-
-                    foreach (DicomItem item in dicom.Dataset)
-                    {
-                        var value = DicomTypeTranslater.Flatten(DicomTypeTranslaterReader.GetCSharpValue(dicom.Dataset, item));
-                    
-                        olvFileTags.AddObject(new TagValueNode(item.Tag, value));
-                    }
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.ToString(), "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
 
         private void olvDicoms_ItemActivate(object sender, EventArgs e)
         {
-            if(olvDicoms.SelectedObject is FileInfo fi && !string.IsNullOrEmpty(fi.DirectoryName))
-                Process.Start(fi.DirectoryName);
+            var fi = olvDicoms.SelectedObject as FileInfo;
+
+            if (fi == null)
+                return;
+
+            var ui = new DicomFileTagsUI(fi);
+            ui.Dock = DockStyle.Fill;
+            var dc = new DockContent();
+            dc.Controls.Add(ui);
+            dc.TabText = fi.Name;
+            dc.Show(dockPanel1,DockState.DockLeft);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
 
         }
-
-        private void tbFilter_TextChanged(object sender, EventArgs e)
-        {
-            olvFileTags.ModelFilter = new TextMatchFilter(olvFileTags,tbFilter.Text);
-            olvFileTags.UseFiltering = !string.IsNullOrWhiteSpace(tbFilter.Text);
-        }
-
+        
 
         private void GoToOnlineTemplates()
         {
@@ -365,10 +347,7 @@ namespace TemplateBuilder
             var ofd = new OpenFileDialog();
             ofd.Filter = "Dicom Files|*.dcm";
             ofd.Multiselect = true;
-
             
-            
-
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -391,8 +370,6 @@ namespace TemplateBuilder
                 
                 Check();
             }
-
-            
         }
 
         private void btnOnlineTemplates_Click(object sender, EventArgs e)
@@ -415,14 +392,24 @@ namespace TemplateBuilder
             NewTemplate();
         }
 
-        private void dataGridToolStripMenuItem_Click(object sender, EventArgs e)
+        private void WindowClicked(object sender, EventArgs e)
         {
+            DockContent dc = null;
 
-        }
+            if (sender == miWindowTable)
+                dc = dcTable;
+            if (sender == miWindowFiles)
+                dc = dcDicoms;
+            if (sender == miWindowSql)
+                dc = dcSql;
+            if (sender == miWindowYaml)
+                dc = dcYaml;
 
-        private void fileListToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
+            if(dc != null)
+             if (dc.Visible)
+                dc.Activate();
+             else
+                 dc.Show(dockPanel1,DefaultDockLocations[dc]);
         }
     }
 
