@@ -5,7 +5,7 @@ require 'json'
 load 'rakeconfig.rb'
 $MSBUILD15CMD = MSBUILD15CMD.gsub(/\\/,"/")
 
-task :release => [:assemblyinfo, :build_release, :build_cli, :github]
+task :release => [:assemblyinfo, :build_release, :github]
 
 task :restorepackages do
     sh "nuget restore #{SOLUTION}"
@@ -15,19 +15,18 @@ task :build, [:config] => :restorepackages do |msb, args|
 	sh "\"#{$MSBUILD15CMD}\" #{SOLUTION} \/t:Clean;Build \/p:Configuration=#{args.config}"
 end
 
-task :build_release => :restorepackages do
-	sh "\"#{$MSBUILD15CMD}\" #{SOLUTION} \/t:Clean;Build \/p:Configuration=Release"
-end
 
-task :build_cli => :restorepackages do
+task :build_release => :restorepackages do
 	Dir.chdir("TemplateBuilder/") do
-        sh "dotnet publish -r win-x64 -c Release -o Publish"
-		Dir.chdir("Publish/") do
+		sh "\"#{$MSBUILD15CMD}\" TemplateBuilder.csproj \/t:Publish \/p:Configuration=Release;RuntimeIdentifiers=win-x64"
+		
+		Dir.chdir("bin/Release/net461/publish/") do
 			sh "#{SQUIRREL}/signtool.exe sign /a /s MY /n \"University of Dundee\" /fd sha256 /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp /td sha256 /v *.dll"
 			sh "#{SQUIRREL}/signtool.exe sign /a /s MY /n \"University of Dundee\" /fd sha256 /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp /td sha256 /v *.exe"
 		end
+        
     end
-	sh "powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('TemplateBuilder/Publish', 'TemplateBuilder/templatebuilder-win-x64.zip'); }\""
+	sh "powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('TemplateBuilder/bin/Release/net461/publish', 'TemplateBuilder/templatebuilder-win-x64.zip'); }\""
 end
 
 desc "Sets the version number from SharedAssemblyInfo file"    
