@@ -6,9 +6,9 @@ It supports:
 
 - Generating schemas in MySql, Oracle and Sql Server
 - Persisting schemas in a template (yaml) file
-- Viewing DICOM images
-- Searching Dicom tags
-- Previewing schema with dicom images
+- Viewing [DICOM] images
+- Searching [DICOM] tags
+- Previewing schema with [DICOM] images
 
 ![GitHub Logo](./Images/screenshot.png)
 _Images in screenshot were sourced from https://wiki.cancerimagingarchive.net/display/Public/Head-Neck-PET-CT [1]_
@@ -31,4 +31,6 @@ Icons are provided Fam Fam Fam under Creative Commons Attribution 2.5 License (h
 
 
 ## Citations
-1. Martin Vallières, Emily Kay-Rivest, Léo Jean Perrin, Xavier Liem, Christophe Furstoss, Nader Khaouam, Phuc Félix Nguyen-Tan, Chang-Shu Wang, Khalil Sultanem. (2017). Data from Head-Neck-PET-CT. The Cancer Imaging Archive. doi: 10.7937/K9/TCIA.2017.8oje5q00
+1. Martin ValliÃ¨res, Emily Kay-Rivest, LÃ©o Jean Perrin, Xavier Liem, Christophe Furstoss, Nader Khaouam, Phuc FÃ©lix Nguyen-Tan, Chang-Shu Wang, Khalil Sultanem. (2017). Data from Head-Neck-PET-CT. The Cancer Imaging Archive. doi: 10.7937/K9/TCIA.2017.8oje5q00
+
+[DICOM]: https://www.dicomstandard.org/
