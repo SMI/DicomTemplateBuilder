@@ -27,7 +27,7 @@ task :build_cli => :restorepackages do
 			sh "#{SQUIRREL}/signtool.exe sign /a /s MY /n \"University of Dundee\" /fd sha256 /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp /td sha256 /v *.exe"
 		end
     end
-	sh "powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('TemplateBuilder/Publish', 'TemplateBuilder/Publish/templatebuilder-win-x64.zip'); }\""
+	sh "powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('TemplateBuilder/Publish', 'TemplateBuilder/templatebuilder-win-x64.zip'); }\""
 end
 
 desc "Sets the version number from SharedAssemblyInfo file"    
@@ -77,7 +77,7 @@ task :github do
     upload_url = githubresponse["upload_url"].gsub(/\{.*\}/, "")
     puts upload_url
     	
-	Dir.chdir("TemplateBuilder/Publish/") do
+	Dir.chdir("TemplateBuilder/") do
 		upload_to_github(upload_url, "templatebuilder-win-x64.zip")
     end
 end
