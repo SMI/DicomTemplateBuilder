@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -50,20 +51,7 @@ namespace TemplateBuilder
 
             _scintillaTemplate = new Scintilla(){Dock = DockStyle.Fill};
             _scintillaSql = new Scintilla(){Dock = DockStyle.Fill};
-
             _scintillaTemplate.AllowDrop = true;
-            _scintillaTemplate.DragDrop += (sender, args) =>
-            {
-                var scintilla = (Scintilla) sender;
-                if (args.Data.GetDataPresent(typeof(TagValueNode)))
-                {
-                    var text = string.Format(@"
-  - ColumnName: {0}
-    AllowNulls: true", Tag);
-
-                    scintilla.InsertText(scintilla.CurrentPosition, "fish");
-                }
-            };
 
             ImplementationManager.Load<MicrosoftSQLImplementation>();
             ImplementationManager.Load<MySqlImplementation>();
@@ -135,9 +123,50 @@ namespace TemplateBuilder
             dcTable.TabText = "Tag Table(s)";
             tcDatagrids.Dock = DockStyle.Fill;
             dcTable.Show(dockPanel1,DefaultDockLocations[dcTable]);
-            
+
+            _scintillaTemplate.DragEnter += Scintilla_OnDragEnter;
+            _scintillaTemplate.DragDrop += Scintilla_OnDragDrop;
+
             _setupFinished = true;
             Check();
+        }
+
+        private void Scintilla_OnDragEnter(object sender, DragEventArgs dragEventArgs)
+        {
+            if(dragEventArgs.Data is OLVDataObject olv)
+                if(olv.ModelObjects.OfType<TagValueNode>().Any())
+                    dragEventArgs.Effect = DragDropEffects.Copy;
+        }
+        private void Scintilla_OnDragDrop(object sender, DragEventArgs dragEventArgs)
+        {
+            //point they are dragged over
+            var editor = ((Scintilla) sender);
+
+            if (editor.ReadOnly)
+                return;
+
+            TagValueNode[] nodes = null; 
+
+            if (dragEventArgs.Data is OLVDataObject olv)
+                nodes = olv.ModelObjects.OfType<TagValueNode>().ToArray();
+
+            if(nodes == null || nodes.Length == 0)
+                return;
+
+            var clientPoint = editor.PointToClient(new Point(dragEventArgs.X, dragEventArgs.Y));
+            //get where the mouse is hovering over
+            int pos = editor.CharPositionFromPoint(clientPoint.X, clientPoint.Y);
+            
+            //if it has a Form give it focus
+            var form = editor.FindForm();
+
+            if(form != null)
+            {
+                form.Activate();
+                editor.Focus();
+            }
+            
+            editor.InsertText(pos,string.Join(Environment.NewLine,nodes.Select(n=>n.GetTemplateYaml())));
         }
 
         private void olvDicoms_CanDrop(object sender, OlvDropEventArgs e)
@@ -422,6 +451,13 @@ namespace TemplateBuilder
         {
             Tag = tag.DictionaryEntry.Keyword;
             Value = value;
+        }
+
+        public string GetTemplateYaml()
+        {
+            return string.Format(@"
+  - ColumnName: {0}
+    AllowNulls: true", Tag);
         }
 
     }

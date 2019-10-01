@@ -6,10 +6,18 @@
     <Product>TemplateBuilder</Product>
     <Copyright>Copyright ©  2018</Copyright>
     <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -57,6 +65,7 @@
     <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
     <PackageReference Include="ObjectListView.Official" Version="2.9.1" />
     <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
     
     <Compile Update="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
