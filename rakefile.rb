@@ -21,8 +21,8 @@ task :build_release => :restorepackages do
 		sh "\"#{$MSBUILD15CMD}\" TemplateBuilder.csproj \/t:Publish \/p:Configuration=Release;RuntimeIdentifiers=win-x64"
 		
 		Dir.chdir("bin/Release/net461/publish/") do
-			sh "#{SQUIRREL}/signtool.exe sign /a /s MY /n \"University of Dundee\" /fd sha256 /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp /td sha256 /v *.dll"
-			sh "#{SQUIRREL}/signtool.exe sign /a /s MY /n \"University of Dundee\" /fd sha256 /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp /td sha256 /v *.exe"
+			sh "#{SQUIRREL}/signtool.exe sign /a /s MY /n \"University of Dundee\" /fd sha256 /tr http://timestamp.digicert.com /td sha256 /v *.dll"
+			sh "#{SQUIRREL}/signtool.exe sign /a /s MY /n \"University of Dundee\" /fd sha256 /tr http://timestamp.digicert.com /td sha256 /v *.exe"
 		end
         
     end
