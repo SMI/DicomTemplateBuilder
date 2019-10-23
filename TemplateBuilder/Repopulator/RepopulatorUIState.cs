@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows.Input;
+using YamlDotNet.Serialization;
 
 namespace TemplateBuilder.Repopulator
 {
@@ -12,9 +13,13 @@ namespace TemplateBuilder.Repopulator
         public bool IncludeSubdirectories;
         public string Pattern;
 
+        [YamlIgnore]
         public DirectoryInfo OutputDirectoryInfo => new DirectoryInfo(OutputFolder);
+        
+        [YamlIgnore]
         public DirectoryInfo DirectoryToProcessInfo => new DirectoryInfo(InputFolder);
-
+        
+        [YamlIgnore]
         public FileInfo CsvFileInfo => new FileInfo(InputCsv);
     }
 }

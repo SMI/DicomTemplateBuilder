@@ -26,7 +26,7 @@ namespace TemplateBuilder.Repopulator
                     tbInputFolder.Text = State.InputFolder;
                     tbInputCsv.Text = State.InputCsv;
                     tbOutputFolder.Text = State.OutputFolder;
-                    nThreads.Value = State.NumThreads;
+                    nThreads.Value = Math.Min(Math.Max(nThreads.Minimum,State.NumThreads),nThreads.Maximum);
                     tbPattern.Text = State.Pattern;
                 }
             }
