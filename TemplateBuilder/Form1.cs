@@ -440,6 +440,17 @@ namespace TemplateBuilder
              else
                  dc.Show(dockPanel1,DefaultDockLocations[dc]);
         }
+
+        private void tagPopulatorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ui = new Repopulator.RepopulatorUI();
+
+            var dc = new DockContent();
+            ui.Dock = DockStyle.Fill;
+            dc.Controls.Add(ui);
+            dc.TabText = "Repopulator";
+            dc.Show(dockPanel1,DockState.DockTop);
+        }
     }
 
     internal class TagValueNode
