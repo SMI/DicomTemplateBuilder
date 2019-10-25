@@ -12,29 +12,9 @@ using DicomTypeTranslation;
 
 namespace TemplateBuilder.Repopulator
 {
-    class CsvToDicomTagMapping
+    public class CsvToDicomTagMapping
     {
-        public class CsvToDicomColumn
-        {
-            public string Name { get; }
-            public int Index { get; }
-            public DicomTag MappedTag { get; }
-            public bool IsFilePath { get; set; }
-
-            public CsvToDicomColumn(string colName, int index, DicomTag mappedTag, bool isFileColumn)
-            {
-                if (mappedTag != null && isFileColumn)
-                    throw new ArgumentException("Column should either be a dicom tag or a file path column not both");
-
-                if (mappedTag == null && !isFileColumn)
-                    throw new ArgumentException("Column must either contain dicom tags or be a file path column");
-
-                Name = colName;
-                Index = index;
-                MappedTag = mappedTag;
-                IsFilePath = isFileColumn;
-            }
-        }
+        
 
         /// <summary>
         /// The column of the CSV which records the file path to the image(s) being processed.  These should be expressed
@@ -49,11 +29,17 @@ namespace TemplateBuilder.Repopulator
         public List<CsvToDicomColumn> TagColumns = new List<CsvToDicomColumn>();
 
         /// <summary>
+        /// The file that was read during <see cref="BuildMap"/>
+        /// </summary>
+        public FileInfo CsvFile { get; private set; }
+
+        /// <summary>
         /// Clears current column mappings
         /// </summary>
         public void Clear()
         {
             FilenameColumn = null;
+            CsvFile = null;
             TagColumns.Clear();
         }
 
@@ -71,7 +57,9 @@ namespace TemplateBuilder.Repopulator
             StringBuilder sb  = new StringBuilder();
             try
             {
-                using (var reader = new CsvReader(state.CsvFileInfo.OpenText()))
+                CsvFile = state.CsvFileInfo;
+
+                using (var reader = new CsvReader(CsvFile.OpenText()))
                 {
                     reader.Configuration.TrimOptions = TrimOptions.Trim;
                     reader.Read();

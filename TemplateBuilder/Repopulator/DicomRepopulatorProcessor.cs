@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace TemplateBuilder.Repopulator
 
         private ParallelOptions _parallelOptions;
 
+        public IFindFilesForRows FileFindingStrategy { get; }
+
         public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget();
         public int Done { get; private set; }
         
@@ -46,9 +49,7 @@ namespace TemplateBuilder.Repopulator
 
             MemoryLogTarget.Layout = "${level} ${message}";
         }
-
         
-
 
         public int Process(RepopulatorUIState options)
         {
@@ -64,12 +65,14 @@ namespace TemplateBuilder.Repopulator
             _logger.Info("Starting to process");
             _stopwatch = Stopwatch.StartNew();
             
+            //build map from the CSV headers
             var map = new CsvToDicomTagMapping();
-
             try
             {
-                if(!map.BuildMap(options,out _))
+                if(!map.BuildMap(options,out string log))
                     throw new Exception("Failed to build map");
+                
+                _logger.Info("Map built succesfully:" + log);
             }
             catch (ApplicationException e)
             {
@@ -77,9 +80,25 @@ namespace TemplateBuilder.Repopulator
                 return -1;
             }
 
-            _logger.Info("Loaded " + map.TagColumns.Count + " rows from " + options.CsvFileInfo.FullName);
+            var csvFile = options.CsvFileInfo;
+            _logger.Info("Starting " + csvFile.FullName);
 
-            
+            //now process each row in the CSV and find matching files
+            using (var reader = new CsvReader(csvFile.OpenText()))
+            {
+                reader.Configuration.TrimOptions = TrimOptions.Trim;
+                while (reader.Read())
+                {
+                    var files = FileFindingStrategy.GetPathsFor(reader, map);
+
+                    if (files == null || files.Length == 0)
+                        Error("No files found for row", reader.Context.RawRow);
+                    else
+                        foreach (var f in files)
+                            RePopulate(f, map,reader.Context.RawRow);
+                }
+            }
+
             try
             {
                 ProcessDicomFiles(options, map);
@@ -103,7 +122,17 @@ namespace TemplateBuilder.Repopulator
             return 0;
         }
 
-        
+        private void RePopulate(string path, CsvToDicomTagMapping map, int lineNumber)
+        {
+            
+        }
+
+        private void Error(string problemDescription, int lineNumber)
+        {
+            _logger.Error($"{problemDescription}:line {lineNumber}");
+        }
+
+
         /// <summary>
         /// Processes the Dicom files and alters the values according to the replacement dictionary.
         /// Makes an alternate copy of each Dicom file into the output directory.

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TemplateBuilder.Repopulator.RepopulatorUIState">
+    <Position X="1" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQgABAAAAAAAQAECAAQQAAAAAAAEAQAAAAACAAA=</HashCode>
+      <FileName>Repopulator\RepopulatorUIState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TemplateBuilder.Repopulator.CsvToDicomTagMapping">
+    <Position X="4.75" Y="1.5" Width="2" />
+    <AssociationLine Name="TagColumns" Type="TemplateBuilder.Repopulator.CsvToDicomColumn" FixedFromPoint="true">
+      <Path>
+        <Point X="6.75" Y="1.989" />
+        <Point X="8.75" Y="1.989" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAGAAAAAAAAAAAAAAABAAAAAAAAABAAAAARAAAA=</HashCode>
+      <FileName>Repopulator\CsvToDicomTagMapping.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="FilenameColumn" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="TagColumns" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TemplateBuilder.Repopulator.CsvToDicomColumn">
+    <Position X="8.75" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAEAAAAAAAAAEAABAAAAA=</HashCode>
+      <FileName>Repopulator\CsvToDicomColumn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TemplateBuilder.Repopulator.DicomRepopulatorProcessor">
+    <Position X="4.75" Y="4" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAIAAAAASAEAhggAIAAIAAABAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Repopulator\DicomRepopulatorProcessor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FileFindingStrategy" />
+    </ShowAsAssociation>
+  </Class>
+  <Interface Name="TemplateBuilder.Repopulator.IFindFilesForRows">
+    <Position X="9" Y="4" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Repopulator\IFindFilesForRows.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
