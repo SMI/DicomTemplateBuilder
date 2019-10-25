@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Dicom;
+using DicomTypeTranslation.Elevation;
+using DicomTypeTranslation.Elevation.Serialization;
 
 namespace TemplateBuilder.Repopulator
 {
@@ -7,20 +11,32 @@ namespace TemplateBuilder.Repopulator
     {
         public string Name { get; }
         public int Index { get; }
-        public DicomTag MappedTag { get; }
+        public HashSet<DicomTag> TagsToPopulate { get; }
         public bool IsFilePath { get; set; }
 
-        public CsvToDicomColumn(string colName, int index, DicomTag mappedTag, bool isFileColumn)
-        {
-            if (mappedTag != null && isFileColumn)
-                throw new ArgumentException("Column should either be a dicom tag or a file path column not both");
 
-            if (mappedTag == null && !isFileColumn)
-                throw new ArgumentException("Column must either contain dicom tags or be a file path column");
+        public CsvToDicomColumn(string colName, int index, bool isFileColumn,params DicomTag[] mappedTags)
+        {
+            if (mappedTags != null && mappedTags.Any() && isFileColumn)
+                throw new ArgumentException("Column has ambiguous role, it should either provide dicom tag substitutions or be the file path column not both");
+
+            if ((mappedTags == null || !mappedTags.Any())&& !isFileColumn)
+                throw new ArgumentException("Column has no clear role, it should either provide dicom tag substitutions or be the file path column");
+
+            if (index < 0)
+                throw new ArgumentException("index cannot be negative");
+
+            if (mappedTags != null)
+            {
+                var sq = mappedTags.FirstOrDefault(t => t.DictionaryEntry.ValueRepresentations.Contains(DicomVR.SQ)); 
+                if(sq != null)
+                    throw new ArgumentException($"Sequence tags are not supported ({sq.DictionaryEntry.Keyword})");
+            }
+
 
             Name = colName;
             Index = index;
-            MappedTag = mappedTag;
+            TagsToPopulate = new HashSet<DicomTag>(mappedTags?? new DicomTag[0]);
             IsFilePath = isFileColumn;
         }
     }

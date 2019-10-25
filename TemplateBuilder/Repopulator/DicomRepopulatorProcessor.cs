@@ -28,11 +28,12 @@ namespace TemplateBuilder.Repopulator
 
         private ParallelOptions _parallelOptions;
 
-        public IFindFilesForRows FileFindingStrategy { get; }
+        public IRowsToFiles FileFindingStrategy { get; }
 
         public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget();
         public int Done { get; private set; }
-        
+        public int Errors { get; private set; }
+
         public DicomRepopulatorProcessor(string currentDirectory = null)
         {
             string log = Path.Combine(currentDirectory ?? Environment.CurrentDirectory, "NLog.config");
@@ -50,7 +51,6 @@ namespace TemplateBuilder.Repopulator
             MemoryLogTarget.Layout = "${level} ${message}";
         }
         
-
         public int Process(RepopulatorUIState options)
         {
             _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = options.NumThreads };
@@ -92,10 +92,16 @@ namespace TemplateBuilder.Repopulator
                     var files = FileFindingStrategy.GetPathsFor(reader, map);
 
                     if (files == null || files.Length == 0)
+                    {
+                        Errors++;
                         Error("No files found for row", reader.Context.RawRow);
+                    }
                     else
                         foreach (var f in files)
+                        {
                             RePopulate(f, map,reader.Context.RawRow);
+                            Done++;
+                        }
                 }
             }
 

@@ -83,8 +83,8 @@ namespace TemplateBuilder.Repopulator
                                         FilenameColumn = match;
                                 else
                                 {
-                                    if(TagColumns.Any(c=>c.MappedTag == match.MappedTag))
-                                        throw new Exception($"There are 2+ columns that both contain DicomTag '{match.MappedTag}'");
+                                    if(TagColumns.Any(c=>c.TagsToPopulate.Intersect(match.TagsToPopulate).Any()))
+                                        throw new Exception($"There are 2+ columns that both populate for one of the DicomTag(s) '{string.Join(",",match.TagsToPopulate)}'");
 
                                     TagColumns.Add(match);
                                 }
@@ -117,13 +117,13 @@ namespace TemplateBuilder.Repopulator
         public CsvToDicomColumn GetKeyDicomTagAndColumnName(RepopulatorUIState state, string columnName,int index)
         {
             if(columnName.Equals(state.FileNameColumn,StringComparison.CurrentCultureIgnoreCase))
-                return new CsvToDicomColumn(columnName,index,null,true);
+                return new CsvToDicomColumn(columnName,index,true);
 
             string[] split = columnName.Split(':');
             if (split.Length == 1)
             {
                 var found = DicomDictionary.Default.SingleOrDefault(entry => string.Equals(entry.Keyword ,columnName,StringComparison.CurrentCultureIgnoreCase));
-                return found != null ? new CsvToDicomColumn(columnName,index,found.Tag,false) : null;
+                return found != null ? new CsvToDicomColumn(columnName,index,false,found.Tag) : null;
             }
             
             if(split.Length != 2 || split[0].Length == 0 || split[1].Length == 0)
@@ -135,7 +135,7 @@ namespace TemplateBuilder.Repopulator
             var found2 =
                 DicomDictionary.Default.SingleOrDefault(entry =>  string.Equals(entry.Keyword ,dicomTagString,StringComparison.CurrentCultureIgnoreCase));
 
-            return found2 != null ? new CsvToDicomColumn(columnName, index, found2.Tag, false) : null;
+            return found2 != null ? new CsvToDicomColumn(columnName, index,false, found2.Tag) : null;
         }
     }
 }

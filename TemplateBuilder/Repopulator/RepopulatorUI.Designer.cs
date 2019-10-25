@@ -51,8 +51,13 @@
             this.cbAnonymise = new System.Windows.Forms.CheckBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
+            this.tbErrors = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.tbDone = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnExtraMappings = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.tbExtraMappings = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -71,7 +76,7 @@
             // btnOutputFolder
             // 
             this.btnOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOutputFolder.Location = new System.Drawing.Point(671, 131);
+            this.btnOutputFolder.Location = new System.Drawing.Point(671, 158);
             this.btnOutputFolder.Name = "btnOutputFolder";
             this.btnOutputFolder.Size = new System.Drawing.Size(67, 23);
             this.btnOutputFolder.TabIndex = 10;
@@ -125,7 +130,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 136);
+            this.label3.Location = new System.Drawing.Point(8, 163);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 4;
@@ -137,7 +142,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbOutputFolder.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.tbOutputFolder.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.tbOutputFolder.Location = new System.Drawing.Point(88, 133);
+            this.tbOutputFolder.Location = new System.Drawing.Point(88, 160);
             this.tbOutputFolder.Name = "tbOutputFolder";
             this.tbOutputFolder.Size = new System.Drawing.Size(577, 20);
             this.tbOutputFolder.TabIndex = 9;
@@ -186,8 +191,9 @@
             // 
             // lblProgress
             // 
+            this.lblProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(2, 189);
+            this.lblProgress.Location = new System.Drawing.Point(5, 211);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(58, 13);
             this.lblProgress.TabIndex = 9;
@@ -195,7 +201,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(218, 159);
+            this.btnStart.Location = new System.Drawing.Point(219, 186);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(67, 23);
             this.btnStart.TabIndex = 11;
@@ -237,7 +243,7 @@
             // 
             // btnValidateCsv
             // 
-            this.btnValidateCsv.Location = new System.Drawing.Point(88, 159);
+            this.btnValidateCsv.Location = new System.Drawing.Point(88, 186);
             this.btnValidateCsv.Name = "btnValidateCsv";
             this.btnValidateCsv.Size = new System.Drawing.Size(125, 23);
             this.btnValidateCsv.TabIndex = 11;
@@ -280,13 +286,40 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.tbErrors);
+            this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.tbDone);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 207);
+            this.panel1.Location = new System.Drawing.Point(0, 227);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(750, 23);
             this.panel1.TabIndex = 14;
+            // 
+            // tbErrors
+            // 
+            this.tbErrors.Location = new System.Drawing.Point(264, 0);
+            this.tbErrors.Name = "tbErrors";
+            this.tbErrors.ReadOnly = true;
+            this.tbErrors.Size = new System.Drawing.Size(166, 20);
+            this.tbErrors.TabIndex = 12;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(221, 3);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(37, 13);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "Errors:";
+            // 
+            // tbDone
+            // 
+            this.tbDone.Location = new System.Drawing.Point(45, 0);
+            this.tbDone.Name = "tbDone";
+            this.tbDone.ReadOnly = true;
+            this.tbDone.Size = new System.Drawing.Size(166, 20);
+            this.tbDone.TabIndex = 10;
             // 
             // label7
             // 
@@ -297,18 +330,45 @@
             this.label7.TabIndex = 9;
             this.label7.Text = "Done:";
             // 
-            // tbDone
+            // btnExtraMappings
             // 
-            this.tbDone.Location = new System.Drawing.Point(45, 0);
-            this.tbDone.Name = "tbDone";
-            this.tbDone.ReadOnly = true;
-            this.tbDone.Size = new System.Drawing.Size(166, 20);
-            this.tbDone.TabIndex = 10;
+            this.btnExtraMappings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExtraMappings.Location = new System.Drawing.Point(671, 132);
+            this.btnExtraMappings.Name = "btnExtraMappings";
+            this.btnExtraMappings.Size = new System.Drawing.Size(67, 23);
+            this.btnExtraMappings.TabIndex = 17;
+            this.btnExtraMappings.Text = "Browse...";
+            this.btnExtraMappings.UseVisualStyleBackColor = true;
+            this.btnExtraMappings.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(4, 137);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(83, 13);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "Extra Mappings:";
+            // 
+            // tbExtraMappings
+            // 
+            this.tbExtraMappings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbExtraMappings.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.tbExtraMappings.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
+            this.tbExtraMappings.Location = new System.Drawing.Point(88, 134);
+            this.tbExtraMappings.Name = "tbExtraMappings";
+            this.tbExtraMappings.Size = new System.Drawing.Size(577, 20);
+            this.tbExtraMappings.TabIndex = 16;
+            this.tbExtraMappings.TextChanged += new System.EventHandler(this.tb_TextChanged);
             // 
             // RepopulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnExtraMappings);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.tbExtraMappings);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.cbAnonymise);
             this.Controls.Add(this.label6);
@@ -330,9 +390,10 @@
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnOutputFolder);
             this.Controls.Add(this.btnInputFolder);
-            this.MinimumSize = new System.Drawing.Size(750, 230);
+            this.MinimumSize = new System.Drawing.Size(750, 250);
             this.Name = "RepopulatorUI";
-            this.Size = new System.Drawing.Size(750, 230);
+            this.Size = new System.Drawing.Size(750, 250);
+            this.Load += new System.EventHandler(this.RepopulatorUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -367,5 +428,10 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox tbDone;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnExtraMappings;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox tbExtraMappings;
+        private System.Windows.Forms.TextBox tbErrors;
+        private System.Windows.Forms.Label label9;
     }
 }

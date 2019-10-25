@@ -29,6 +29,7 @@ namespace TemplateBuilder.Repopulator
                     cbIncludeSubfolders.Checked = State.IncludeSubdirectories;
                     tbInputFolder.Text = State.InputFolder;
                     tbInputCsv.Text = State.InputCsv;
+                    tbExtraMappings.Text = State.InputExtraMappings;
                     tbOutputFolder.Text = State.OutputFolder;
                     nThreads.Value = Math.Min(Math.Max(nThreads.Minimum,State.NumThreads),nThreads.Maximum);
                     tbPattern.Text = State.Pattern;
@@ -45,35 +46,43 @@ namespace TemplateBuilder.Repopulator
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             if (sender == btnInputCsv)
+                BrowseForFile(tbInputCsv, "Comma Separated File|*.csv");
+            else if (sender == btnExtraMappings)
+                BrowseForFile(tbExtraMappings, "Supplemental Mappings File|*.*");
+            else if (sender == btnInputFolder)
+                BrowseForFolder(tbInputFolder);
+            else if(sender == btnOutputFolder)
+                BrowseForFolder(tbOutputFolder);
+        }
+
+        private void BrowseForFolder(TextBox destinationTextBox)
+        {
+            var ofd = new FolderBrowserDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+                destinationTextBox.Text = ofd.SelectedPath;
+        }
+
+        private void BrowseForFile(TextBox destinationTextBox, string filter)
+        {
+            
+            var ofd = new OpenFileDialog();
+            ofd.CheckPathExists = true;
+
+            try
             {
-                var ofd = new OpenFileDialog();
-                ofd.CheckPathExists = true;
-
-                try
-                {
-                    if (tbInputCsv.Text != null)
-                        ofd.InitialDirectory = Path.GetDirectoryName(tbInputCsv.Text);
-                }
-                catch (Exception)
-                {
-                    //they typed something odd in there?
-                }
-
-                ofd.Filter = "Comma Separated File|*.csv";
-                ofd.Multiselect = false;
-
-                if(ofd.ShowDialog()==DialogResult.OK)
-                    tbInputCsv.Text = ofd.FileName;
+                if (destinationTextBox.Text != null)
+                    ofd.InitialDirectory = Path.GetDirectoryName(destinationTextBox.Text);
             }
-            else
+            catch (Exception)
             {
-                var ofd = new FolderBrowserDialog();
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    var tb = sender == btnInputFolder ? tbInputFolder : tbOutputFolder;
-                    tb.Text = ofd.SelectedPath;
-                }
+                //they typed something odd in there?
             }
+
+            ofd.Filter = filter;
+            ofd.Multiselect = false;
+
+            if(ofd.ShowDialog()==DialogResult.OK)
+                destinationTextBox.Text = ofd.FileName;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -101,6 +110,8 @@ namespace TemplateBuilder.Repopulator
             if(sender == tbOutputFolder)
                 State.OutputFolder = tbOutputFolder.Text;
 
+            if (sender == tbExtraMappings)
+                State.InputExtraMappings = tbExtraMappings.Text;
 
             SaveState();
         }
@@ -167,6 +178,16 @@ namespace TemplateBuilder.Repopulator
 
             if(done != tbDone.Text)
                 tbDone.Text = done;
+
+            string errors = (_populator?.Errors ?? 0).ToString("{0:n0}");
+
+            if(done != tbDone.Text)
+                tbDone.Text = done;
+        }
+
+        private void RepopulatorUI_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

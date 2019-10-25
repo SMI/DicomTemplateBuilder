@@ -9,6 +9,7 @@ namespace TemplateBuilder.Repopulator
     {
         public string InputFolder;
         public string InputCsv;
+        public string InputExtraMappings;
         public string OutputFolder;
         public int NumThreads;
         public bool IncludeSubdirectories;
