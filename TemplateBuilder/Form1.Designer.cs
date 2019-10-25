@@ -51,8 +51,8 @@ namespace TemplateBuilder
             this.miWindowSql = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tagPopulatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -246,19 +246,19 @@ namespace TemplateBuilder
             this.miWindowTable.Text = "Table Viewer";
             this.miWindowTable.Click += new System.EventHandler(this.WindowClicked);
             // 
-            // dockPanel1
-            // 
-            this.dockPanel1.Location = new System.Drawing.Point(12, 28);
-            this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Size = new System.Drawing.Size(200, 100);
-            this.dockPanel1.TabIndex = 11;
-            // 
             // tagPopulatorToolStripMenuItem
             // 
             this.tagPopulatorToolStripMenuItem.Name = "tagPopulatorToolStripMenuItem";
             this.tagPopulatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.tagPopulatorToolStripMenuItem.Text = "Tag Populator";
             this.tagPopulatorToolStripMenuItem.Click += new System.EventHandler(this.tagPopulatorToolStripMenuItem_Click);
+            // 
+            // dockPanel1
+            // 
+            this.dockPanel1.Location = new System.Drawing.Point(12, 28);
+            this.dockPanel1.Name = "dockPanel1";
+            this.dockPanel1.Size = new System.Drawing.Size(200, 100);
+            this.dockPanel1.TabIndex = 11;
             // 
             // Form1
             // 

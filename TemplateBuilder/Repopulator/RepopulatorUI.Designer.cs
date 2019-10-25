@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnInputFolder = new System.Windows.Forms.Button();
             this.btnOutputFolder = new System.Windows.Forms.Button();
             this.cbIncludeSubfolders = new System.Windows.Forms.CheckBox();
@@ -39,20 +40,27 @@
             this.label2 = new System.Windows.Forms.Label();
             this.nThreads = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.lblProgress = new System.Windows.Forms.Label();
             this.btnStart = new System.Windows.Forms.Button();
             this.tbInputCsv = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.btnInputCsv = new System.Windows.Forms.Button();
             this.btnValidateCsv = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tbFilenameColumn = new System.Windows.Forms.TextBox();
+            this.cbAnonymise = new System.Windows.Forms.CheckBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.tbDone = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnInputFolder
             // 
             this.btnInputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInputFolder.Location = new System.Drawing.Point(496, 28);
+            this.btnInputFolder.Location = new System.Drawing.Point(671, 28);
             this.btnInputFolder.Name = "btnInputFolder";
             this.btnInputFolder.Size = new System.Drawing.Size(67, 23);
             this.btnInputFolder.TabIndex = 1;
@@ -63,7 +71,7 @@
             // btnOutputFolder
             // 
             this.btnOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOutputFolder.Location = new System.Drawing.Point(496, 121);
+            this.btnOutputFolder.Location = new System.Drawing.Point(671, 131);
             this.btnOutputFolder.Name = "btnOutputFolder";
             this.btnOutputFolder.Size = new System.Drawing.Size(67, 23);
             this.btnOutputFolder.TabIndex = 10;
@@ -101,7 +109,7 @@
             this.tbInputFolder.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.tbInputFolder.Location = new System.Drawing.Point(88, 30);
             this.tbInputFolder.Name = "tbInputFolder";
-            this.tbInputFolder.Size = new System.Drawing.Size(402, 20);
+            this.tbInputFolder.Size = new System.Drawing.Size(577, 20);
             this.tbInputFolder.TabIndex = 0;
             this.tbInputFolder.TextChanged += new System.EventHandler(this.tb_TextChanged);
             // 
@@ -117,7 +125,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 126);
+            this.label3.Location = new System.Drawing.Point(10, 136);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 4;
@@ -129,9 +137,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbOutputFolder.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.tbOutputFolder.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.tbOutputFolder.Location = new System.Drawing.Point(88, 123);
+            this.tbOutputFolder.Location = new System.Drawing.Point(88, 133);
             this.tbOutputFolder.Name = "tbOutputFolder";
-            this.tbOutputFolder.Size = new System.Drawing.Size(402, 20);
+            this.tbOutputFolder.Size = new System.Drawing.Size(577, 20);
             this.tbOutputFolder.TabIndex = 9;
             this.tbOutputFolder.TextChanged += new System.EventHandler(this.tb_TextChanged);
             // 
@@ -176,19 +184,10 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Threads:";
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(8, 178);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(556, 10);
-            this.progressBar1.TabIndex = 8;
-            // 
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(10, 194);
+            this.lblProgress.Location = new System.Drawing.Point(2, 189);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(58, 13);
             this.lblProgress.TabIndex = 9;
@@ -196,7 +195,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(218, 149);
+            this.btnStart.Location = new System.Drawing.Point(218, 159);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(67, 23);
             this.btnStart.TabIndex = 11;
@@ -210,16 +209,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbInputCsv.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.tbInputCsv.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.tbInputCsv.Location = new System.Drawing.Point(88, 95);
+            this.tbInputCsv.Location = new System.Drawing.Point(88, 105);
             this.tbInputCsv.Name = "tbInputCsv";
-            this.tbInputCsv.Size = new System.Drawing.Size(402, 20);
+            this.tbInputCsv.Size = new System.Drawing.Size(577, 20);
             this.tbInputCsv.TabIndex = 7;
             this.tbInputCsv.TextChanged += new System.EventHandler(this.tb_TextChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(10, 98);
+            this.label5.Location = new System.Drawing.Point(10, 108);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 13);
             this.label5.TabIndex = 4;
@@ -228,7 +227,7 @@
             // btnInputCsv
             // 
             this.btnInputCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInputCsv.Location = new System.Drawing.Point(496, 93);
+            this.btnInputCsv.Location = new System.Drawing.Point(671, 103);
             this.btnInputCsv.Name = "btnInputCsv";
             this.btnInputCsv.Size = new System.Drawing.Size(67, 23);
             this.btnInputCsv.TabIndex = 8;
@@ -238,7 +237,7 @@
             // 
             // btnValidateCsv
             // 
-            this.btnValidateCsv.Location = new System.Drawing.Point(88, 149);
+            this.btnValidateCsv.Location = new System.Drawing.Point(88, 159);
             this.btnValidateCsv.Name = "btnValidateCsv";
             this.btnValidateCsv.Size = new System.Drawing.Size(125, 23);
             this.btnValidateCsv.TabIndex = 11;
@@ -246,13 +245,75 @@
             this.btnValidateCsv.UseVisualStyleBackColor = true;
             this.btnValidateCsv.Click += new System.EventHandler(this.btnValidateCsv_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(93, 82);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(87, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Filename Column";
+            // 
+            // tbFilenameColumn
+            // 
+            this.tbFilenameColumn.Location = new System.Drawing.Point(186, 79);
+            this.tbFilenameColumn.Name = "tbFilenameColumn";
+            this.tbFilenameColumn.Size = new System.Drawing.Size(205, 20);
+            this.tbFilenameColumn.TabIndex = 4;
+            this.tbFilenameColumn.TextChanged += new System.EventHandler(this.tbFilenameColumn_TextChanged);
+            // 
+            // cbAnonymise
+            // 
+            this.cbAnonymise.AutoSize = true;
+            this.cbAnonymise.Location = new System.Drawing.Point(400, 81);
+            this.cbAnonymise.Name = "cbAnonymise";
+            this.cbAnonymise.Size = new System.Drawing.Size(207, 17);
+            this.cbAnonymise.TabIndex = 13;
+            this.cbAnonymise.Text = "Anonymise (with FoDicom Anonymizer)";
+            this.cbAnonymise.UseVisualStyleBackColor = true;
+            this.cbAnonymise.CheckedChanged += new System.EventHandler(this.cbAnonymise_CheckedChanged);
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.tbDone);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 207);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(750, 23);
+            this.panel1.TabIndex = 14;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 3);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 13);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "Done:";
+            // 
+            // tbDone
+            // 
+            this.tbDone.Location = new System.Drawing.Point(45, 0);
+            this.tbDone.Name = "tbDone";
+            this.tbDone.ReadOnly = true;
+            this.tbDone.Size = new System.Drawing.Size(166, 20);
+            this.tbDone.TabIndex = 10;
+            // 
             // RepopulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.cbAnonymise);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnInputCsv);
             this.Controls.Add(this.lblProgress);
-            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.nThreads);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -262,15 +323,19 @@
             this.Controls.Add(this.tbOutputFolder);
             this.Controls.Add(this.tbInputCsv);
             this.Controls.Add(this.tbInputFolder);
+            this.Controls.Add(this.tbFilenameColumn);
             this.Controls.Add(this.tbPattern);
             this.Controls.Add(this.cbIncludeSubfolders);
             this.Controls.Add(this.btnValidateCsv);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnOutputFolder);
             this.Controls.Add(this.btnInputFolder);
+            this.MinimumSize = new System.Drawing.Size(750, 230);
             this.Name = "RepopulatorUI";
-            this.Size = new System.Drawing.Size(575, 214);
+            this.Size = new System.Drawing.Size(750, 230);
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -289,12 +354,18 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown nThreads;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblProgress;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.TextBox tbInputCsv;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnInputCsv;
         private System.Windows.Forms.Button btnValidateCsv;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox tbFilenameColumn;
+        private System.Windows.Forms.CheckBox cbAnonymise;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox tbDone;
+        private System.Windows.Forms.Label label7;
     }
 }

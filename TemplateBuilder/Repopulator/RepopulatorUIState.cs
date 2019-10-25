@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows.Input;
+using DicomTypeTranslation.TableCreation;
 using YamlDotNet.Serialization;
 
 namespace TemplateBuilder.Repopulator
@@ -12,6 +13,8 @@ namespace TemplateBuilder.Repopulator
         public int NumThreads;
         public bool IncludeSubdirectories;
         public string Pattern;
+        public string FileNameColumn = ImagingTableCreation.RelativeFileArchiveURI;
+        public bool Anonymise;
 
         [YamlIgnore]
         public DirectoryInfo OutputDirectoryInfo => new DirectoryInfo(OutputFolder);
@@ -21,5 +24,7 @@ namespace TemplateBuilder.Repopulator
         
         [YamlIgnore]
         public FileInfo CsvFileInfo => new FileInfo(InputCsv);
+
+        
     }
 }

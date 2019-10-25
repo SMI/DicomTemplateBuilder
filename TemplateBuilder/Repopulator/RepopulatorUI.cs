@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using YamlDotNet.Serialization;
 
@@ -9,6 +10,9 @@ namespace TemplateBuilder.Repopulator
     {
         public RepopulatorUIState State;
         private const string StateFile = "RepopulatorUI.yaml";
+
+        public DicomRepopulatorProcessor _populator;
+
         public RepopulatorUI()
         {
             InitializeComponent();
@@ -28,6 +32,8 @@ namespace TemplateBuilder.Repopulator
                     tbOutputFolder.Text = State.OutputFolder;
                     nThreads.Value = Math.Min(Math.Max(nThreads.Minimum,State.NumThreads),nThreads.Maximum);
                     tbPattern.Text = State.Pattern;
+                    tbFilenameColumn.Text = State.FileNameColumn;
+                    cbAnonymise.Checked = State.Anonymise;
                 }
             }
             catch (Exception)
@@ -42,6 +48,17 @@ namespace TemplateBuilder.Repopulator
             {
                 var ofd = new OpenFileDialog();
                 ofd.CheckPathExists = true;
+
+                try
+                {
+                    if (tbInputCsv.Text != null)
+                        ofd.InitialDirectory = Path.GetDirectoryName(tbInputCsv.Text);
+                }
+                catch (Exception)
+                {
+                    //they typed something odd in there?
+                }
+
                 ofd.Filter = "Comma Separated File|*.csv";
                 ofd.Multiselect = false;
 
@@ -61,7 +78,16 @@ namespace TemplateBuilder.Repopulator
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                _populator = new DicomRepopulatorProcessor();
+                _populator.Process(State);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
 
         private void tb_TextChanged(object sender, EventArgs e)
@@ -116,6 +142,31 @@ namespace TemplateBuilder.Repopulator
             bool built = mapping.BuildMap(State, out string log);
 
             MessageBox.Show(log,$"Validation { (built ? "Success" : "Failure" )}",MessageBoxButtons.OK,built ? MessageBoxIcon.Information: MessageBoxIcon.Error);
+        }
+
+        private void tbFilenameColumn_TextChanged(object sender, EventArgs e)
+        {
+            State.FileNameColumn = tbFilenameColumn.Text;
+            SaveState();
+        }
+
+        private void cbAnonymise_CheckedChanged(object sender, EventArgs e)
+        {
+            State.Anonymise = cbAnonymise.Checked;
+            SaveState();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            string log = _populator?.MemoryLogTarget?.Logs?.Last();
+
+            if (log != lblProgress.Text)
+                lblProgress.Text = log;
+
+            string done = (_populator?.Done ?? 0).ToString("{0:n0}");
+
+            if(done != tbDone.Text)
+                tbDone.Text = done;
         }
     }
 }

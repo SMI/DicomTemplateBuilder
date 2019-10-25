@@ -11,6 +11,7 @@ using CsvHelper.Configuration;
 using Dicom;
 using DicomTypeTranslation.Helpers;
 using NLog;
+using NLog.Targets;
 
 namespace TemplateBuilder.Repopulator
 {
@@ -26,33 +27,40 @@ namespace TemplateBuilder.Repopulator
 
         private ParallelOptions _parallelOptions;
 
-
+        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget();
+        public int Done { get; private set; }
+        
         public DicomRepopulatorProcessor(string currentDirectory = null)
         {
-            LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(Path.Combine(currentDirectory ?? Environment.CurrentDirectory, "Microservices.NLog.config"), false);
+            string log = Path.Combine(currentDirectory ?? Environment.CurrentDirectory, "NLog.config");
+
+            if(File.Exists(log))
+                LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(log, false);
+
+            LogManager.Configuration.AddTarget(MemoryLogTarget);
+
             _logger = LogManager.GetCurrentClassLogger();
 
             if (!DicomDatasetHelpers.CorrectFoDicomVersion())
                 throw new ApplicationException("Incorrect fo-dicom version for the current platform");
+
+            MemoryLogTarget.Layout = "${level} ${message}";
         }
+
+        
 
 
         public int Process(RepopulatorUIState options)
         {
             _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = options.NumThreads };
-
-            _logger.Debug("CLI options:\n" + options);
-
+            
             _logger.Debug("Checking output directory for contents");
             if (options.OutputDirectoryInfo.EnumerateFileSystemInfos().Any())
             {
                 _logger.Error("Output directory " + options.OutputDirectoryInfo.FullName + " is not empty");
                 return -1;
             }
-
-            Dictionary<DicomTag, int> keyDicomTagToColumnIndexMapping;
-            Dictionary<string, DicomDataset> replacementDict;
-
+            
             _logger.Info("Starting to process");
             _stopwatch = Stopwatch.StartNew();
             
@@ -69,11 +77,12 @@ namespace TemplateBuilder.Repopulator
                 return -1;
             }
 
-            _logger.Info("Loaded " + map.Map.Count + " rows from " + options.CsvFileInfo.FullName);
+            _logger.Info("Loaded " + map.TagColumns.Count + " rows from " + options.CsvFileInfo.FullName);
 
+            
             try
             {
-                ProcessDicomFiles(options, map.Map);
+                ProcessDicomFiles(options, map);
             }
             catch (Exception e)
             {
@@ -103,7 +112,7 @@ namespace TemplateBuilder.Repopulator
         /// contains new values for the tags to be altered.</param>
         private void ProcessDicomFiles(
             RepopulatorUIState options,
-            Dictionary<string, DicomTag> map)
+            CsvToDicomTagMapping map)
         {
             _logger.Info("Starting directory scan of " + options.DirectoryToProcessInfo.FullName);
 
