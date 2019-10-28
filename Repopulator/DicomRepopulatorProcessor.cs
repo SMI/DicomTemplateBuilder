@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CsvHelper;
-using CsvHelper.Configuration;
 using Dicom;
 using DicomTypeTranslation.Helpers;
 using NLog;
 using NLog.Targets;
 
-namespace TemplateBuilder.Repopulator
+namespace Repopulator
 {
     public class DicomRepopulatorProcessor
     {
@@ -28,7 +25,7 @@ namespace TemplateBuilder.Repopulator
 
         private ParallelOptions _parallelOptions;
 
-        public IRowsToFiles FileFindingStrategy { get; }
+        public IRepopulatorMatcher Matcher { get; }
 
         public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget();
         public int Done { get; private set; }
@@ -51,7 +48,7 @@ namespace TemplateBuilder.Repopulator
             MemoryLogTarget.Layout = "${level} ${message}";
         }
         
-        public int Process(RepopulatorUIState options)
+        public int Process(DicomRepopulatorOptions options)
         {
             _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = options.NumThreads };
             
@@ -83,13 +80,22 @@ namespace TemplateBuilder.Repopulator
             var csvFile = options.CsvFileInfo;
             _logger.Info("Starting " + csvFile.FullName);
 
+            RepopulatorJob job;
+
+            //while there are more jobs
+            while ((job = Matcher.Next()) != null)
+            {
+                ProcessJob(job);
+            }
+
+            /*
             //now process each row in the CSV and find matching files
             using (var reader = new CsvReader(csvFile.OpenText()))
             {
                 reader.Configuration.TrimOptions = TrimOptions.Trim;
                 while (reader.Read())
                 {
-                    var files = FileFindingStrategy.GetPathsFor(reader, map);
+                    var files = 
 
                     if (files == null || files.Length == 0)
                     {
@@ -104,6 +110,7 @@ namespace TemplateBuilder.Repopulator
                         }
                 }
             }
+            */
 
             try
             {
@@ -128,9 +135,9 @@ namespace TemplateBuilder.Repopulator
             return 0;
         }
 
-        private void RePopulate(string path, CsvToDicomTagMapping map, int lineNumber)
+        private void ProcessJob(RepopulatorJob job)
         {
-            
+            throw new NotImplementedException();
         }
 
         private void Error(string problemDescription, int lineNumber)
@@ -146,7 +153,7 @@ namespace TemplateBuilder.Repopulator
         /// <param name="options">Options as specified on the command line.</param>
         /// contains new values for the tags to be altered.</param>
         private void ProcessDicomFiles(
-            RepopulatorUIState options,
+            DicomRepopulatorOptions options,
             CsvToDicomTagMapping map)
         {
             _logger.Info("Starting directory scan of " + options.DirectoryToProcessInfo.FullName);
@@ -191,7 +198,7 @@ namespace TemplateBuilder.Repopulator
             FileSystemInfo dFilePath,
             Dictionary<DicomTag, int> keyDicomTagToColumnIndexMapping,
             Dictionary<string, DicomDataset> replacementDict,
-            RepopulatorUIState options)
+            DicomRepopulatorOptions options)
         {
             _logger.Debug("Processing file " + dFilePath.FullName);
 

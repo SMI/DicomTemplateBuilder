@@ -443,7 +443,7 @@ namespace TemplateBuilder
 
         private void tagPopulatorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var ui = new Repopulator.RepopulatorUI();
+            var ui = new RepopulatorUI();
 
             var dc = new DockContent();
             ui.Dock = DockStyle.Fill;

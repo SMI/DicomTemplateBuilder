@@ -1,11 +1,10 @@
 ﻿using System.IO;
-using System.Windows.Input;
 using DicomTypeTranslation.TableCreation;
 using YamlDotNet.Serialization;
 
-namespace TemplateBuilder.Repopulator
+namespace Repopulator
 {
-    public class RepopulatorUIState
+    public class DicomRepopulatorOptions
     {
         public string InputFolder;
         public string InputCsv;

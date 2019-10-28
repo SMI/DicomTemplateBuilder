@@ -1,4 +1,4 @@
-﻿namespace TemplateBuilder.Repopulator
+﻿namespace TemplateBuilder
 {
     partial class RepopulatorUI
     {

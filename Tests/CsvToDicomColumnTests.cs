@@ -1,38 +1,37 @@
 ﻿using System;
 using Dicom;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TemplateBuilder.Repopulator;
+using NUnit.Framework;
+using Repopulator;
 
 namespace Tests
 {
-    [TestClass]
     public class CsvToDicomColumnTests
     {
-        [TestMethod]
+        [Test]
         public void NegativeIndex()
         {
-            var ex = Assert.ThrowsException<ArgumentException>(() => new CsvToDicomColumn("fish", -1, true));
+            var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", -1, true));
             StringAssert.Contains("index cannot be negative",ex.Message);
         }
 
-        [TestMethod]
+        [Test]
         public void NoClearRole()
         {
-            var ex = Assert.ThrowsException<ArgumentException>(() => new CsvToDicomColumn("fish", 0, false));
+            var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", 0, false));
             StringAssert.Contains(ex.Message,"no clear role");
         }
 
-        [TestMethod]
+        [Test]
         public void TooManyRoles()
         {
-            var ex = Assert.ThrowsException<ArgumentException>(() => new CsvToDicomColumn("fish", 0, true,DicomTag.ALineRate));
+            var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", 0, true,DicomTag.ALineRate));
             StringAssert.Contains(ex.Message,"has ambiguous role");
         }
 
-        [TestMethod]
+        [Test]
         public void SequenceTags()
         {
-            var ex = Assert.ThrowsException<ArgumentException>(() => new CsvToDicomColumn("fish", 0, false,DicomTag.AbstractPriorCodeSequence));
+            var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", 0, false,DicomTag.AbstractPriorCodeSequence));
             StringAssert.Contains(ex.Message,"Sequence tags are not supported (AbstractPriorCodeSequence)");
         }
     }

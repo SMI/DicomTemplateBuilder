@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Dicom;
-using DicomTypeTranslation;
 
-namespace TemplateBuilder.Repopulator
+namespace Repopulator
 {
     public class CsvToDicomTagMapping
     {
@@ -50,7 +47,7 @@ namespace TemplateBuilder.Repopulator
         /// <param name="state"></param>
         /// <param name="log"></param>
         /// <returns></returns>
-        public bool BuildMap(RepopulatorUIState state, out string log)
+        public bool BuildMap(DicomRepopulatorOptions state, out string log)
         {
             Clear();
 
@@ -114,7 +111,7 @@ namespace TemplateBuilder.Repopulator
         /// <summary>
         /// Get the key DicomTag and associated CSV column name.
         /// </summary>
-        public CsvToDicomColumn GetKeyDicomTagAndColumnName(RepopulatorUIState state, string columnName,int index)
+        public CsvToDicomColumn GetKeyDicomTagAndColumnName(DicomRepopulatorOptions state, string columnName,int index)
         {
             if(columnName.Equals(state.FileNameColumn,StringComparison.CurrentCultureIgnoreCase))
                 return new CsvToDicomColumn(columnName,index,true);

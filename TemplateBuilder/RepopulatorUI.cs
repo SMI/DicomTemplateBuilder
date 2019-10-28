@@ -2,13 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Repopulator;
 using YamlDotNet.Serialization;
 
-namespace TemplateBuilder.Repopulator
+namespace TemplateBuilder
 {
     public partial class RepopulatorUI : UserControl
     {
-        public RepopulatorUIState State;
+        public DicomRepopulatorOptions State;
         private const string StateFile = "RepopulatorUI.yaml";
 
         public DicomRepopulatorProcessor _populator;
@@ -17,21 +18,21 @@ namespace TemplateBuilder.Repopulator
         {
             InitializeComponent();
 
-            State = new RepopulatorUIState();
+            State = new DicomRepopulatorOptions();
 
             try
             {
                 if (File.Exists("RepopulatorUI.yaml"))
                 {
                     var des = new Deserializer();
-                    State = des.Deserialize<RepopulatorUIState>(File.ReadAllText(StateFile));
+                    State = des.Deserialize<DicomRepopulatorOptions>(File.ReadAllText(StateFile));
 
                     cbIncludeSubfolders.Checked = State.IncludeSubdirectories;
                     tbInputFolder.Text = State.InputFolder;
                     tbInputCsv.Text = State.InputCsv;
                     tbExtraMappings.Text = State.InputExtraMappings;
                     tbOutputFolder.Text = State.OutputFolder;
-                    nThreads.Value = Math.Min(Math.Max(nThreads.Minimum,State.NumThreads),nThreads.Maximum);
+                    nThreads.Value = Math.Min(Math.Max((decimal) nThreads.Minimum,State.NumThreads),nThreads.Maximum);
                     tbPattern.Text = State.Pattern;
                     tbFilenameColumn.Text = State.FileNameColumn;
                     cbAnonymise.Checked = State.Anonymise;
