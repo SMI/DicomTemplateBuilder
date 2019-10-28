@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Repopulator;
+using Repopulator.Matchers;
 using YamlDotNet.Serialization;
 
 namespace TemplateBuilder

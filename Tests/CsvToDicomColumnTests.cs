@@ -2,6 +2,7 @@
 using Dicom;
 using NUnit.Framework;
 using Repopulator;
+using Repopulator.Matchers;
 
 namespace Tests
 {
@@ -11,28 +12,28 @@ namespace Tests
         public void NegativeIndex()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", -1, true));
-            StringAssert.Contains("index cannot be negative",ex.Message);
+            StringAssert.Contains(ex.Message,"index cannot be negative");
         }
 
         [Test]
         public void NoClearRole()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", 0, false));
-            StringAssert.Contains(ex.Message,"no clear role");
+            StringAssert.Contains("no clear role",ex.Message);
         }
 
         [Test]
         public void TooManyRoles()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", 0, true,DicomTag.ALineRate));
-            StringAssert.Contains(ex.Message,"has ambiguous role");
+            StringAssert.Contains("has ambiguous role",ex.Message);
         }
 
         [Test]
         public void SequenceTags()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CsvToDicomColumn("fish", 0, false,DicomTag.AbstractPriorCodeSequence));
-            StringAssert.Contains(ex.Message,"Sequence tags are not supported (AbstractPriorCodeSequence)");
+            StringAssert.Contains("Sequence tags are not supported (AbstractPriorCodeSequence)",ex.Message);
         }
     }
 }

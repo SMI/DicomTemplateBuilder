@@ -6,13 +6,12 @@ using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Dicom;
+using Repopulator.Matchers;
 
 namespace Repopulator
 {
     public class CsvToDicomTagMapping
     {
-        
-
         /// <summary>
         /// The column of the CSV which records the file path to the image(s) being processed.  These should be expressed
         /// relatively (i.e. not absolute path names)
@@ -38,23 +37,35 @@ namespace Repopulator
             FilenameColumn = null;
             CsvFile = null;
             TagColumns.Clear();
+            IsBuilt = false;
         }
 
         /// <summary>
-        /// Reads the headers from the CSV specified in <paramref name="state"/> and builds <see cref="TagColumns"/> and <see cref="FilenameColumn"/>.
+        /// True if the class has been built yet
+        /// </summary>
+        public bool IsBuilt { get; private set; }
+
+        /// <summary>
+        /// Reads the headers from the CSV specified in <paramref name="options"/> and builds <see cref="TagColumns"/> and <see cref="FilenameColumn"/>.
         /// Returns true if the headers constitute a valid set (at least 1 and <see cref="FilenameColumn"/> found).
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="options"></param>
         /// <param name="log"></param>
         /// <returns></returns>
-        public bool BuildMap(DicomRepopulatorOptions state, out string log)
+        public bool BuildMap(DicomRepopulatorOptions options, out string log)
         {
             Clear();
 
             StringBuilder sb  = new StringBuilder();
+            
+            //how we will tie CSV rows to files
+            IRepopulatorMatcher matcher = null;
+
             try
             {
-                CsvFile = state.CsvFileInfo;
+                var extraMappings = GetExtraMappings(options);
+
+                CsvFile = options.CsvFileInfo;
 
                 using (var reader = new CsvReader(CsvFile.OpenText()))
                 {
@@ -69,7 +80,7 @@ namespace Repopulator
                         for (var index = 0; index < reader.Context.HeaderRecord.Length; index++)
                         {
                             var header = reader.Context.HeaderRecord[index];
-                            var match = GetKeyDicomTagAndColumnName(state, header, index);
+                            var match = GetKeyDicomTagAndColumnName(options, header, index,extraMappings);
 
                             if (match != null)
                             {
@@ -86,7 +97,7 @@ namespace Repopulator
                                     TagColumns.Add(match);
                                 }
                                 
-                                sb.AppendLine($"Validated header ''{header}''");
+                                sb.AppendLine($"Validated header '{header}'");
                             }
                             else
                                 sb.AppendLine($"Could not determine tag for '{header}'");
@@ -96,6 +107,12 @@ namespace Repopulator
                     sb.AppendLine($"Found {TagColumns.Count} valid mappings");
                     sb.AppendLine($"FilenameColumn is: {FilenameColumn?.Name ?? "Not Set"}");
                 }
+
+                IsBuilt = true;
+                
+                var matcherFactory = new MatcherFactory();
+                matcher = matcherFactory.Create(this,options);
+                sb.AppendLine($"Matching Strategy is: { matcher?.ToString() ?? "No Strategy Found"}");
             }
             catch (Exception e)
             {
@@ -103,36 +120,77 @@ namespace Repopulator
                 log = sb.ToString();
                 return false;
             }
-
+            
             log = sb.ToString();
-            return TagColumns.Count > 0 && FilenameColumn != null;
+
+
+            return TagColumns.Count > 0 && matcher != null;
+        }
+
+        
+
+        private Dictionary<string, HashSet<DicomTag>> GetExtraMappings(DicomRepopulatorOptions state)
+        {
+            Dictionary<string, HashSet<DicomTag>> toReturn = new Dictionary<string, HashSet<DicomTag>>(StringComparer.CurrentCultureIgnoreCase);
+
+            if(string.IsNullOrWhiteSpace(state.InputExtraMappings))
+                return null;
+
+            var extraMappingsFile = state.ExtraMappings;
+
+            int lineNumber = 0;
+            foreach (string[] pair in File.ReadAllLines(extraMappingsFile.FullName).Select(l => l.Split(new []{':'},StringSplitOptions.RemoveEmptyEntries)))
+            {
+                lineNumber++;
+                
+                //ignore blank lines
+                if(pair.Length == 0)
+                    continue;
+
+                if(pair.Length != 2)
+                    throw new Exception($"Bad line in extra mappings file (line number {lineNumber}).  Line did not match expected format 'ColumnName:TagName'");
+
+
+                var found = DicomDictionary.Default.SingleOrDefault(entry => string.Equals(entry.Keyword ,pair[1],StringComparison.CurrentCultureIgnoreCase));
+
+                if (found == null)
+                    throw new Exception(
+                        $"Bad tag '{pair[1]}' on line number {lineNumber} of ExtraMappings file '{extraMappingsFile.FullName}'. It is not a valid DicomTag name");
+
+                if(!toReturn.ContainsKey(pair[0]))
+                    toReturn.Add(pair[0],new HashSet<DicomTag>());
+
+                toReturn[pair[0]].Add(found.Tag);
+            }
+
+            return toReturn;
         }
 
         /// <summary>
-        /// Get the key DicomTag and associated CSV column name.
+        /// Creates a mapping between a single CSV file column and one or more <see cref="DicomTag"/>
         /// </summary>
-        public CsvToDicomColumn GetKeyDicomTagAndColumnName(DicomRepopulatorOptions state, string columnName,int index)
+        public CsvToDicomColumn GetKeyDicomTagAndColumnName(DicomRepopulatorOptions state, string columnName,int index,Dictionary<string,HashSet<DicomTag>> extraMappings)
         {
+            CsvToDicomColumn toReturn = null;
             if(columnName.Equals(state.FileNameColumn,StringComparison.CurrentCultureIgnoreCase))
-                return new CsvToDicomColumn(columnName,index,true);
-
-            string[] split = columnName.Split(':');
-            if (split.Length == 1)
-            {
-                var found = DicomDictionary.Default.SingleOrDefault(entry => string.Equals(entry.Keyword ,columnName,StringComparison.CurrentCultureIgnoreCase));
-                return found != null ? new CsvToDicomColumn(columnName,index,false,found.Tag) : null;
-            }
+                toReturn = new CsvToDicomColumn(columnName,index,true);
             
-            if(split.Length != 2 || split[0].Length == 0 || split[1].Length == 0)
-                return null;
-            
-            string dicomTagString = split[1];
+            var found = DicomDictionary.Default.SingleOrDefault(entry => string.Equals(entry.Keyword ,columnName,StringComparison.CurrentCultureIgnoreCase));
 
-            // Check the DICOM tag is a valid DICOM tag
-            var found2 =
-                DicomDictionary.Default.SingleOrDefault(entry =>  string.Equals(entry.Keyword ,dicomTagString,StringComparison.CurrentCultureIgnoreCase));
+            if(found != null)
+                if (toReturn == null)
+                    toReturn = new CsvToDicomColumn(columnName,index,false,found.Tag); 
+                else
+                    toReturn.TagsToPopulate.Add(found.Tag); //it's a file path AND a tag! ok...
+                
 
-            return found2 != null ? new CsvToDicomColumn(columnName, index,false, found2.Tag) : null;
+            if (extraMappings != null && extraMappings.ContainsKey(columnName))
+                if(toReturn == null)
+                    toReturn = new CsvToDicomColumn(columnName,index,false,extraMappings[columnName].ToArray());
+                else
+                    toReturn.TagsToPopulate.UnionWith(extraMappings[columnName]);
+
+            return toReturn;
         }
     }
 }

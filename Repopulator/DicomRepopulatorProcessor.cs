@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using Dicom;
 using DicomTypeTranslation.Helpers;
 using NLog;
+using NLog.Config;
 using NLog.Targets;
+using Repopulator.Matchers;
 
 namespace Repopulator
 {
@@ -25,9 +27,9 @@ namespace Repopulator
 
         private ParallelOptions _parallelOptions;
 
-        public IRepopulatorMatcher Matcher { get; }
+        public IRepopulatorMatcher Matcher { get; private set; }
 
-        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget();
+        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget(){Name = "DicomRepopulatorProcessor_Memory"};
         public int Done { get; private set; }
         public int Errors { get; private set; }
 
@@ -37,7 +39,9 @@ namespace Repopulator
 
             if(File.Exists(log))
                 LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(log, false);
-
+            else
+                LogManager.Configuration = new LoggingConfiguration();
+            
             LogManager.Configuration.AddTarget(MemoryLogTarget);
 
             _logger = LogManager.GetCurrentClassLogger();
@@ -51,6 +55,9 @@ namespace Repopulator
         public int Process(DicomRepopulatorOptions options)
         {
             _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = options.NumThreads };
+            
+            if(!options.OutputDirectoryInfo.Exists)
+                options.OutputDirectoryInfo.Create();
             
             _logger.Debug("Checking output directory for contents");
             if (options.OutputDirectoryInfo.EnumerateFileSystemInfos().Any())
@@ -67,7 +74,7 @@ namespace Repopulator
             try
             {
                 if(!map.BuildMap(options,out string log))
-                    throw new Exception("Failed to build map");
+                    throw new Exception("Failed to build map:" + log);
                 
                 _logger.Info("Map built succesfully:" + log);
             }
@@ -80,48 +87,21 @@ namespace Repopulator
             var csvFile = options.CsvFileInfo;
             _logger.Info("Starting " + csvFile.FullName);
 
+            var factory = new MatcherFactory();
+
+            Matcher = factory.Create(map, options);
+
+            if (Matcher == null)
+                throw new Exception("No suitable IRepopulatorMatcher could be built, ensure you have either file paths or instance UIDs in your csv file / extra mappings (otherwise we have no way to match rows to files)");
+
             RepopulatorJob job;
 
             //while there are more jobs
             while ((job = Matcher.Next()) != null)
             {
-                ProcessJob(job);
+                ProcessJob(job,options);
             }
-
-            /*
-            //now process each row in the CSV and find matching files
-            using (var reader = new CsvReader(csvFile.OpenText()))
-            {
-                reader.Configuration.TrimOptions = TrimOptions.Trim;
-                while (reader.Read())
-                {
-                    var files = 
-
-                    if (files == null || files.Length == 0)
-                    {
-                        Errors++;
-                        Error("No files found for row", reader.Context.RawRow);
-                    }
-                    else
-                        foreach (var f in files)
-                        {
-                            RePopulate(f, map,reader.Context.RawRow);
-                            Done++;
-                        }
-                }
-            }
-            */
-
-            try
-            {
-                ProcessDicomFiles(options, map);
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Exception processing dicom files: " + e.Message);
-                return -1;
-            }
-
+            
             var sb = new StringBuilder();
             sb.AppendLine("\n=== Finished processing ===");
             sb.AppendLine("Total input files: " + _nInput);
@@ -135,9 +115,24 @@ namespace Repopulator
             return 0;
         }
 
-        private void ProcessJob(RepopulatorJob job)
+        private void ProcessJob(RepopulatorJob job, DicomRepopulatorOptions options)
         {
-            throw new NotImplementedException();
+            foreach (var col in job.Map.TagColumns)
+                foreach (DicomTag dicomTag in col.TagsToPopulate)
+                    job.File.Dataset.AddOrUpdate(dicomTag, job.Cells[col.Index]);
+             
+            //the relative location in the archive
+            var inputRelativePath =
+            job.File.File.Name.Replace(options.DirectoryToProcessInfo.FullName, "").TrimStart(Path.DirectorySeparatorChar);
+
+            _logger.Debug("Saving output file");
+
+            // Preserves any sub-directory structures
+            var outPath = Path.Combine(options.OutputDirectoryInfo.FullName, inputRelativePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+
+            job.File.Save(outPath);
+
         }
 
         private void Error(string problemDescription, int lineNumber)

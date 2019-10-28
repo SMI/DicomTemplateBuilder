@@ -11,8 +11,8 @@ namespace Repopulator
         public string InputExtraMappings;
         public string OutputFolder;
         public int NumThreads;
-        public bool IncludeSubdirectories;
-        public string Pattern;
+        public bool IncludeSubdirectories = true;
+        public string Pattern = "*.dcm";
         public string FileNameColumn = ImagingTableCreation.RelativeFileArchiveURI;
         public bool Anonymise;
 
@@ -25,6 +25,8 @@ namespace Repopulator
         [YamlIgnore]
         public FileInfo CsvFileInfo => new FileInfo(InputCsv);
 
+        [YamlIgnore]
+        public FileInfo ExtraMappings => new FileInfo(InputExtraMappings);
         
     }
 }

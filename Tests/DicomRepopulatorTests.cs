@@ -80,7 +80,7 @@ namespace Tests
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "KeyNotFirstColumn.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
-                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID" ),
+                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID","sopid:SOPInstanceUID" ),
                 NumThreads = 4
             };
 
