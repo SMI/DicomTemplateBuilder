@@ -63,8 +63,9 @@ namespace Tests
             Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
         }
 
-        [Test]
-        public void KeyNotFirstColumn()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void KeyNotFirstColumn(bool runSecondaryAnon)
         {
             string inputDirPath = Path.Combine(_inputFileBase, "KeyNotFirstColumn");
             const string testFileName = IM_0001_0013_NAME;
@@ -80,6 +81,7 @@ namespace Tests
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "KeyNotFirstColumn.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
+                Anonymise = runSecondaryAnon,
                 InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID","sopid:SOPInstanceUID" ),
                 NumThreads = 4
             };

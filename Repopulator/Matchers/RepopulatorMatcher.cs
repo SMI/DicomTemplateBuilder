@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Repopulator.Matchers
 {
@@ -16,9 +19,22 @@ namespace Repopulator.Matchers
 
             if(string.IsNullOrWhiteSpace(options.InputFolder))
                 throw new ArgumentException("InputFolder has not been set");
+
+        }
+
+        protected IEnumerable<string> GetFileList()
+        {
+            return Directory.GetFiles(Options.InputFolder, Options.Pattern,
+                Options.IncludeSubdirectories? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
         public abstract RepopulatorJob Next();
+
+        public virtual int GetInputFileCount()
+        {
+            return GetFileList().Count();
+        }
+
         public abstract void Dispose();
     }
 }

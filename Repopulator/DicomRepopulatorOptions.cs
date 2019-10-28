@@ -15,6 +15,7 @@ namespace Repopulator
         public string Pattern = "*.dcm";
         public string FileNameColumn = ImagingTableCreation.RelativeFileArchiveURI;
         public bool Anonymise;
+        public int ErrorThreshold = 100;
 
         [YamlIgnore]
         public DirectoryInfo OutputDirectoryInfo => new DirectoryInfo(OutputFolder);

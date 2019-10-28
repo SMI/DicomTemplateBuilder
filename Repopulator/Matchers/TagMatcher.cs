@@ -26,9 +26,8 @@ namespace Repopulator.Matchers
         
         public TagMatcher(CsvToDicomTagMapping map, DicomRepopulatorOptions options):base(map,options)
         {
-            _fileList = Directory.GetFiles(options.InputFolder, options.Pattern,
-                options.IncludeSubdirectories? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-            
+            _fileList = GetFileList().ToArray();
+
             _indexer = GetBestIndexer(map);
 
             if(_indexer == null)
@@ -90,6 +89,11 @@ namespace Repopulator.Matchers
             {
                 _currentFile++;
             }
+        }
+
+        public override int GetInputFileCount()
+        {
+            return _fileList.Length;
         }
 
         public override void Dispose()

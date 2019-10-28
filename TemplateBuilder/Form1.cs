@@ -446,10 +446,11 @@ namespace TemplateBuilder
             var ui = new RepopulatorUI();
 
             var dc = new DockContent();
+            dc.Height = ui.MinimumSize.Height;
             ui.Dock = DockStyle.Fill;
             dc.Controls.Add(ui);
             dc.TabText = "Repopulator";
-            dc.Show(dockPanel1,DockState.DockTop);
+            dc.Show(dockPanel1,DockState.Document);
         }
     }
 

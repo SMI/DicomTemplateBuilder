@@ -11,5 +11,7 @@
         /// null if there are no more files/rows to process
         /// </summary>
         RepopulatorJob Next();
+
+        int GetInputFileCount();
     }
 }
