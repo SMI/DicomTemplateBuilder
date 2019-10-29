@@ -203,7 +203,7 @@ namespace TemplateBuilder
 
         private void tbPattern_TextChanged(object sender, EventArgs e)
         {
-            State.Pattern = tbFilePattern.Text;
+            State.Pattern = string.IsNullOrWhiteSpace(tbFilePattern.Text) ? DicomRepopulatorOptions.DefaultPattern:tbFilePattern.Text;
             SaveState();
         }
 
@@ -229,7 +229,7 @@ namespace TemplateBuilder
 
         private void tbFilenameColumn_TextChanged(object sender, EventArgs e)
         {
-            State.FileNameColumn = tbFilenameColumn.Text;
+            State.FileNameColumn = string.IsNullOrWhiteSpace(tbFilenameColumn.Text) ? DicomRepopulatorOptions.DefaultFileNameColumn : tbFilenameColumn.Text;
             SaveState();
         }
 
@@ -261,7 +261,7 @@ namespace TemplateBuilder
 
                 string errors = string.Format("{0:n0}",nErrors);
 
-                if(done != tbErrors.Text)
+                if(errors != tbErrors.Text)
                     tbErrors.Text = errors;
                 
                 int processed = nDone + nErrors;

@@ -16,6 +16,8 @@ namespace Repopulator.Matchers
                 throw new ArgumentException("Map did not contain file name column");
             
             Reader = new CsvReader(map.CsvFile.OpenText());
+            Reader.Read();
+            Reader.ReadHeader();
             Reader.Configuration.TrimOptions = TrimOptions.Trim; 
         }
         

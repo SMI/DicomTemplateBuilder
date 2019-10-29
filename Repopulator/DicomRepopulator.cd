@@ -1,53 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="TemplateBuilder.Repopulator.RepopulatorUIState">
-    <Position X="1" Y="1.75" Width="2.25" />
+  <Class Name="Repopulator.Matchers.FilePathMatcher" Collapsed="true">
+    <Position X="4.5" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAQgABAAAAAAAQAECAAQQAAAAAAAEAQAAAAACAAA=</HashCode>
-      <FileName>Repopulator\RepopulatorUIState.cs</FileName>
+      <HashCode>AgAAAAAAACAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Matchers\FilePathMatcher.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TemplateBuilder.Repopulator.CsvToDicomTagMapping">
-    <Position X="4.75" Y="1.5" Width="2" />
-    <AssociationLine Name="TagColumns" Type="TemplateBuilder.Repopulator.CsvToDicomColumn" FixedFromPoint="true">
-      <Path>
-        <Point X="6.75" Y="1.989" />
-        <Point X="8.75" Y="1.989" />
-      </Path>
-    </AssociationLine>
+  <Class Name="Repopulator.Matchers.MatcherFactory">
+    <Position X="3.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAGAAAAAAAAAAAAAAABAAAAAAAAABAAAAARAAAA=</HashCode>
-      <FileName>Repopulator\CsvToDicomTagMapping.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Matchers\MatcherFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Repopulator.Matchers.RepopulatorMatcher" Collapsed="true">
+    <Position X="5.5" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAADIAAAAAAAAAAAAAAAAAAAAAIAAAAABAAAA=</HashCode>
+      <FileName>Matchers\RepopulatorMatcher.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Repopulator.Matchers.TagMatcher" Collapsed="true">
+    <Position X="7" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAEAAAACAAAAABAAAAAgAAAAAAAAAAJAQgBAAAAAA=</HashCode>
+      <FileName>Matchers\TagMatcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Repopulator.CsvToDicomColumn" Collapsed="true">
+    <Position X="12.5" Y="6" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAAAEAABAAAAA=</HashCode>
+      <FileName>CsvToDicomColumn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Repopulator.CsvToDicomTagMapping">
+    <Position X="8.75" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAGAAAAAAAAAAAAAAABAAAAAAAAABAAAAARBAAA=</HashCode>
+      <FileName>CsvToDicomTagMapping.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="FilenameColumn" />
     </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Field Name="TagColumns" />
-    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="TemplateBuilder.Repopulator.CsvToDicomColumn">
-    <Position X="8.75" Y="1.25" Width="2.25" />
+  <Class Name="Repopulator.DicomRepopulatorOptions">
+    <Position X="15.5" Y="0.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAEAAAAAAAAAEAABAAAAA=</HashCode>
-      <FileName>Repopulator\CsvToDicomColumn.cs</FileName>
+      <HashCode>AAAAgQgABAAAAAAAQAECAAQQCAAAEAgEASAAAAACAAA=</HashCode>
+      <FileName>DicomRepopulatorOptions.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TemplateBuilder.Repopulator.DicomRepopulatorProcessor">
-    <Position X="4.75" Y="4" Width="2.5" />
+  <Class Name="Repopulator.DicomRepopulatorProcessor" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="1.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AABAAAAIAAAAASAEAhggAIAAIAAABAAAAAAAAAAAgAA=</HashCode>
-      <FileName>Repopulator\DicomRepopulatorProcessor.cs</FileName>
+      <HashCode>AAhAAAAIACAAQQAAAgAAAIBAMAAABACAAAAQAAAAgAA=</HashCode>
+      <FileName>DicomRepopulatorProcessor.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="FileFindingStrategy" />
+      <Property Name="Matcher" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Interface Name="TemplateBuilder.Repopulator.IFindFilesForRows">
-    <Position X="9" Y="4" Width="2.25" />
+  <Class Name="Repopulator.RepopulatorJob">
+    <Position X="13" Y="3.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
-      <FileName>Repopulator\IFindFilesForRows.cs</FileName>
+      <HashCode>AAAAAAAAABAAAAAAAAIAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RepopulatorJob.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Repopulator.Matchers.IRepopulatorMatcher">
+    <Position X="5.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Matchers\IRepopulatorMatcher.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />
