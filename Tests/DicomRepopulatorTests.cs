@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Dicom;
 using NUnit.Framework;
@@ -31,35 +32,45 @@ namespace Tests
             if (Directory.Exists(_seriesFilesBase)) Directory.Delete(_seriesFilesBase, true);
         }
 
+        [Test]
+        public void Test_AbsolutePaths_InCsv()
+        {
+            //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
+            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013,
+                Path.Combine("subdir", nameof(TestDicomFiles.IM_0001_0013) +".dcm"));
+            
+            //Create a CSV with the full path to the image
+            var inputCsv = CreateInputCsvFile(
+                $@"File,PatientID
+{inputDicom.FullName},ABC");
 
+            //run repopulator
+            var outDir = AssertRunsSuccesfully(1,inputCsv,null,inputDicom.Directory.Parent,(o)=>o.FileNameColumn = "File");
+            
+            //anonymous image should appear in the subdirectory of the out dir
+            var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestDicomFiles.IM_0001_0013) + ".dcm"));
+            FileAssert.Exists(expectedOutFile);
+        }
+        
         [Test]
         public void SingleFileBasicOperationTest()
         {
-            string inputDirPath = Path.Combine(_inputFileBase, "SingleFileBasicOperationTest");
-            const string testFileName = IM_0001_0013_NAME;
+            var inFile = CreateInputFile(TestDicomFiles.IM_0001_0013,nameof(TestDicomFiles.IM_0001_0013) +".dcm");
 
-            Directory.CreateDirectory(inputDirPath);
-            File.WriteAllBytes(Path.Combine(inputDirPath, testFileName), TestDicomFiles.IM_0001_0013);
+            var outDir = AssertRunsSuccesfully(1, null, 
+                
+                //Treat Csv column "ID" as a replacement for PatientID
+                CreateExtraMappingsFile("ID:PatientID"), inFile.Directory,
+                
+                //Give it BasicTest.csv 
+                (o) => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
 
-            string outputDirPath = Path.Combine(_outputFileBase, "SingleFileBasicOperationTest");
-            string expectedFile = Path.Combine(outputDirPath, testFileName);
-            
-            
-            var options = new DicomRepopulatorOptions
-            {
-                InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"),
-                InputFolder = inputDirPath,
-                OutputFolder = outputDirPath,
-                InputExtraMappings = GenerateExtraMappingsFile("ID:PatientID"),
-                NumThreads = 4
-            };
+            //Anonymous dicom image should exist
+            var expectedFile = new FileInfo(Path.Combine(outDir.FullName, nameof(TestDicomFiles.IM_0001_0013) + ".dcm"));
+            FileAssert.Exists(expectedFile);
 
-            int result = new DicomRepopulatorProcessor(TestContext.CurrentContext.TestDirectory).Process(options);
-            Assert.AreEqual(0, result);
-
-            Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
-
-            DicomFile file = DicomFile.Open(expectedFile);
+            //it should have the patient ID from the csv
+            DicomFile file = DicomFile.Open(expectedFile.FullName);
             Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
         }
 
@@ -82,7 +93,7 @@ namespace Tests
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
                 Anonymise = runSecondaryAnon,
-                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID","sopid:SOPInstanceUID" ),
+                InputExtraMappings = CreateExtraMappingsFile( "ID:PatientID","sopid:SOPInstanceUID" ).FullName,
                 NumThreads = 4
             };
 
@@ -112,7 +123,7 @@ namespace Tests
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "WithDate.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
-                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID", "Date:StudyDate" ),
+                InputExtraMappings = CreateExtraMappingsFile( "ID:PatientID", "Date:StudyDate" ).FullName,
                 NumThreads = 4
             };
 
@@ -144,7 +155,7 @@ namespace Tests
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "WithDate.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
-                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID", "Date:StudyDate", "Date:SeriesDate" ),
+                InputExtraMappings = CreateExtraMappingsFile( "ID:PatientID", "Date:StudyDate", "Date:SeriesDate" ).FullName,
                 NumThreads = 1
             };
 
@@ -176,7 +187,7 @@ namespace Tests
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "SpacesInCsvHeaderTest.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
-                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID" ),
+                InputExtraMappings = CreateExtraMappingsFile( "ID:PatientID" ).FullName,
                 NumThreads = 1
             };
 
@@ -209,7 +220,7 @@ namespace Tests
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
-                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID" ),
+                InputExtraMappings = CreateExtraMappingsFile( "ID:PatientID" ).FullName,
                 NumThreads = 1
             };
 
@@ -251,7 +262,7 @@ namespace Tests
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "TwoSeriesCsv.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
-                InputExtraMappings = GenerateExtraMappingsFile( "ID:PatientID" ),
+                InputExtraMappings = CreateExtraMappingsFile( "ID:PatientID" ).FullName,
                 NumThreads = 4
             };
 
@@ -276,16 +287,84 @@ namespace Tests
             Assert.AreEqual("NewPatientID2", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
         }
         /// <summary>
-        /// Writes the supplied string to "ExtraMappings.csv" in the test directory and returns the path to the file
+        /// Writes the supplied string to "ExtraMappings.txt" in the test directory and returns the path to the file
         /// </summary>
         /// <param name="contents"></param>
         /// <returns></returns>
-        private string GenerateExtraMappingsFile(params string[] contents)
+        private FileInfo CreateExtraMappingsFile(params string[] contents)
         {
-            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory,"ExtraMappings.csv");
+            return GenerateTextFile(contents, "ExtraMappings.txt");
+        }
+        
+        /// <summary>
+        /// Writes the supplied string to "Map.csv" in the test directory and returns the path to the file
+        /// </summary>
+        private FileInfo CreateInputCsvFile(params string[] contents)
+        {
+            return GenerateTextFile(contents, "Map.csv");
+        }
+
+        private FileInfo GenerateTextFile(string[] contents, string filename)
+        {
+            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory,filename);
             File.WriteAllLines(filePath,contents);
 
-            return filePath;
+            return new FileInfo(filePath);
+        }
+
+        private FileInfo CreateInputFile(byte[] bytes,string filename,[System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
+        {
+            string inputDirPath = Path.Combine(_inputFileBase, memberName);
+            
+            Directory.CreateDirectory(inputDirPath);
+            var toReturn = new FileInfo(Path.Combine(inputDirPath, filename));
+            
+            toReturn.Directory.Create();
+
+            File.WriteAllBytes(toReturn.FullName, bytes);
+
+            return toReturn;
+        }
+        /// <summary>
+        /// Runs the <see cref="DicomRepopulatorProcessor"/> with the provided <paramref name="inputCsv"/> etc.  Asserts that there
+        /// are no errors during the run and th
+        /// </summary>
+        /// <param name="expectedDone"></param>
+        /// <param name="inputCsv"></param>
+        /// <param name="inputExtraMapping"></param>
+        /// <param name="inputDicomDirectory"></param>
+        /// <param name="memberName"></param>
+        /// <returns></returns>
+        private DirectoryInfo AssertRunsSuccesfully(int expectedDone, FileInfo inputCsv, FileInfo inputExtraMapping,
+            DirectoryInfo inputDicomDirectory,
+            Action<DicomRepopulatorOptions> adjustOptions = null,
+            [System.Runtime.CompilerServices.CallerMemberName]
+            string memberName = "")
+        {
+            string outputDirPath = Path.Combine(_outputFileBase, memberName);
+
+            Directory.CreateDirectory(outputDirPath);
+            Directory.Delete(outputDirPath,true);
+
+            var options = new DicomRepopulatorOptions
+            {
+                InputCsv = inputCsv?.FullName,
+                InputFolder = inputDicomDirectory?.FullName,
+                InputExtraMappings = inputExtraMapping?.FullName,
+                OutputFolder = outputDirPath,
+                NumThreads = 4
+            };
+
+            adjustOptions?.Invoke(options);
+
+            var processor = new DicomRepopulatorProcessor(TestContext.CurrentContext.TestDirectory);
+            int result = processor.Process(options);
+            Assert.AreEqual(0, result);
+
+            Assert.AreEqual(expectedDone,processor.Done);
+            Assert.AreEqual(0,processor.Errors,"There were non fatal errors, examine processor.MemoryLogTarget for details");
+
+            return new DirectoryInfo(outputDirPath);
         }
     }
 }
