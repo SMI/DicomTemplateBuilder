@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Repopulator.Matchers
 {
-    public abstract class RepopulatorMatcher : IRepopulatorMatcher, IDisposable
+    public abstract class RepopulatorMatcher : IRepopulatorMatcher
     {
         protected DicomRepopulatorOptions Options { get; }
         protected CsvToDicomTagMapping Map { get; }

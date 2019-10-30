@@ -111,8 +111,8 @@ namespace Repopulator
                 IsBuilt = true;
                 
                 var matcherFactory = new MatcherFactory();
-                matcher = matcherFactory.Create(this,options);
-                sb.AppendLine($"Matching Strategy is: { matcher?.ToString() ?? "No Strategy Found"}");
+                using(matcher = matcherFactory.Create(this,options))
+                    sb.AppendLine($"Matching Strategy is: { matcher?.ToString() ?? "No Strategy Found"}");
             }
             catch (Exception e)
             {

@@ -63,6 +63,8 @@
             this.btnCopyToClipboard = new System.Windows.Forms.Button();
             this.nErrorThreshold = new System.Windows.Forms.NumericUpDown();
             this.lblErrorThreshold = new System.Windows.Forms.Label();
+            this.lblCulture = new System.Windows.Forms.Label();
+            this.tbCulture = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nErrorThreshold)).BeginInit();
@@ -422,11 +424,30 @@
             this.lblErrorThreshold.TabIndex = 20;
             this.lblErrorThreshold.Text = "Error Threshold:";
             // 
+            // lblCulture
+            // 
+            this.lblCulture.AutoSize = true;
+            this.lblCulture.Location = new System.Drawing.Point(522, 165);
+            this.lblCulture.Name = "lblCulture";
+            this.lblCulture.Size = new System.Drawing.Size(43, 13);
+            this.lblCulture.TabIndex = 22;
+            this.lblCulture.Text = "Culture:";
+            // 
+            // tbCulture
+            // 
+            this.tbCulture.Location = new System.Drawing.Point(567, 162);
+            this.tbCulture.Name = "tbCulture";
+            this.tbCulture.Size = new System.Drawing.Size(100, 20);
+            this.tbCulture.TabIndex = 23;
+            this.tbCulture.TextChanged += new System.EventHandler(this.tbCulture_TextChanged);
+            // 
             // RepopulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.tbCulture);
+            this.Controls.Add(this.lblCulture);
             this.Controls.Add(this.nErrorThreshold);
             this.Controls.Add(this.lblErrorThreshold);
             this.Controls.Add(this.btnCopyToClipboard);
@@ -503,5 +524,7 @@
         private System.Windows.Forms.Button btnCopyToClipboard;
         private System.Windows.Forms.NumericUpDown nErrorThreshold;
         private System.Windows.Forms.Label lblErrorThreshold;
+        private System.Windows.Forms.Label lblCulture;
+        private System.Windows.Forms.TextBox tbCulture;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using DicomTypeTranslation.TableCreation;
 using YamlDotNet.Serialization;
 
@@ -19,6 +20,7 @@ namespace Repopulator
         public string FileNameColumn = DefaultFileNameColumn;
         public bool Anonymise;
         public int ErrorThreshold = 100;
+        public CultureInfo Culture = CultureInfo.CurrentCulture;
         
 
         [YamlIgnore]

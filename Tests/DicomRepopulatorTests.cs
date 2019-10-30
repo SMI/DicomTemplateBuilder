@@ -33,7 +33,7 @@ namespace Tests
         }
 
         [Test]
-        public void Test_AbsolutePaths_InCsv()
+        public void Test_AbsolutePath_InCsv()
         {
             //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
             var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013,
@@ -45,19 +45,90 @@ namespace Tests
 {inputDicom.FullName},ABC");
 
             //run repopulator
-            var outDir = AssertRunsSuccesfully(1,inputCsv,null,inputDicom.Directory.Parent,(o)=>o.FileNameColumn = "File");
+            var outDir = AssertRunsSuccesfully(1,
+                0,
+                inputCsv,
+                null,
+                inputDicom.Directory.Parent,
+                (o) => o.FileNameColumn = "File");
             
             //anonymous image should appear in the subdirectory of the out dir
             var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestDicomFiles.IM_0001_0013) + ".dcm"));
             FileAssert.Exists(expectedOutFile);
         }
-        
+
+        [TestCase("./subdir/IM_0001_0013.dcm")]
+        [TestCase("subdir/IM_0001_0013.dcm")]
+        [TestCase("./../Test_RelativePath_InCsv/subdir/IM_0001_0013.dcm")]
+        public void Test_RelativePath_InCsv(string csvPath)
+        {
+            //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
+            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013,
+                Path.Combine("subdir", nameof(TestDicomFiles.IM_0001_0013) +".dcm"));
+            
+            //Create a CSV with the full path to the image
+            var inputCsv = CreateInputCsvFile(
+                $@"File,PatientID
+{csvPath},ABC");
+
+            //run repopulator
+            var outDir = AssertRunsSuccesfully(1,
+                0,
+                inputCsv,
+                null,
+                inputDicom.Directory.Parent,
+                (o) => o.FileNameColumn = "File");
+            
+            //anonymous image should appear in the subdirectory of the out dir
+            var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestDicomFiles.IM_0001_0013) + ".dcm"));
+            FileAssert.Exists(expectedOutFile);
+        }
+
+        [Test]
+        public void Test_StudyDateTag_GoodData()
+        {
+            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013, "mydicom.dcm");
+            var inputCsv = CreateInputCsvFile(
+                $@"RelativeFileArchiveURI,PatientID,StudyDate
+{inputDicom.FullName},ABC123,2001-01-01");
+
+            var outDir = AssertRunsSuccesfully(1,0,inputCsv,null,inputDicom.Directory);
+            
+            var fi = new FileInfo (Path.Combine(outDir.FullName,"mydicom.dcm"));
+            FileAssert.Exists(fi);
+
+            DicomFile file = DicomFile.Open(fi.FullName);
+            Assert.AreEqual("ABC123", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+            Assert.AreEqual(new DateTime(2001,1,1), file.Dataset.GetValue<DateTime>(DicomTag.StudyDate, 0));
+
+        }
+
+        [Test]
+        public void Test_StudyDateTag_BadData()
+        {
+            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013, "mydicom.dcm");
+            var inputCsv = CreateInputCsvFile(
+                $@"RelativeFileArchiveURI,PatientID,StudyDate
+{inputDicom.FullName},ABC123,Lolz");
+
+            //should be an error because Lolz is not a valid date!
+            var outDir = AssertRunsSuccesfully(0,1,inputCsv,null,inputDicom.Directory);
+            
+            var fi = new FileInfo (Path.Combine(outDir.FullName,"mydicom.dcm"));
+            FileAssert.Exists(fi);
+
+            DicomFile file = DicomFile.Open(fi.FullName);
+            Assert.AreEqual("ABC123", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+            Assert.AreEqual(new DateTime(2001,1,1), file.Dataset.GetValue<DateTime>(DicomTag.StudyDate, 0));
+
+        }
+
         [Test]
         public void SingleFileBasicOperationTest()
         {
             var inFile = CreateInputFile(TestDicomFiles.IM_0001_0013,nameof(TestDicomFiles.IM_0001_0013) +".dcm");
 
-            var outDir = AssertRunsSuccesfully(1, null, 
+            var outDir = AssertRunsSuccesfully(1, 0,null, 
                 
                 //Treat Csv column "ID" as a replacement for PatientID
                 CreateExtraMappingsFile("ID:PatientID"), inFile.Directory,
@@ -312,6 +383,14 @@ namespace Tests
             return new FileInfo(filePath);
         }
 
+        /// <summary>
+        /// Creates a new input directory with the name of the calling method (under <see cref="_inputFileBase"/>) then creates
+        /// the given dicom file (<paramref name="bytes"/>) at <paramref name="filename"/> location (which can include subdirectories)
+        /// </summary>
+        /// <param name="bytes">The dicom files raw bytes</param>
+        /// <param name="filename">The filename to write out e.g. "my.dcm" or "mysubdir/my.dcm"</param>
+        /// <param name="memberName"></param>
+        /// <returns></returns>
         private FileInfo CreateInputFile(byte[] bytes,string filename,[System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
         {
             string inputDirPath = Path.Combine(_inputFileBase, memberName);
@@ -335,36 +414,59 @@ namespace Tests
         /// <param name="inputDicomDirectory"></param>
         /// <param name="memberName"></param>
         /// <returns></returns>
-        private DirectoryInfo AssertRunsSuccesfully(int expectedDone, FileInfo inputCsv, FileInfo inputExtraMapping,
+        private DirectoryInfo AssertRunsSuccesfully(int expectedDone, int expectedErrors, FileInfo inputCsv, FileInfo inputExtraMapping,
             DirectoryInfo inputDicomDirectory,
             Action<DicomRepopulatorOptions> adjustOptions = null,
             [System.Runtime.CompilerServices.CallerMemberName]
             string memberName = "")
         {
-            string outputDirPath = Path.Combine(_outputFileBase, memberName);
+            var processor = GetProcessor(inputCsv,
+                inputExtraMapping,
+                inputDicomDirectory,
+                adjustOptions,
+                memberName,
+                out DicomRepopulatorOptions options,
+                out DirectoryInfo outputDirPath);
+            
+            int result = processor.Process(options);
+            Assert.AreEqual(0, result);
+            
+            foreach (var log in processor.MemoryLogTarget.Logs)
+                Console.WriteLine(log);
 
-            Directory.CreateDirectory(outputDirPath);
-            Directory.Delete(outputDirPath,true);
+            Assert.AreEqual(expectedErrors,processor.Errors,"Expected error count was not correct");
+            Assert.AreEqual(expectedDone,processor.Done, "Expected success count was not correct");
 
-            var options = new DicomRepopulatorOptions
+            return outputDirPath;
+        }
+        
+        private DicomRepopulatorProcessor GetProcessor(FileInfo inputCsv, FileInfo inputExtraMapping,
+            DirectoryInfo inputDicomDirectory, Action<DicomRepopulatorOptions> adjustOptions, string memberName,
+            out DicomRepopulatorOptions options,
+            out DirectoryInfo outputDirPath)
+        {
+            outputDirPath = new DirectoryInfo(Path.Combine(_outputFileBase, memberName));
+
+            //delete old content
+            if(Directory.Exists(outputDirPath.FullName))
+                Directory.Delete(outputDirPath.FullName,true);
+
+            Directory.CreateDirectory(outputDirPath.FullName);
+            
+
+            options = new DicomRepopulatorOptions
             {
                 InputCsv = inputCsv?.FullName,
                 InputFolder = inputDicomDirectory?.FullName,
                 InputExtraMappings = inputExtraMapping?.FullName,
-                OutputFolder = outputDirPath,
+                OutputFolder = outputDirPath.FullName,
                 NumThreads = 4
             };
 
             adjustOptions?.Invoke(options);
 
-            var processor = new DicomRepopulatorProcessor(TestContext.CurrentContext.TestDirectory);
-            int result = processor.Process(options);
-            Assert.AreEqual(0, result);
-
-            Assert.AreEqual(expectedDone,processor.Done);
-            Assert.AreEqual(0,processor.Errors,"There were non fatal errors, examine processor.MemoryLogTarget for details");
-
-            return new DirectoryInfo(outputDirPath);
+            return new DicomRepopulatorProcessor(TestContext.CurrentContext.TestDirectory);
         }
+
     }
 }

@@ -7,11 +7,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dicom;
+using DicomTypeTranslation;
 using DicomTypeTranslation.Helpers;
+using FAnsi.Discovery.QuerySyntax.Update;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using Repopulator.Matchers;
+using Repopulator.TagUpdaters;
+using TypeGuesser.Deciders;
 
 namespace Repopulator
 {
@@ -23,7 +27,9 @@ namespace Repopulator
 
         private ParallelOptions _parallelOptions;
         private DicomAnonymizer _anonymizer;
-        
+
+        private ITagUpdater _tagUpdater;
+
         public IRepopulatorMatcher Matcher { get; private set; }
 
         public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget(){Name = "DicomRepopulatorProcessor_Memory"};
@@ -61,7 +67,7 @@ namespace Repopulator
         public int Process(DicomRepopulatorOptions options)
         {
             _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = options.NumThreads };
-            
+            _tagUpdater = new ParseStringsUpdater(options.Culture);
             _anonymizer = options.Anonymise ? new DicomAnonymizer() : null;
 
             if(!options.OutputDirectoryInfo.Exists)
@@ -97,34 +103,35 @@ namespace Repopulator
 
             var factory = new MatcherFactory();
 
-            Matcher = factory.Create(map, options);
-
-            if (Matcher == null)
-                throw new Exception("No suitable IRepopulatorMatcher could be built, ensure you have either file paths or instance UIDs in your csv file / extra mappings (otherwise we have no way to match rows to files)");
-
-            _nInput = Matcher.GetInputFileCount();
-
-            RepopulatorJob job = null;
-
-            //while there are more jobs
-            do
+            using (Matcher = factory.Create(map, options))
             {
-                try
-                {
-                    job = Matcher.Next();
-                    
-                    if(job != null)
-                        ProcessJob(job, options);
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e);
-                    Interlocked.Increment(ref _nErrors);
-                }
-            } while (job != null && _nErrors < options.ErrorThreshold);
+                if (Matcher == null)
+                    throw new Exception("No suitable IRepopulatorMatcher could be built, ensure you have either file paths or instance UIDs in your csv file / extra mappings (otherwise we have no way to match rows to files)");
 
-            if(_nErrors >= options.ErrorThreshold)
-                throw new Exception("Error threshold reached");
+                _nInput = Matcher.GetInputFileCount();
+
+                RepopulatorJob job = null;
+
+                //while there are more jobs
+                do
+                {
+                    try
+                    {
+                        job = Matcher.Next();
+                    
+                        if(job != null)
+                            ProcessJob(job, options);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error(e);
+                        Interlocked.Increment(ref _nErrors);
+                    }
+                } while (job != null && _nErrors < options.ErrorThreshold);
+
+                if(_nErrors >= options.ErrorThreshold)
+                    throw new Exception("Error threshold reached");
+            }
             
             var sb = new StringBuilder();
             sb.AppendLine("\n=== Finished processing ===");
@@ -138,16 +145,16 @@ namespace Repopulator
 
             return 0;
         }
-
+        
+        
+            
         private void ProcessJob(RepopulatorJob job, DicomRepopulatorOptions options)
         {
             if(options.Anonymise)
                 _anonymizer.AnonymizeInPlace(job.File.Dataset);
 
-            foreach (var col in job.Map.TagColumns)
-                foreach (DicomTag dicomTag in col.TagsToPopulate)
-                    job.File.Dataset.AddOrUpdate(dicomTag, job.Cells[col.Index]);
-             
+            _tagUpdater.UpdateTags(job);
+            
             //the relative location in the archive
             var inputRelativePath =
             job.File.File.Name.Replace(options.DirectoryToProcessInfo.FullName, "").TrimStart(Path.DirectorySeparatorChar);

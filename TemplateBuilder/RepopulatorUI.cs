@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,6 +41,9 @@ namespace TemplateBuilder
         public const string HelpErrors =
             "The number of errors occuring during processing.  For example this can be an error resolving a CSV line or an error writting a tag / file to disk.";
 
+        public const string HelpCulture
+            = "The culture to use for parsing string values into dicom types e.g. dates, numbers";
+
         public RepopulatorUI()
         {
             InitializeComponent();
@@ -62,6 +67,7 @@ namespace TemplateBuilder
                     tbFilePattern.Text = State.Pattern;
                     tbFilenameColumn.Text = State.FileNameColumn;
                     cbAnonymise.Checked = State.Anonymise;
+                    tbCulture.Text = State.Culture.DisplayName;
                 }
             }
             catch (Exception)
@@ -94,6 +100,8 @@ namespace TemplateBuilder
 
             tt.SetToolTip(lblDone,HelpDone);
             tt.SetToolTip(lblErrors,HelpErrors);
+
+            tt.SetToolTip(lblCulture,HelpCulture);
         }
         
 
@@ -297,5 +305,20 @@ namespace TemplateBuilder
                 Clipboard.SetText(string.Join(Environment.NewLine, logs));
         }
 
+        private void tbCulture_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                State.Culture = new CultureInfo(tbCulture.Text);
+                tbCulture.ForeColor = Color.Black;
+            }
+            catch (Exception)
+            {
+                tbCulture.ForeColor = Color.Red;
+            }
+
+            SaveState();
+
+        }
     }
 }
