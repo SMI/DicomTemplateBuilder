@@ -4,8 +4,12 @@
 
 - [Background](#background)
 - [Matching Rows to Files](#matching-rows-to-files)
-  - [By File Path](#by-file-path)
+  - [Match by File Path](#match-by-file-path)
     - [File Path Formats](#file-path-formats)
+  - [Match by Tag](#match-by-tag)
+- [Extra Column Mappings](#extra-column-mappings)
+- [Outstanding Issues](#outstanding-issues)
+- [Error States](#error-states)
 
 ## Background
 
@@ -19,7 +23,7 @@ Each row in the CSV is responsible for updating one or more Dicom images.  There
  - By SopInstanceUID
  - By secondary UID (SeriesInstanceUID or StudyInstanceUID)
 
-### By File Path
+### Match By File Path
 
 You can specify which image to anonymise directly in the CSV by creating a column called `RelativeFileArchiveURI`.  For example
 
@@ -44,7 +48,16 @@ When specifying the file paths (to dicom files) in the anonymisation CSV you can
 |Relative Windows(dot prefix)|./temp/fish.dcm|Yes|
 |Relative No Prefix|temp/fish.dcm|No|
 
-## Arbitrary Column Names (and 1-to-n mapping)
+### Match By Tag
+
+If file path is a problem then Csv files can instead contain the file(s) UIDs.  If there is a column called `SOPInstanceUID` then this will be used to map between CSV and files in the input directory.  
+
+If `SOPInstanceUID` is unavailable then Series / Study UID tags will be used for mapping.  This allows you to specify a set of values in the CSV that should be overwritten in all images in a series/study at once.
+
+When matching on tag the entire CSV has to be read into memory at once (in order to match files as they are found).  This may be a problem with very large CSV files.
+
+
+## Extra Column Mappings
 
 Normally columns in the CSV are expected to be named after dicom tags e.g. PatientID.  However you can use your own headers (e.g. patid) by supplying an `Extra Mappings` file.
 
@@ -61,7 +74,6 @@ MyDate:StudyDate
 MyDate:SeriesDate
 ```
 _Example would write values stored in the MyDate column of the CSV into dicom tags StudyDate and SeriesDate_
-
 
 ## Outstanding Issues
 
