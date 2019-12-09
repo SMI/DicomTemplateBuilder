@@ -23,21 +23,14 @@
     <ProjectReference Include="..\Repopulator\Repopulator.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="TestDicomFiles.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TestDicomFiles.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="TestDicomFiles.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TestDicomFiles.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Update="BasicTest.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\IM-0001-0013.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\IM-0001-0019.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="KeyNotFirstColumn.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

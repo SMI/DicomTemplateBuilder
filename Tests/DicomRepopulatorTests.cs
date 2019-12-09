@@ -36,8 +36,8 @@ namespace Tests
         public void Test_AbsolutePath_InCsv()
         {
             //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
-            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013,
-                Path.Combine("subdir", nameof(TestDicomFiles.IM_0001_0013) +".dcm"));
+            var inputDicom = CreateInputFile(TestData.IMG_013,
+                Path.Combine("subdir", nameof(TestData.IMG_013) +".dcm"));
             
             //Create a CSV with the full path to the image
             var inputCsv = CreateInputCsvFile(
@@ -53,18 +53,17 @@ namespace Tests
                 (o) => o.FileNameColumn = "File");
             
             //anonymous image should appear in the subdirectory of the out dir
-            var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestDicomFiles.IM_0001_0013) + ".dcm"));
+            var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestData.IMG_013) + ".dcm"));
             FileAssert.Exists(expectedOutFile);
         }
 
-        [TestCase("./subdir/IM_0001_0013.dcm")]
-        [TestCase("subdir/IM_0001_0013.dcm")]
-        [TestCase("./../Test_RelativePath_InCsv/subdir/IM_0001_0013.dcm")]
+        [TestCase("./subdir/IM-0001-0013.dcm")]
+        [TestCase("subdir/IM-0001-0013.dcm")]
+        [TestCase("./../Test_RelativePath_InCsv/subdir/IM-0001-0013.dcm")]
         public void Test_RelativePath_InCsv(string csvPath)
         {
             //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
-            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013,
-                Path.Combine("subdir", nameof(TestDicomFiles.IM_0001_0013) +".dcm"));
+            var inputDicom = TestData.Create(new FileInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory,nameof(Test_RelativePath_InCsv),"subdir", Path.GetFileName(TestData.IMG_013))),TestData.IMG_013);
             
             //Create a CSV with the full path to the image
             var inputCsv = CreateInputCsvFile(
@@ -80,14 +79,14 @@ namespace Tests
                 (o) => o.FileNameColumn = "File");
             
             //anonymous image should appear in the subdirectory of the out dir
-            var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestDicomFiles.IM_0001_0013) + ".dcm"));
+            var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", Path.GetFileName(TestData.IMG_013)));
             FileAssert.Exists(expectedOutFile);
         }
 
         [Test]
         public void Test_StudyDateTag_GoodData()
         {
-            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013, "mydicom.dcm");
+            var inputDicom = CreateInputFile(TestData.IMG_013, "mydicom.dcm");
             var inputCsv = CreateInputCsvFile(
                 $@"RelativeFileArchiveURI,PatientID,StudyDate
 {inputDicom.FullName},ABC123,2001-01-01");
@@ -107,7 +106,7 @@ namespace Tests
         [Test]
         public void Test_StudyDateTag_BadData()
         {
-            var inputDicom = CreateInputFile(TestDicomFiles.IM_0001_0013, "mydicom.dcm");
+            var inputDicom = CreateInputFile(TestData.IMG_013, "mydicom.dcm");
             var inputCsv = CreateInputCsvFile(
                 $@"RelativeFileArchiveURI,PatientID,StudyDate
 {inputDicom.FullName},ABC123,Lolz");
@@ -127,7 +126,7 @@ namespace Tests
         [Test]
         public void SingleFileBasicOperationTest()
         {
-            var inFile = CreateInputFile(TestDicomFiles.IM_0001_0013,nameof(TestDicomFiles.IM_0001_0013) +".dcm");
+            var inFile = CreateInputFile(TestData.IMG_013,nameof(TestData.IMG_013) +".dcm");
 
             var outDir = AssertRunsSuccesfully(1, 0,null, 
                 
@@ -138,7 +137,7 @@ namespace Tests
                 (o) => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
 
             //Anonymous dicom image should exist
-            var expectedFile = new FileInfo(Path.Combine(outDir.FullName, nameof(TestDicomFiles.IM_0001_0013) + ".dcm"));
+            var expectedFile = new FileInfo(Path.Combine(outDir.FullName, nameof(TestData.IMG_013) + ".dcm"));
             FileAssert.Exists(expectedFile);
 
             //it should have the patient ID from the csv
@@ -154,7 +153,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            File.WriteAllBytes(Path.Combine(inputDirPath, testFileName), TestDicomFiles.IM_0001_0013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "KeyNotFirstColumn");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -185,7 +184,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            File.WriteAllBytes(Path.Combine(inputDirPath, testFileName), TestDicomFiles.IM_0001_0013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "DateRepopulation");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -217,7 +216,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            File.WriteAllBytes(Path.Combine(inputDirPath, testFileName), TestDicomFiles.IM_0001_0013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "OneCsvColumnToMultipleDicomTags");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -249,7 +248,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            File.WriteAllBytes(Path.Combine(inputDirPath, testFileName), TestDicomFiles.IM_0001_0013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "SpacesInCsvHeaderTest");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -280,8 +279,8 @@ namespace Tests
             const string testFileName2 = IM_0001_0019_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            File.WriteAllBytes(Path.Combine(inputDirPath, testFileName1), TestDicomFiles.IM_0001_0013);
-            File.WriteAllBytes(Path.Combine(inputDirPath, testFileName2), TestDicomFiles.IM_0001_0013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName1)), TestData.IMG_013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName2)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "MultipleFilesSameSeriesTest");
             string expectedFile1 = Path.Combine(outputDirPath, testFileName1);
@@ -318,10 +317,10 @@ namespace Tests
 
             Directory.CreateDirectory(Path.Combine(inputDirPath, "Series1"));
             Directory.CreateDirectory(Path.Combine(inputDirPath, "Series2"));
-            File.WriteAllBytes(Path.Combine(inputDirPath, "Series1", testFileName1), TestDicomFiles.IM_0001_0013);
-            File.WriteAllBytes(Path.Combine(inputDirPath, "Series1", testFileName2), TestDicomFiles.IM_0001_0013);
-            File.WriteAllBytes(Path.Combine(inputDirPath, "Series2", testFileName1), TestDicomFiles.IM_0001_0019);
-            File.WriteAllBytes(Path.Combine(inputDirPath, "Series2", testFileName2), TestDicomFiles.IM_0001_0019);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName1)), TestData.IMG_013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName2)), TestData.IMG_013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName1)), TestData.IMG_019);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName2)), TestData.IMG_019);
 
             string outputDirPath = Path.Combine(_seriesFilesBase, "TestOutput");
             string expectedFile1 = Path.Combine(outputDirPath, "Series1", testFileName1);
@@ -392,7 +391,7 @@ namespace Tests
         /// <param name="filename">The filename to write out e.g. "my.dcm" or "mysubdir/my.dcm"</param>
         /// <param name="memberName"></param>
         /// <returns></returns>
-        private FileInfo CreateInputFile(byte[] bytes,string filename,[System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
+        private FileInfo CreateInputFile(string testFile,string filename,[System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
         {
             string inputDirPath = Path.Combine(_inputFileBase, memberName);
             
@@ -401,9 +400,7 @@ namespace Tests
             
             toReturn.Directory.Create();
 
-            File.WriteAllBytes(toReturn.FullName, bytes);
-
-            return toReturn;
+            return TestData.Create(toReturn, testFile);
         }
         /// <summary>
         /// Runs the <see cref="DicomRepopulatorProcessor"/> with the provided <paramref name="inputCsv"/> etc.  Asserts that there
