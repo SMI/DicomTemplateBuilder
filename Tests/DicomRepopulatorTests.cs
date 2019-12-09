@@ -279,8 +279,8 @@ namespace Tests
             const string testFileName2 = IM_0001_0019_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName1)), TestData.IMG_013);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName2)), TestData.IMG_013);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName1)), TestData.IMG_013,true);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName2)), TestData.IMG_013,false);
 
             string outputDirPath = Path.Combine(_outputFileBase, "MultipleFilesSameSeriesTest");
             string expectedFile1 = Path.Combine(outputDirPath, testFileName1);
@@ -317,10 +317,10 @@ namespace Tests
 
             Directory.CreateDirectory(Path.Combine(inputDirPath, "Series1"));
             Directory.CreateDirectory(Path.Combine(inputDirPath, "Series2"));
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName1)), TestData.IMG_013);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName2)), TestData.IMG_013);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName1)), TestData.IMG_019);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName2)), TestData.IMG_019);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName1)), TestData.IMG_013,true);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName2)), TestData.IMG_013,false);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName1)), TestData.IMG_019,true);
+            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName2)), TestData.IMG_019,false);
 
             string outputDirPath = Path.Combine(_seriesFilesBase, "TestOutput");
             string expectedFile1 = Path.Combine(outputDirPath, "Series1", testFileName1);
