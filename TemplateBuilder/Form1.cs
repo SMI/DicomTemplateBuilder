@@ -373,32 +373,35 @@ namespace TemplateBuilder
 
         private void OpenDicoms()
         {
-            var ofd = new OpenFileDialog();
-            ofd.Filter = "Dicom Files|*.dcm";
-            ofd.Multiselect = true;
-            
-            if (ofd.ShowDialog() == DialogResult.OK)
+            using (var ofd = new OpenFileDialog())
             {
-                try
+                ofd.Filter = "Dicom Files|*.dcm";
+                ofd.Multiselect = true;
+            
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    _setupFinished = false;
-                    olvDicoms.BeginUpdate();
-
-                    foreach (var f in ofd.FileNames)
+                    try
                     {
-                        var fi = new FileInfo(f);
-                        if (fi.Exists)
-                            olvDicoms.AddObject(fi);
+                        _setupFinished = false;
+                        olvDicoms.BeginUpdate();
+
+                        foreach (var f in ofd.FileNames)
+                        {
+                            var fi = new FileInfo(f);
+                            if (fi.Exists)
+                                olvDicoms.AddObject(fi);
+                        }
                     }
-                }
-                finally
-                {
-                    olvDicoms.EndUpdate();
-                    _setupFinished = true;
-                }
+                    finally
+                    {
+                        olvDicoms.EndUpdate();
+                        _setupFinished = true;
+                    }
                 
-                Check();
+                    Check();
+                }
             }
+            
         }
 
         private void btnOnlineTemplates_Click(object sender, EventArgs e)

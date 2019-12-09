@@ -53,7 +53,7 @@ namespace TemplateBuilder
                     }
                     
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //no picture
                     splitContainer1.Panel1Collapsed = true;
