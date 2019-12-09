@@ -51,6 +51,7 @@ namespace TemplateBuilder
             this.miWindowSql = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.tagPopulatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -209,40 +210,48 @@ namespace TemplateBuilder
             this.miWindowYaml,
             this.miWindowSql,
             this.miWindowFiles,
-            this.miWindowTable});
+            this.miWindowTable,
+            this.tagPopulatorToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
             this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
             this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
             // 
-            // templateyamlToolStripMenuItem
+            // miWindowYaml
             // 
             this.miWindowYaml.Name = "miWindowYaml";
             this.miWindowYaml.Size = new System.Drawing.Size(180, 22);
             this.miWindowYaml.Text = "Template (yaml)";
             this.miWindowYaml.Click += new System.EventHandler(this.WindowClicked);
             // 
-            // templateSqlToolStripMenuItem
+            // miWindowSql
             // 
             this.miWindowSql.Name = "miWindowSql";
             this.miWindowSql.Size = new System.Drawing.Size(180, 22);
             this.miWindowSql.Text = "Template (sql)";
             this.miWindowSql.Click += new System.EventHandler(this.WindowClicked);
             // 
-            // fileListToolStripMenuItem
+            // miWindowFiles
             // 
             this.miWindowFiles.Name = "miWindowFiles";
             this.miWindowFiles.Size = new System.Drawing.Size(180, 22);
             this.miWindowFiles.Text = "Dicom File List";
             this.miWindowFiles.Click += new System.EventHandler(this.WindowClicked);
             // 
-            // dataGridToolStripMenuItem
+            // miWindowTable
             // 
             this.miWindowTable.Name = "miWindowTable";
             this.miWindowTable.Size = new System.Drawing.Size(180, 22);
             this.miWindowTable.Text = "Table Viewer";
             this.miWindowTable.Click += new System.EventHandler(this.WindowClicked);
+            // 
+            // tagPopulatorToolStripMenuItem
+            // 
+            this.tagPopulatorToolStripMenuItem.Name = "tagPopulatorToolStripMenuItem";
+            this.tagPopulatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tagPopulatorToolStripMenuItem.Text = "Tag Populator";
+            this.tagPopulatorToolStripMenuItem.Click += new System.EventHandler(this.tagPopulatorToolStripMenuItem_Click);
             // 
             // dockPanel1
             // 
@@ -294,6 +303,7 @@ namespace TemplateBuilder
         private System.Windows.Forms.ToolStripMenuItem miWindowFiles;
         private System.Windows.Forms.ToolStripMenuItem miWindowTable;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
+        private System.Windows.Forms.ToolStripMenuItem tagPopulatorToolStripMenuItem;
     }
 }
 

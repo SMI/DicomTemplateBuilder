@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProjectGuid>{66EED857-25C6-4FF9-967A-333CB151DF0B}</ProjectGuid>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <AssemblyTitle>Tests</AssemblyTitle>
+    <Product>Tests</Product>
+    <Copyright>Copyright ©  2019</Copyright>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <ItemGroup>
+    <PackageReference Include="HIC.DicomTypeTranslation" Version="2.1.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="NunitXml.TestLogger" Version="2.1.41" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Repopulator\Repopulator.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="BasicTest.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\IM-0001-0013.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\IM-0001-0019.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="KeyNotFirstColumn.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SpacesInCsvHeaderTest.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TwoSeriesCsv.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="WithDate.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

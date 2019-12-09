@@ -373,32 +373,35 @@ namespace TemplateBuilder
 
         private void OpenDicoms()
         {
-            var ofd = new OpenFileDialog();
-            ofd.Filter = "Dicom Files|*.dcm";
-            ofd.Multiselect = true;
-            
-            if (ofd.ShowDialog() == DialogResult.OK)
+            using (var ofd = new OpenFileDialog())
             {
-                try
+                ofd.Filter = "Dicom Files|*.dcm";
+                ofd.Multiselect = true;
+            
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    _setupFinished = false;
-                    olvDicoms.BeginUpdate();
-
-                    foreach (var f in ofd.FileNames)
+                    try
                     {
-                        var fi = new FileInfo(f);
-                        if (fi.Exists)
-                            olvDicoms.AddObject(fi);
+                        _setupFinished = false;
+                        olvDicoms.BeginUpdate();
+
+                        foreach (var f in ofd.FileNames)
+                        {
+                            var fi = new FileInfo(f);
+                            if (fi.Exists)
+                                olvDicoms.AddObject(fi);
+                        }
                     }
-                }
-                finally
-                {
-                    olvDicoms.EndUpdate();
-                    _setupFinished = true;
-                }
+                    finally
+                    {
+                        olvDicoms.EndUpdate();
+                        _setupFinished = true;
+                    }
                 
-                Check();
+                    Check();
+                }
             }
+            
         }
 
         private void btnOnlineTemplates_Click(object sender, EventArgs e)
@@ -439,6 +442,18 @@ namespace TemplateBuilder
                 dc.Activate();
              else
                  dc.Show(dockPanel1,DefaultDockLocations[dc]);
+        }
+
+        private void tagPopulatorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ui = new RepopulatorUI();
+
+            var dc = new DockContent();
+            dc.Height = ui.MinimumSize.Height;
+            ui.Dock = DockStyle.Fill;
+            dc.Controls.Add(ui);
+            dc.TabText = "Repopulator";
+            dc.Show(dockPanel1,DockState.Document);
         }
     }
 

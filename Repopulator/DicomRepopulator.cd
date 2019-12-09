@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Repopulator.Matchers.FilePathMatcher" Collapsed="true">
+    <Position X="4.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAACAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Matchers\FilePathMatcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Repopulator.Matchers.MatcherFactory">
+    <Position X="3.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Matchers\MatcherFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Repopulator.Matchers.RepopulatorMatcher" Collapsed="true">
+    <Position X="5.5" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAADIAAAAAAAAAAAAAAAAAAAAAIAAAAABAAAA=</HashCode>
+      <FileName>Matchers\RepopulatorMatcher.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Map" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Repopulator.Matchers.TagMatcher" Collapsed="true">
+    <Position X="7" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAEAAAACAAAAABAAAAAgAAAAAAAAAAJAQgBAAAAAA=</HashCode>
+      <FileName>Matchers\TagMatcher.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_indexer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Repopulator.CsvToDicomColumn">
+    <Position X="9.25" Y="6.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAAAEAABAAAAA=</HashCode>
+      <FileName>CsvToDicomColumn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Repopulator.CsvToDicomTagMapping">
+    <Position X="5" Y="5.75" Width="2" />
+    <AssociationLine Name="FilenameColumn" Type="Repopulator.CsvToDicomColumn" FixedToPoint="true">
+      <Path>
+        <Point X="7" Y="7.923" />
+        <Point X="9.25" Y="7.923" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAGAAAAAAAAAAAAAAABAAAAAAAAABAAAAARBAAA=</HashCode>
+      <FileName>CsvToDicomTagMapping.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="FilenameColumn" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="TagColumns" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Repopulator.DicomRepopulatorOptions">
+    <Position X="12" Y="0.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAgQgABAAAAAAAQAECAAQQCAAAEAgEASAAAAACAAA=</HashCode>
+      <FileName>DicomRepopulatorOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Repopulator.DicomRepopulatorProcessor" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAhAAAAIACAAQQAAAgAAAIBAMAAABACAAAAQAAAAgAA=</HashCode>
+      <FileName>DicomRepopulatorProcessor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Matcher" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Repopulator.RepopulatorJob">
+    <Position X="9.25" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAIAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RepopulatorJob.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Map" />
+    </ShowAsAssociation>
+  </Class>
+  <Interface Name="Repopulator.Matchers.IRepopulatorMatcher">
+    <Position X="5.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Matchers\IRepopulatorMatcher.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

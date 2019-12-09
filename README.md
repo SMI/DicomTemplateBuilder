@@ -1,5 +1,7 @@
 # DicomTemplateBuilder
 
+[![Build Status](https://travis-ci.org/HicServices/DicomTemplateBuilder.svg?branch=master)](https://travis-ci.org/HicServices/DicomTemplateBuilder)  [![Total alerts](https://img.shields.io/lgtm/alerts/g/HicServices/DicomTemplateBuilder.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/HicServices/DicomTemplateBuilder/alerts/)
+
 [Dicom Template Builder](https://github.com/HicServices/DicomTemplateBuilder/releases) is a small windows application to assist researchers in building simple relational database schemas for storing DICOM images.
 
 It supports:

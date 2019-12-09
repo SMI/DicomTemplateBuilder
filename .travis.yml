@@ -1,0 +1,9 @@
+dist: bionic
+jobs:
+  include:
+  - language: csharp
+    mono: none
+    dotnet: 2.2.100
+    
+    script:
+    - dotnet test ./Tests/Tests.csproj

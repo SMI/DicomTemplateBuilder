@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProjectGuid>3b0e5ac1-5439-470c-832d-7de566b22cd8</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyTitle>Repopulator</AssemblyTitle>
+    <Product>Repopulator</Product>
+    <Copyright>Copyright ©  2019</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="HIC.DicomTypeTranslation" Version="2.1.2" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.*" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+    <PackageReference Include="System.Net.Http" Version="4.*" />
+  </ItemGroup>
+</Project>
