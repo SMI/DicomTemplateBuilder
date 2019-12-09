@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{30CD1058-100D-42BE-8C0D-8FC425559D06}"
 	ProjectSection(SolutionItems) = preProject
 		.travis.yml = .travis.yml
+		CHANGELOG.md = CHANGELOG.md
 		rakeconfig.rb = rakeconfig.rb
 		rakefile.rb = rakefile.rb
 		README.md = README.md

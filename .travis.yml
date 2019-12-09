@@ -6,5 +6,4 @@ jobs:
     dotnet: 2.2.100
     
     script:
-    - dotnet build --verbosity quiet
     - dotnet test ./Tests/Tests.csproj

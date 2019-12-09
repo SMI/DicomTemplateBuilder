@@ -103,6 +103,7 @@ namespace Tests
 
         }
 
+        [Ignore("This really shouldn't be passing! how do we validate that 'Lolz' is not a valid StudyDate for inserting rather than blindly writting it in?")]
         [Test]
         public void Test_StudyDateTag_BadData()
         {

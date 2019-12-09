@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{66EED857-25C6-4FF9-967A-333CB151DF0B}</ProjectGuid>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
@@ -20,7 +20,7 @@
     <PackageReference Include="NunitXml.TestLogger" Version="2.1.41" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TemplateBuilder\TemplateBuilder.csproj" />
+    <ProjectReference Include="..\Repopulator\Repopulator.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="TestDicomFiles.Designer.cs">
