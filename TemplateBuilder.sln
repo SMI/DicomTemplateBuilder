@@ -7,14 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateBuilder", "Template
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{30CD1058-100D-42BE-8C0D-8FC425559D06}"
 	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
 		rakeconfig.rb = rakeconfig.rb
 		rakefile.rb = rakefile.rb
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{66EED857-25C6-4FF9-967A-333CB151DF0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{66EED857-25C6-4FF9-967A-333CB151DF0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repopulator", "Repopulator\Repopulator.csproj", "{3B0E5AC1-5439-470C-832D-7DE566B22CD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repopulator", "Repopulator\Repopulator.csproj", "{3B0E5AC1-5439-470C-832D-7DE566B22CD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
