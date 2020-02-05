@@ -70,10 +70,19 @@ namespace TemplateBuilder
                     tbFilePattern.Text = State.Pattern;
                     tbFilenameColumn.Text = State.FileNameColumn;
                     cbAnonymise.Checked = State.Anonymise;
-                    tbCulture.Text = State.Culture.DisplayName;
+
+                    if (!string.IsNullOrWhiteSpace(State.CultureName))
+                    {
+                        tbCulture.Text = State.CultureName;
+                        State.Culture = new CultureInfo(State.CultureName);
+                    }
+                    else
+                        tbCulture.Text = State.Culture.DisplayName;
+
+                    tbSubFolderColumn.Text = State.SubFolderColumn;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
             }
 
@@ -320,6 +329,7 @@ namespace TemplateBuilder
             try
             {
                 State.Culture = new CultureInfo(tbCulture.Text);
+                State.CultureName = tbCulture.Text;
                 tbCulture.ForeColor = Color.Black;
             }
             catch (Exception)
