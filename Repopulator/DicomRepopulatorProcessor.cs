@@ -62,7 +62,7 @@ namespace Repopulator
         
         public int Process(DicomRepopulatorOptions options)
         {
-            _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = options.NumThreads };
+            _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1,options.NumThreads) };
             _tagUpdater = new ParseStringsUpdater(options.Culture);
             _anonymizer = options.Anonymise ? new DicomAnonymizer() : null;
 
