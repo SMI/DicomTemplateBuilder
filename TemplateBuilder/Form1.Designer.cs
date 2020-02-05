@@ -35,26 +35,29 @@ namespace TemplateBuilder
             this.olvName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tcDatagrids = new System.Windows.Forms.TabControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btnAddDicom = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnOpenTemplate = new System.Windows.Forms.ToolStripButton();
             this.btnOnlineTemplates = new System.Windows.Forms.ToolStripButton();
-            this.btnSave = new System.Windows.Forms.ToolStripButton();
-            this.btnSaveAs = new System.Windows.Forms.ToolStripButton();
-            this.btnNewTemplate = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.ddDatabaseType = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.miNewTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.miOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.miOpenTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.miOpenDicoms = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSaveTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSaveAsTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowYaml = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowSql = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.tagPopulatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.miRepopulator = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // olvDicoms
@@ -97,48 +100,15 @@ namespace TemplateBuilder
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnAddDicom,
-            this.toolStripSeparator2,
-            this.btnOpenTemplate,
             this.btnOnlineTemplates,
-            this.btnSave,
-            this.btnSaveAs,
-            this.btnNewTemplate,
             this.toolStripSeparator1,
             this.toolStripLabel1,
-            this.ddDatabaseType,
-            this.toolStripSeparator3,
-            this.toolStripDropDownButton1});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.ddDatabaseType});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1205, 25);
             this.toolStrip1.TabIndex = 9;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // btnAddDicom
-            // 
-            this.btnAddDicom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnAddDicom.Image = ((System.Drawing.Image)(resources.GetObject("btnAddDicom.Image")));
-            this.btnAddDicom.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAddDicom.Name = "btnAddDicom";
-            this.btnAddDicom.Size = new System.Drawing.Size(23, 22);
-            this.btnAddDicom.Text = "Open Dicom Files";
-            this.btnAddDicom.Click += new System.EventHandler(this.btnAddDicom_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnOpenTemplate
-            // 
-            this.btnOpenTemplate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnOpenTemplate.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenTemplate.Image")));
-            this.btnOpenTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnOpenTemplate.Name = "btnOpenTemplate";
-            this.btnOpenTemplate.Size = new System.Drawing.Size(23, 22);
-            this.btnOpenTemplate.Text = "Open Template";
-            this.btnOpenTemplate.Click += new System.EventHandler(this.openTemplate_Click);
             // 
             // btnOnlineTemplates
             // 
@@ -149,36 +119,6 @@ namespace TemplateBuilder
             this.btnOnlineTemplates.Size = new System.Drawing.Size(23, 22);
             this.btnOnlineTemplates.Text = "Go to online templates";
             this.btnOnlineTemplates.Click += new System.EventHandler(this.btnOnlineTemplates_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
-            this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(23, 22);
-            this.btnSave.Text = "Save";
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnSaveAs
-            // 
-            this.btnSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAs.Image")));
-            this.btnSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSaveAs.Name = "btnSaveAs";
-            this.btnSaveAs.Size = new System.Drawing.Size(23, 22);
-            this.btnSaveAs.Text = "Save As";
-            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
-            // 
-            // btnNewTemplate
-            // 
-            this.btnNewTemplate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnNewTemplate.Image = ((System.Drawing.Image)(resources.GetObject("btnNewTemplate.Image")));
-            this.btnNewTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnNewTemplate.Name = "btnNewTemplate";
-            this.btnNewTemplate.Size = new System.Drawing.Size(23, 22);
-            this.btnNewTemplate.Text = "New (empty) template";
-            this.btnNewTemplate.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripSeparator1
             // 
@@ -193,72 +133,141 @@ namespace TemplateBuilder
             // 
             // ddDatabaseType
             // 
-            this.ddDatabaseType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddDatabaseType.Name = "ddDatabaseType";
-            this.ddDatabaseType.Size = new System.Drawing.Size(121, 25);
+            this.ddDatabaseType.Size = new System.Drawing.Size(160, 25);
             this.ddDatabaseType.SelectedIndexChanged += new System.EventHandler(this.ddDatabaseType_SelectedIndexChanged);
             // 
-            // toolStripSeparator3
+            // dockPanel1
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.dockPanel1.Location = new System.Drawing.Point(636, 147);
+            this.dockPanel1.Name = "dockPanel1";
+            this.dockPanel1.Size = new System.Drawing.Size(200, 100);
+            this.dockPanel1.TabIndex = 11;
             // 
-            // toolStripDropDownButton1
+            // menuStrip1
             // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.windowToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1205, 24);
+            this.menuStrip1.TabIndex = 13;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miNew,
+            this.miOpen,
+            this.miSaveTemplate,
+            this.miSaveAsTemplate});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // miNew
+            // 
+            this.miNew.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miNewTemplate});
+            this.miNew.Name = "miNew";
+            this.miNew.Size = new System.Drawing.Size(195, 22);
+            this.miNew.Text = "New";
+            // 
+            // miNewTemplate
+            // 
+            this.miNewTemplate.Name = "miNewTemplate";
+            this.miNewTemplate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.miNewTemplate.Size = new System.Drawing.Size(166, 22);
+            this.miNewTemplate.Text = "Template";
+            // 
+            // miOpen
+            // 
+            this.miOpen.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miOpenTemplate,
+            this.miOpenDicoms});
+            this.miOpen.Name = "miOpen";
+            this.miOpen.Size = new System.Drawing.Size(195, 22);
+            this.miOpen.Text = "Open";
+            // 
+            // miOpenTemplate
+            // 
+            this.miOpenTemplate.Name = "miOpenTemplate";
+            this.miOpenTemplate.Size = new System.Drawing.Size(180, 22);
+            this.miOpenTemplate.Text = "Template..";
+            this.miOpenTemplate.Click += new System.EventHandler(this.openTemplate_Click);
+            // 
+            // miOpenDicoms
+            // 
+            this.miOpenDicoms.Name = "miOpenDicoms";
+            this.miOpenDicoms.Size = new System.Drawing.Size(180, 22);
+            this.miOpenDicoms.Text = "Dicom File(s)...";
+            this.miOpenDicoms.Click += new System.EventHandler(this.btnAddDicom_Click);
+            // 
+            // miSaveTemplate
+            // 
+            this.miSaveTemplate.Image = ((System.Drawing.Image)(resources.GetObject("miSaveTemplate.Image")));
+            this.miSaveTemplate.Name = "miSaveTemplate";
+            this.miSaveTemplate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.miSaveTemplate.Size = new System.Drawing.Size(195, 22);
+            this.miSaveTemplate.Text = "Save";
+            this.miSaveTemplate.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // miSaveAsTemplate
+            // 
+            this.miSaveAsTemplate.Name = "miSaveAsTemplate";
+            this.miSaveAsTemplate.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.miSaveAsTemplate.Size = new System.Drawing.Size(195, 22);
+            this.miSaveAsTemplate.Text = "Save As...";
+            this.miSaveAsTemplate.Click += new System.EventHandler(this.btnSaveAs_Click);
+            // 
+            // windowToolStripMenuItem
+            // 
+            this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miWindowYaml,
             this.miWindowSql,
             this.miWindowFiles,
             this.miWindowTable,
-            this.tagPopulatorToolStripMenuItem});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
-            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            this.miRepopulator});
+            this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
+            this.windowToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.windowToolStripMenuItem.Text = "Window";
             // 
             // miWindowYaml
             // 
             this.miWindowYaml.Name = "miWindowYaml";
             this.miWindowYaml.Size = new System.Drawing.Size(180, 22);
-            this.miWindowYaml.Text = "Template (yaml)";
+            this.miWindowYaml.Text = "Template Yaml";
             this.miWindowYaml.Click += new System.EventHandler(this.WindowClicked);
             // 
             // miWindowSql
             // 
             this.miWindowSql.Name = "miWindowSql";
             this.miWindowSql.Size = new System.Drawing.Size(180, 22);
-            this.miWindowSql.Text = "Template (sql)";
+            this.miWindowSql.Text = "Template Sql";
             this.miWindowSql.Click += new System.EventHandler(this.WindowClicked);
             // 
             // miWindowFiles
             // 
             this.miWindowFiles.Name = "miWindowFiles";
             this.miWindowFiles.Size = new System.Drawing.Size(180, 22);
-            this.miWindowFiles.Text = "Dicom File List";
+            this.miWindowFiles.Text = "Dicom Files";
             this.miWindowFiles.Click += new System.EventHandler(this.WindowClicked);
             // 
             // miWindowTable
             // 
             this.miWindowTable.Name = "miWindowTable";
             this.miWindowTable.Size = new System.Drawing.Size(180, 22);
-            this.miWindowTable.Text = "Table Viewer";
+            this.miWindowTable.Text = "Table View";
             this.miWindowTable.Click += new System.EventHandler(this.WindowClicked);
             // 
-            // tagPopulatorToolStripMenuItem
+            // miRepopulator
             // 
-            this.tagPopulatorToolStripMenuItem.Name = "tagPopulatorToolStripMenuItem";
-            this.tagPopulatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.tagPopulatorToolStripMenuItem.Text = "Tag Populator";
-            this.tagPopulatorToolStripMenuItem.Click += new System.EventHandler(this.tagPopulatorToolStripMenuItem_Click);
-            // 
-            // dockPanel1
-            // 
-            this.dockPanel1.Location = new System.Drawing.Point(12, 28);
-            this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Size = new System.Drawing.Size(200, 100);
-            this.dockPanel1.TabIndex = 11;
+            this.miRepopulator.Name = "miRepopulator";
+            this.miRepopulator.Size = new System.Drawing.Size(180, 22);
+            this.miRepopulator.Text = "Tag Populator";
+            this.miRepopulator.Click += new System.EventHandler(this.miRepopulator_Click);
             // 
             // Form1
             // 
@@ -269,12 +278,16 @@ namespace TemplateBuilder
             this.Controls.Add(this.olvDicoms);
             this.Controls.Add(this.tcDatagrids);
             this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,24 +299,26 @@ namespace TemplateBuilder
         private OLVColumn olvName;
         private System.Windows.Forms.TabControl tcDatagrids;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton btnAddDicom;
         private System.Windows.Forms.ToolStripComboBox ddDatabaseType;
-        private System.Windows.Forms.ToolStripButton btnOpenTemplate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnOnlineTemplates;
-        private System.Windows.Forms.ToolStripButton btnSave;
-        private System.Windows.Forms.ToolStripButton btnSaveAs;
-        private System.Windows.Forms.ToolStripButton btnNewTemplate;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem miOpen;
+        private System.Windows.Forms.ToolStripMenuItem miOpenTemplate;
+        private System.Windows.Forms.ToolStripMenuItem miOpenDicoms;
+        private System.Windows.Forms.ToolStripMenuItem miSaveTemplate;
+        private System.Windows.Forms.ToolStripMenuItem miSaveAsTemplate;
+        private System.Windows.Forms.ToolStripMenuItem windowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem miNew;
+        private System.Windows.Forms.ToolStripMenuItem miNewTemplate;
         private System.Windows.Forms.ToolStripMenuItem miWindowYaml;
         private System.Windows.Forms.ToolStripMenuItem miWindowSql;
         private System.Windows.Forms.ToolStripMenuItem miWindowFiles;
         private System.Windows.Forms.ToolStripMenuItem miWindowTable;
-        private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
-        private System.Windows.Forms.ToolStripMenuItem tagPopulatorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem miRepopulator;
     }
 }
 
