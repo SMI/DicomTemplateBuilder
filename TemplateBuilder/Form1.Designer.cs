@@ -178,8 +178,9 @@ namespace TemplateBuilder
             // 
             this.miNewTemplate.Name = "miNewTemplate";
             this.miNewTemplate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.miNewTemplate.Size = new System.Drawing.Size(166, 22);
+            this.miNewTemplate.Size = new System.Drawing.Size(180, 22);
             this.miNewTemplate.Text = "Template";
+            this.miNewTemplate.Click += new System.EventHandler(this.miNewTemplate_Click);
             // 
             // miOpen
             // 
@@ -193,14 +194,14 @@ namespace TemplateBuilder
             // miOpenTemplate
             // 
             this.miOpenTemplate.Name = "miOpenTemplate";
-            this.miOpenTemplate.Size = new System.Drawing.Size(180, 22);
+            this.miOpenTemplate.Size = new System.Drawing.Size(152, 22);
             this.miOpenTemplate.Text = "Template..";
             this.miOpenTemplate.Click += new System.EventHandler(this.openTemplate_Click);
             // 
             // miOpenDicoms
             // 
             this.miOpenDicoms.Name = "miOpenDicoms";
-            this.miOpenDicoms.Size = new System.Drawing.Size(180, 22);
+            this.miOpenDicoms.Size = new System.Drawing.Size(152, 22);
             this.miOpenDicoms.Text = "Dicom File(s)...";
             this.miOpenDicoms.Click += new System.EventHandler(this.btnAddDicom_Click);
             // 
@@ -237,35 +238,35 @@ namespace TemplateBuilder
             // miWindowYaml
             // 
             this.miWindowYaml.Name = "miWindowYaml";
-            this.miWindowYaml.Size = new System.Drawing.Size(180, 22);
+            this.miWindowYaml.Size = new System.Drawing.Size(152, 22);
             this.miWindowYaml.Text = "Template Yaml";
             this.miWindowYaml.Click += new System.EventHandler(this.WindowClicked);
             // 
             // miWindowSql
             // 
             this.miWindowSql.Name = "miWindowSql";
-            this.miWindowSql.Size = new System.Drawing.Size(180, 22);
+            this.miWindowSql.Size = new System.Drawing.Size(152, 22);
             this.miWindowSql.Text = "Template Sql";
             this.miWindowSql.Click += new System.EventHandler(this.WindowClicked);
             // 
             // miWindowFiles
             // 
             this.miWindowFiles.Name = "miWindowFiles";
-            this.miWindowFiles.Size = new System.Drawing.Size(180, 22);
+            this.miWindowFiles.Size = new System.Drawing.Size(152, 22);
             this.miWindowFiles.Text = "Dicom Files";
             this.miWindowFiles.Click += new System.EventHandler(this.WindowClicked);
             // 
             // miWindowTable
             // 
             this.miWindowTable.Name = "miWindowTable";
-            this.miWindowTable.Size = new System.Drawing.Size(180, 22);
+            this.miWindowTable.Size = new System.Drawing.Size(152, 22);
             this.miWindowTable.Text = "Table View";
             this.miWindowTable.Click += new System.EventHandler(this.WindowClicked);
             // 
             // miRepopulator
             // 
             this.miRepopulator.Name = "miRepopulator";
-            this.miRepopulator.Size = new System.Drawing.Size(180, 22);
+            this.miRepopulator.Size = new System.Drawing.Size(152, 22);
             this.miRepopulator.Text = "Tag Populator";
             this.miRepopulator.Click += new System.EventHandler(this.miRepopulator_Click);
             // 

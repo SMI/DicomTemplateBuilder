@@ -402,12 +402,7 @@ namespace TemplateBuilder
         {
             SaveAs();
         }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            NewTemplate();
-        }
-
+        
         private void WindowClicked(object sender, EventArgs e)
         {
             DockContent dc = null;
@@ -439,10 +434,10 @@ namespace TemplateBuilder
             dc.TabText = "Repopulator";
             dc.Show(dockPanel1,DockState.Document);
         }
-
-        private void fileToolStripMenuItem1_Click(object sender, EventArgs e)
+        
+        private void miNewTemplate_Click(object sender, EventArgs e)
         {
-
+            NewTemplate();
         }
     }
 
