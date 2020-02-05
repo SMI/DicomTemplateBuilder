@@ -44,6 +44,9 @@ namespace TemplateBuilder
         public const string HelpCulture
             = "The culture to use for parsing string values into dicom types e.g. dates, numbers";
 
+        public const string HelpSubFolderColumn
+            = "Optional, column in your CSV which provides the top level extraction folder under which all associated studies/series will go e.g. PatientID";
+
         public RepopulatorUI()
         {
             InitializeComponent();
@@ -102,6 +105,8 @@ namespace TemplateBuilder
             tt.SetToolTip(lblErrors,HelpErrors);
 
             tt.SetToolTip(lblCulture,HelpCulture);
+
+            tt.SetToolTip(lblSubFolder,HelpSubFolderColumn);
         }
         
 
@@ -224,6 +229,11 @@ namespace TemplateBuilder
         private void nErrorThreshold_ValueChanged(object sender, EventArgs e)
         {
             State.ErrorThreshold = (int) nErrorThreshold.Value;
+            SaveState();
+        }
+        private void tbSubFolderColumn_TextChanged(object sender, EventArgs e)
+        {
+            State.SubFolderColumn = tbSubFolderColumn.Text;
             SaveState();
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -7,15 +6,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dicom;
-using DicomTypeTranslation;
 using DicomTypeTranslation.Helpers;
-using FAnsi.Discovery.QuerySyntax.Update;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using Repopulator.Matchers;
 using Repopulator.TagUpdaters;
-using TypeGuesser.Deciders;
 
 namespace Repopulator
 {
@@ -162,7 +158,10 @@ namespace Repopulator
             _logger.Debug("Saving output file");
 
             // Preserves any sub-directory structures
-            var outPath = Path.Combine(options.OutputDirectoryInfo.FullName, inputRelativePath);
+            var outPath = job.Map.SubFolderColumn != null
+                ? Path.Combine(options.OutputDirectoryInfo.FullName, job.Cells[job.Map.SubFolderColumn.Index],inputRelativePath)
+                : Path.Combine(options.OutputDirectoryInfo.FullName, inputRelativePath);
+
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
 
             job.File.Save(outPath);

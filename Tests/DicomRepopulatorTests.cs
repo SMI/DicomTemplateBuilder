@@ -308,8 +308,9 @@ namespace Tests
             Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
         }
 
-        [Test]
-        public void MultipleSeriesTest()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void MultipleSeriesTest(bool useSubfolder)
         {
             string inputDirPath = Path.Combine(_seriesFilesBase, "TestInput");
             const string testFileName1 = IM_0001_0013_NAME;
@@ -323,16 +324,17 @@ namespace Tests
             TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName2)), TestData.IMG_019,false);
 
             string outputDirPath = Path.Combine(_seriesFilesBase, "TestOutput");
-            string expectedFile1 = Path.Combine(outputDirPath, "Series1", testFileName1);
-            string expectedFile2 = Path.Combine(outputDirPath, "Series1", testFileName2);
-            string expectedFile3 = Path.Combine(outputDirPath, "Series2", testFileName1);
-            string expectedFile4 = Path.Combine(outputDirPath, "Series2", testFileName2);
+            string expectedFile1 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID1/Series1" : "Series1", testFileName1);
+            string expectedFile2 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID1/Series1" : "Series1", testFileName2);
+            string expectedFile3 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID2/Series2" : "Series2", testFileName1);
+            string expectedFile4 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID2/Series2" : "Series2", testFileName2);
 
             var options = new DicomRepopulatorOptions
             {
                 InputCsv = Path.Combine(TestContext.CurrentContext.TestDirectory, "TwoSeriesCsv.csv"),
                 InputFolder = inputDirPath,
                 OutputFolder = outputDirPath,
+                SubFolderColumn = useSubfolder ? "ID": null,
                 InputExtraMappings = CreateExtraMappingsFile( "ID:PatientID" ).FullName,
                 NumThreads = 4
             };
