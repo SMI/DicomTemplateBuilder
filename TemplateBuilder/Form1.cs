@@ -439,6 +439,11 @@ namespace TemplateBuilder
         {
             NewTemplate();
         }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 
     internal class TagValueNode

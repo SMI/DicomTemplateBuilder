@@ -55,6 +55,7 @@ namespace TemplateBuilder
             this.miWindowFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.miWindowTable = new System.Windows.Forms.ToolStripMenuItem();
             this.miRepopulator = new System.Windows.Forms.ToolStripMenuItem();
+            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -161,7 +162,8 @@ namespace TemplateBuilder
             this.miNew,
             this.miOpen,
             this.miSaveTemplate,
-            this.miSaveAsTemplate});
+            this.miSaveAsTemplate,
+            this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -270,6 +272,13 @@ namespace TemplateBuilder
             this.miRepopulator.Text = "Tag Populator";
             this.miRepopulator.Click += new System.EventHandler(this.miRepopulator_Click);
             // 
+            // quitToolStripMenuItem
+            // 
+            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.quitToolStripMenuItem.Text = "Quit";
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -320,6 +329,7 @@ namespace TemplateBuilder
         private System.Windows.Forms.ToolStripMenuItem miWindowFiles;
         private System.Windows.Forms.ToolStripMenuItem miWindowTable;
         private System.Windows.Forms.ToolStripMenuItem miRepopulator;
+        private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
     }
 }
 
