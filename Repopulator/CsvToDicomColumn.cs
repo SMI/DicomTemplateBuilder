@@ -5,20 +5,38 @@ using Dicom;
 
 namespace Repopulator
 {
+
+    public enum ColumnRole
+    {
+        None = 0,
+        
+        /// <summary>
+        /// The column that contains the alleged location of dcm files on disk
+        /// </summary>
+        FilePath,
+
+        /// <summary>
+        /// The column should be a top level subfolder under which to create files e.g. PatientID
+        /// </summary>
+        SubFolder,
+    }
+
     public class CsvToDicomColumn
     {
         public string Name { get; }
         public int Index { get; }
         public HashSet<DicomTag> TagsToPopulate { get; }
-        public bool IsFilePath { get; set; }
+        
+        public ColumnRole Role { get; }
 
-
-        public CsvToDicomColumn(string colName, int index, bool isFileColumn,params DicomTag[] mappedTags)
+        public CsvToDicomColumn(string colName, int index, ColumnRole role,params DicomTag[] mappedTags)
         {
-            if (mappedTags != null && mappedTags.Any() && isFileColumn)
+            //cannot be DicomTag AND FilePath
+            if (mappedTags != null && mappedTags.Any() && role == ColumnRole.FilePath)
                 throw new ArgumentException("Column has ambiguous role, it should either provide dicom tag substitutions or be the file path column not both");
 
-            if ((mappedTags == null || !mappedTags.Any())&& !isFileColumn)
+            //if you don't have DicomTags you must have some other role
+            if ((mappedTags == null || !mappedTags.Any())&& role == ColumnRole.None)
                 throw new ArgumentException("Column has no clear role, it should either provide dicom tag substitutions or be the file path column");
 
             if (index < 0)
@@ -35,7 +53,7 @@ namespace Repopulator
             Name = colName;
             Index = index;
             TagsToPopulate = new HashSet<DicomTag>(mappedTags?? new DicomTag[0]);
-            IsFilePath = isFileColumn;
+            Role = role;
         }
     }
 }

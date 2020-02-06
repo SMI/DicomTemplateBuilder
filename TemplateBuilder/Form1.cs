@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using Dicom.Imaging;
 using FAnsi.Implementations.MySql;
 using FAnsi.Implementations.Oracle;
+using FAnsi.Implementations.PostgreSql;
 using WeifenLuo.WinFormsUI.Docking;
 using DatabaseType = FAnsi.DatabaseType;
 
@@ -30,11 +31,6 @@ namespace TemplateBuilder
         private Scintilla _scintillaTemplate;
         private Scintilla _scintillaSql;
         bool _setupFinished = false;
-        private ToolStripMenuItem miOpenDicoms;
-        private ToolStripMenuItem miOpenTemplate;
-        private ToolStripMenuItem miSaveTemplate;
-        private ToolStripMenuItem miSaveAsTemplate;
-        private ToolStripMenuItem miNewTemplate;
 
 
         DockContent dcDicoms = new DockContent(){HideOnClose = true};
@@ -56,6 +52,7 @@ namespace TemplateBuilder
             ImplementationManager.Load<MicrosoftSQLImplementation>();
             ImplementationManager.Load<MySqlImplementation>();
             ImplementationManager.Load<OracleImplementation>();
+            ImplementationManager.Load<PostgreSqlImplementation>();
             
             ImageManager.SetImplementation(WinFormsImageManager.Instance);
 
@@ -75,20 +72,7 @@ namespace TemplateBuilder
             ddDatabaseType.ComboBox.DataSource = Enum.GetValues(typeof(DatabaseType));
 
             var menu = new ContextMenuStrip();
-            miOpenDicoms = new ToolStripMenuItem("Open Dicom", null, (s, e) => OpenDicoms())
-                {ShortcutKeys = Keys.Control | Keys.Shift | Keys.O};
-
-            miNewTemplate =  new ToolStripMenuItem("New (empty) template",null,(s,e)=>NewTemplate()){ShortcutKeys = Keys.Control | Keys.N};
-            miOpenTemplate = new ToolStripMenuItem("Open Template",null,(s,e)=>OpenTemplate()){ShortcutKeys = Keys.Control | Keys.O};
-            miSaveTemplate = new ToolStripMenuItem("Save", null, (s, e) => Save()) {ShortcutKeys = Keys.Control | Keys.S};
-            miSaveAsTemplate = new ToolStripMenuItem("Save As", null, (s, e) => SaveAs()){ShortcutKeys = Keys.Control | Keys.Shift | Keys.S};
-
-            menu.Items.Add(miOpenDicoms);
-            menu.Items.Add(miNewTemplate);
-            menu.Items.Add(miOpenTemplate);
             menu.Items.Add(new ToolStripMenuItem("Navigate To Templates (Online)", null, (s, e) => GoToOnlineTemplates()));
-            menu.Items.Add(miSaveTemplate);
-            menu.Items.Add(miSaveAsTemplate);
 
             ContextMenuStrip = menu;
 
@@ -418,12 +402,7 @@ namespace TemplateBuilder
         {
             SaveAs();
         }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            NewTemplate();
-        }
-
+        
         private void WindowClicked(object sender, EventArgs e)
         {
             DockContent dc = null;
@@ -444,7 +423,7 @@ namespace TemplateBuilder
                  dc.Show(dockPanel1,DefaultDockLocations[dc]);
         }
 
-        private void tagPopulatorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void miRepopulator_Click(object sender, EventArgs e)
         {
             var ui = new RepopulatorUI();
 
@@ -454,6 +433,16 @@ namespace TemplateBuilder
             dc.Controls.Add(ui);
             dc.TabText = "Repopulator";
             dc.Show(dockPanel1,DockState.Document);
+        }
+        
+        private void miNewTemplate_Click(object sender, EventArgs e)
+        {
+            NewTemplate();
+        }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 

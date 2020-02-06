@@ -44,6 +44,9 @@ namespace TemplateBuilder
         public const string HelpCulture
             = "The culture to use for parsing string values into dicom types e.g. dates, numbers";
 
+        public const string HelpSubFolderColumn
+            = "Optional, column in your CSV which provides the top level extraction folder under which all associated studies/series will go e.g. PatientID";
+
         public RepopulatorUI()
         {
             InitializeComponent();
@@ -67,10 +70,19 @@ namespace TemplateBuilder
                     tbFilePattern.Text = State.Pattern;
                     tbFilenameColumn.Text = State.FileNameColumn;
                     cbAnonymise.Checked = State.Anonymise;
-                    tbCulture.Text = State.Culture.DisplayName;
+
+                    if (!string.IsNullOrWhiteSpace(State.CultureName))
+                    {
+                        tbCulture.Text = State.CultureName;
+                        State.Culture = new CultureInfo(State.CultureName);
+                    }
+                    else
+                        tbCulture.Text = State.Culture.DisplayName;
+
+                    tbSubFolderColumn.Text = State.SubFolderColumn;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
             }
 
@@ -102,6 +114,8 @@ namespace TemplateBuilder
             tt.SetToolTip(lblErrors,HelpErrors);
 
             tt.SetToolTip(lblCulture,HelpCulture);
+
+            tt.SetToolTip(lblSubFolder,HelpSubFolderColumn);
         }
         
 
@@ -226,6 +240,11 @@ namespace TemplateBuilder
             State.ErrorThreshold = (int) nErrorThreshold.Value;
             SaveState();
         }
+        private void tbSubFolderColumn_TextChanged(object sender, EventArgs e)
+        {
+            State.SubFolderColumn = tbSubFolderColumn.Text;
+            SaveState();
+        }
 
         private void btnValidateCsv_Click(object sender, EventArgs e)
         {
@@ -310,6 +329,7 @@ namespace TemplateBuilder
             try
             {
                 State.Culture = new CultureInfo(tbCulture.Text);
+                State.CultureName = tbCulture.Text;
                 tbCulture.ForeColor = Color.Black;
             }
             catch (Exception)

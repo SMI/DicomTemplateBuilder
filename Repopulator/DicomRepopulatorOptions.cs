@@ -20,8 +20,12 @@ namespace Repopulator
         public string FileNameColumn = DefaultFileNameColumn;
         public bool Anonymise;
         public int ErrorThreshold = 100;
+        public string CultureName;
+
+        [YamlIgnore]
         public CultureInfo Culture = CultureInfo.CurrentCulture;
-        
+
+        public string SubFolderColumn;
 
         [YamlIgnore]
         public DirectoryInfo OutputDirectoryInfo => new DirectoryInfo(OutputFolder);
@@ -34,6 +38,7 @@ namespace Repopulator
 
         [YamlIgnore]
         public FileInfo ExtraMappings => new FileInfo(InputExtraMappings);
+
         
     }
 }

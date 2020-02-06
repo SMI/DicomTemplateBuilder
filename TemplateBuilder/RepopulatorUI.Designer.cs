@@ -65,6 +65,8 @@
             this.lblErrorThreshold = new System.Windows.Forms.Label();
             this.lblCulture = new System.Windows.Forms.Label();
             this.tbCulture = new System.Windows.Forms.TextBox();
+            this.lblSubFolder = new System.Windows.Forms.Label();
+            this.tbSubFolderColumn = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nErrorThreshold)).BeginInit();
@@ -441,11 +443,30 @@
             this.tbCulture.TabIndex = 23;
             this.tbCulture.TextChanged += new System.EventHandler(this.tbCulture_TextChanged);
             // 
+            // lblSubFolder
+            // 
+            this.lblSubFolder.AutoSize = true;
+            this.lblSubFolder.Location = new System.Drawing.Point(294, 165);
+            this.lblSubFolder.Name = "lblSubFolder";
+            this.lblSubFolder.Size = new System.Drawing.Size(99, 13);
+            this.lblSubFolder.TabIndex = 24;
+            this.lblSubFolder.Text = "Subfolder (Column):";
+            // 
+            // tbSubFolderColumn
+            // 
+            this.tbSubFolderColumn.Location = new System.Drawing.Point(399, 162);
+            this.tbSubFolderColumn.Name = "tbSubFolderColumn";
+            this.tbSubFolderColumn.Size = new System.Drawing.Size(117, 20);
+            this.tbSubFolderColumn.TabIndex = 25;
+            this.tbSubFolderColumn.TextChanged += new System.EventHandler(this.tbSubFolderColumn_TextChanged);
+            // 
             // RepopulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.tbSubFolderColumn);
+            this.Controls.Add(this.lblSubFolder);
             this.Controls.Add(this.tbCulture);
             this.Controls.Add(this.lblCulture);
             this.Controls.Add(this.nErrorThreshold);
@@ -526,5 +547,7 @@
         private System.Windows.Forms.Label lblErrorThreshold;
         private System.Windows.Forms.Label lblCulture;
         private System.Windows.Forms.TextBox tbCulture;
+        private System.Windows.Forms.Label lblSubFolder;
+        private System.Windows.Forms.TextBox tbSubFolderColumn;
     }
 }

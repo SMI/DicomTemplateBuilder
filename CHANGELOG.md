@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.0.2] - 2020-02-06
+
+### Added
+
+- New option for DicomRepopulator to put images in root subfolders e.g. by PatientID
+
+### Changed
+
+- Improved GUI usability 
+
 ## [1.0.1] - 2019-12-09
 
 ### Added 
@@ -18,7 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial version
 
 
-[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.1...develop
+[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.2...develop
+[1.0.2]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/HicServices/DicomTemplateBuilder/tree/v1.0.0
 [DicomTypeTranslation]: https://github.com/HicServices/DicomTypeTranslation

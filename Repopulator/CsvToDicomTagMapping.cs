@@ -17,6 +17,12 @@ namespace Repopulator
         /// relatively (i.e. not absolute path names)
         /// </summary>
         public CsvToDicomColumn FilenameColumn;
+
+
+        /// <summary>
+        /// The column of the CSV which records.  The column should be a top level subfolder under which to create files e.g. PatientID
+        /// </summary>
+        public CsvToDicomColumn SubFolderColumn;
         
         /// <summary>
         /// Columns which contain dicom tag values.  This is not all the columns in the CSV.  It does not include <see cref="FilenameColumn"/>
@@ -84,18 +90,27 @@ namespace Repopulator
 
                             if (match != null)
                             {
-                                if(match.IsFilePath)
+                                if(match.Role == ColumnRole.FilePath)
+                                {
                                     if (FilenameColumn != null)
                                         throw new Exception("There are 2+ FilenameColumn in the CSV");
                                     else
                                         FilenameColumn = match;
-                                else
-                                {
-                                    if(TagColumns.Any(c=>c.TagsToPopulate.Intersect(match.TagsToPopulate).Any()))
-                                        throw new Exception($"There are 2+ columns that both populate for one of the DicomTag(s) '{string.Join(",",match.TagsToPopulate)}'");
-
-                                    TagColumns.Add(match);
                                 }
+                                
+                                if(match.Role == ColumnRole.SubFolder)
+                                {
+                                    if (SubFolderColumn != null)
+                                        throw new Exception("There are 2+ SubFolderColumn in the CSV");
+                                    else
+                                        SubFolderColumn = match;
+                                }
+                                
+                                if(TagColumns.Any(c=>c.TagsToPopulate.Intersect(match.TagsToPopulate).Any()))
+                                    throw new Exception($"There are 2+ columns that both populate for one of the DicomTag(s) '{string.Join(",",match.TagsToPopulate)}'");
+
+                                TagColumns.Add(match);
+                            
                                 
                                 sb.AppendLine($"Validated header '{header}'");
                             }
@@ -173,20 +188,23 @@ namespace Repopulator
         {
             CsvToDicomColumn toReturn = null;
             if(columnName.Equals(state.FileNameColumn,StringComparison.CurrentCultureIgnoreCase))
-                toReturn = new CsvToDicomColumn(columnName,index,true);
+                toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.FilePath);
             
+            if(columnName.Equals(state.SubFolderColumn, StringComparison.CurrentCultureIgnoreCase))
+                toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.SubFolder);
+
             var found = DicomDictionary.Default.SingleOrDefault(entry => string.Equals(entry.Keyword ,columnName,StringComparison.CurrentCultureIgnoreCase));
 
             if(found != null)
                 if (toReturn == null)
-                    toReturn = new CsvToDicomColumn(columnName,index,false,found.Tag); 
+                    toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.None,found.Tag); 
                 else
                     toReturn.TagsToPopulate.Add(found.Tag); //it's a file path AND a tag! ok...
                 
 
             if (extraMappings != null && extraMappings.ContainsKey(columnName))
                 if(toReturn == null)
-                    toReturn = new CsvToDicomColumn(columnName,index,false,extraMappings[columnName].ToArray());
+                    toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.None,extraMappings[columnName].ToArray());
                 else
                     toReturn.TagsToPopulate.UnionWith(extraMappings[columnName]);
 
