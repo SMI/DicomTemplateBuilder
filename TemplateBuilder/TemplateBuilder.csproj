@@ -8,6 +8,7 @@
     <Copyright>Copyright ©  2018</Copyright>
     <Prefer32Bit>false</Prefer32Bit>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DebugType>full</DebugType>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
