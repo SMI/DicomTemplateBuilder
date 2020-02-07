@@ -18,7 +18,7 @@ after_test:
   - dotnet restore ./RepopulatorCli/RepopulatorCli.csproj
   - dotnet publish ./RepopulatorCli/RepopulatorCli.csproj -r win-x64 -o ./RepopulatorCli-win-x64
   - dotnet publish ./RepopulatorCli/RepopulatorCli.csproj -r linux-x64 -o ./RepopulatorCli-linux-x64
-  - ps: Compress-Archive -Path ./RepopulatorCli-win-x64 -DestinationPath ./DeployRepopulatorCli-win-x64.zip
+  - ps: Compress-Archive -Path ./RepopulatorCli-win-x64 -DestinationPath ./Deploy/RepopulatorCli-win-x64.zip
   - ps: Compress-Archive -Path ./RepopulatorCli-linux-x64 -DestinationPath ./Deploy/RepopulatorCli-linux-x64.zip
 artifacts:
 - path: ./Deploy/*.zip
