@@ -32,8 +32,9 @@ namespace Tests
             if (Directory.Exists(_seriesFilesBase)) Directory.Delete(_seriesFilesBase, true);
         }
 
-        [Test]
-        public void Test_AbsolutePath_InCsv()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Test_AbsolutePath_InCsv(bool deleteAsYouGo)
         {
             //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
             var inputDicom = CreateInputFile(TestData.IMG_013,
@@ -50,11 +51,17 @@ namespace Tests
                 inputCsv,
                 null,
                 inputDicom.Directory.Parent,
-                (o) => o.FileNameColumn = "File");
+                (o) => 
+                { o.FileNameColumn = "File";
+                    o.DeleteAsYouGo = deleteAsYouGo;
+                    }
+                );
             
             //anonymous image should appear in the subdirectory of the out dir
             var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestData.IMG_013) + ".dcm"));
             FileAssert.Exists(expectedOutFile);
+
+            Assert.AreEqual(!deleteAsYouGo,File.Exists(inputDicom.FullName));
         }
 
         [TestCase("./subdir/IM-0001-0013.dcm")]

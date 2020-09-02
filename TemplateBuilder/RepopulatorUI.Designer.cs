@@ -67,6 +67,7 @@
             this.tbCulture = new System.Windows.Forms.TextBox();
             this.lblSubFolder = new System.Windows.Forms.Label();
             this.tbSubFolderColumn = new System.Windows.Forms.TextBox();
+            this.cbDeleteAsYouGo = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nErrorThreshold)).BeginInit();
@@ -460,11 +461,23 @@
             this.tbSubFolderColumn.TabIndex = 25;
             this.tbSubFolderColumn.TextChanged += new System.EventHandler(this.tbSubFolderColumn_TextChanged);
             // 
+            // cbDeleteAsYouGo
+            // 
+            this.cbDeleteAsYouGo.AutoSize = true;
+            this.cbDeleteAsYouGo.Location = new System.Drawing.Point(567, 183);
+            this.cbDeleteAsYouGo.Name = "cbDeleteAsYouGo";
+            this.cbDeleteAsYouGo.Size = new System.Drawing.Size(111, 17);
+            this.cbDeleteAsYouGo.TabIndex = 26;
+            this.cbDeleteAsYouGo.Text = "Delete As You Go";
+            this.cbDeleteAsYouGo.UseVisualStyleBackColor = true;
+            this.cbDeleteAsYouGo.CheckedChanged += new System.EventHandler(this.cbDeleteAsYouGo_CheckedChanged);
+            // 
             // RepopulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.cbDeleteAsYouGo);
             this.Controls.Add(this.tbSubFolderColumn);
             this.Controls.Add(this.lblSubFolder);
             this.Controls.Add(this.tbCulture);
@@ -549,5 +562,6 @@
         private System.Windows.Forms.TextBox tbCulture;
         private System.Windows.Forms.Label lblSubFolder;
         private System.Windows.Forms.TextBox tbSubFolderColumn;
+        private System.Windows.Forms.CheckBox cbDeleteAsYouGo;
     }
 }
