@@ -168,6 +168,9 @@ namespace Repopulator
 
             Interlocked.Increment(ref _nDone);
 
+            if(options.DeleteAsYouGo)
+                job.FileInfo.Delete();
+
         }
 
         public void Dispose()

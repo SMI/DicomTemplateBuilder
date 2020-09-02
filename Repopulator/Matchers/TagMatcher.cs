@@ -77,13 +77,14 @@ namespace Repopulator.Matchers
 
             try
             {
-                var df = DicomFile.Open(_fileList[_currentFile]);
+                var currentFile = new FileInfo(_fileList[_currentFile]);
+                var df = DicomFile.Open(currentFile.FullName);
                 var seek = df.Dataset.GetValue<string>(_indexerTag, 0);
 
                 if(!_indexerToRowMap.ContainsKey(seek))
                     throw new Exception($"Csv did not contain a value for {_indexerTag} {seek} which was found in file '{_fileList[_currentFile]}'");
 
-                return new RepopulatorJob(Map,df,_indexerToRowMap[seek]);
+                return new RepopulatorJob(Map,currentFile,df,_indexerToRowMap[seek]);
             }
             finally
             {

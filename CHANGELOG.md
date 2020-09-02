@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ...
 
+### Added
+
+- DeleteAsYouGo mode where input files are deleted after processing to the output directory
+
 ## [1.1.0] - 2020-02-07
 
 ### Added
