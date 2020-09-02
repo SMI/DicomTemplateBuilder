@@ -70,6 +70,7 @@ namespace TemplateBuilder
                     tbFilePattern.Text = State.Pattern;
                     tbFilenameColumn.Text = State.FileNameColumn;
                     cbAnonymise.Checked = State.Anonymise;
+                    cbDeleteAsYouGo.Checked = State.DeleteAsYouGo;
 
                     if (!string.IsNullOrWhiteSpace(State.CultureName))
                     {
@@ -339,6 +340,12 @@ namespace TemplateBuilder
 
             SaveState();
 
+        }
+
+        private void cbDeleteAsYouGo_CheckedChanged(object sender, EventArgs e)
+        {
+            State.DeleteAsYouGo = cbDeleteAsYouGo.Checked;
+            SaveState();
         }
     }
 }

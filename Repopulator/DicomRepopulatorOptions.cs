@@ -27,6 +27,11 @@ namespace Repopulator
 
         public string SubFolderColumn;
 
+        /// <summary>
+        /// True to delete input files as output files are generated
+        /// </summary>
+        public bool DeleteAsYouGo;
+
         [YamlIgnore]
         public DirectoryInfo OutputDirectoryInfo => new DirectoryInfo(OutputFolder);
         
