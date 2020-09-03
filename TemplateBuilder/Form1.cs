@@ -56,7 +56,7 @@ namespace TemplateBuilder
             
             ImageManager.SetImplementation(WinFormsImageManager.Instance);
 
-            var autoComplete = new AutocompleteMenu();
+            autoComplete = new AutocompleteMenu();
 
             autoComplete.AddItem(new AutocompleteItem("Tables"));
             autoComplete.AddItem(new AutocompleteItem("TableName"));
@@ -198,18 +198,14 @@ namespace TemplateBuilder
 
         private void OpenTemplate()
         {
-            var ofd = new OpenFileDialog();
-            ofd.Filter = "Imaging Template|*.it";
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                if (!string.IsNullOrWhiteSpace(ofd.FileName))
+            using (var ofd = new OpenFileDialog { Filter = "Imaging Template|*.it" })
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
+                    if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
                     _scintillaTemplate.Text = File.ReadAllText(ofd.FileName);
                     _filename = ofd.FileName;
                     Check();
                 }
-            }
         }
 
         private void Save()
@@ -229,11 +225,9 @@ namespace TemplateBuilder
 
         private void SaveAs()
         {
-            var sfd = new SaveFileDialog();
-            sfd.Filter = "Imaging Template|*.it";
-
-            if (sfd.ShowDialog() == DialogResult.OK)
-                _filename = sfd.FileName;
+            using (var sfd = new SaveFileDialog { Filter = "Imaging Template|*.it" })
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    _filename = sfd.FileName;
         }
 
         private bool Check()

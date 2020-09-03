@@ -85,12 +85,10 @@ namespace TemplateBuilder
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.Message, "Error in RepopulatorUI.yaml", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            var tt = new ToolTip();
-            tt.InitialDelay = 0;
-            tt.AutoPopDelay = 32767;
-            tt.ShowAlways = true;
+            tt = new ToolTip {InitialDelay = 0, AutoPopDelay = 32767, ShowAlways = true};
             tt.SetToolTip(btnInputFolder,HelpInputFolder);
             tt.SetToolTip(lblInputFolder,HelpInputFolder);
 
@@ -134,39 +132,35 @@ namespace TemplateBuilder
 
         private void BrowseForFolder(TextBox destinationTextBox)
         {
-            var ofd = new FolderBrowserDialog();
-            if (ofd.ShowDialog() == DialogResult.OK)
-                destinationTextBox.Text = ofd.SelectedPath;
+            using (var ofd = new FolderBrowserDialog())
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    destinationTextBox.Text = ofd.SelectedPath;
         }
 
         private void BrowseForFile(TextBox destinationTextBox, string filter)
         {
-            
-            var ofd = new OpenFileDialog();
-            ofd.CheckPathExists = true;
-
-            try
+            using (var ofd = new OpenFileDialog {CheckPathExists = true, Filter = filter, Multiselect = false})
             {
-                if (destinationTextBox.Text != null)
-                    ofd.InitialDirectory = Path.GetDirectoryName(destinationTextBox.Text);
-            }
-            catch (Exception)
-            {
-                //they typed something odd in there?
-            }
+                try
+                {
+                    if (destinationTextBox.Text != null)
+                        ofd.InitialDirectory = Path.GetDirectoryName(destinationTextBox.Text);
+                }
+                catch (Exception)
+                {
+                    //they typed something odd in there?
+                }
 
-            ofd.Filter = filter;
-            ofd.Multiselect = false;
-
-            if(ofd.ShowDialog()==DialogResult.OK)
-                destinationTextBox.Text = ofd.FileName;
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    destinationTextBox.Text = ofd.FileName;
+            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             btnStart.Enabled = false;
 
-            var task = new Task(()
+            var task = new Task(() // lgtm[cs/local-not-disposed] - Tasks don't really need to be Disposed
                 =>
                 { using(_populator = new DicomRepopulatorProcessor())
                     _populator.Process(State);
@@ -212,9 +206,9 @@ namespace TemplateBuilder
                 var ser = new Serializer();
                 File.WriteAllText(StateFile,ser.Serialize(State));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                
+                MessageBox.Show(e.Message, "Error in RepopulatorUI.yaml", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
