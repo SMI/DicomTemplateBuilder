@@ -4,7 +4,7 @@ init:
   - cmd: if defined APPVEYOR_PULL_REQUEST_NUMBER appveyor exit
 
 cache:
-  - '%USERPROFILE%\.nuget\packages
+  - '%USERPROFILE%\.nuget\packages'
 
 before_build:
 - nuget restore
