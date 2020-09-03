@@ -33,7 +33,7 @@ namespace Repopulator.Matchers
             if(_indexer == null)
                 throw new ArgumentException("No valid indexer could be found, there must be a column in the map for either SOP, Series or Study instance UIDs");
 
-            using (var reader = new CsvReader(map.CsvFile.OpenText()))
+            using (var reader = new CsvReader(map.CsvFile.OpenText(), System.Globalization.CultureInfo.CurrentCulture))
             {
                 reader.Configuration.TrimOptions = TrimOptions.Trim;
 
