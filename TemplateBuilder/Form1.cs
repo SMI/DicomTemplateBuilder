@@ -117,9 +117,9 @@ namespace TemplateBuilder
 
         private void Scintilla_OnDragEnter(object sender, DragEventArgs dragEventArgs)
         {
-            if(dragEventArgs.Data is OLVDataObject olv)
-                if(olv.ModelObjects.OfType<TagValueNode>().Any())
-                    dragEventArgs.Effect = DragDropEffects.Copy;
+            if (!(dragEventArgs.Data is OLVDataObject olv)) return;
+            if(olv.ModelObjects.OfType<TagValueNode>().Any())
+                dragEventArgs.Effect = DragDropEffects.Copy;
         }
         private void Scintilla_OnDragDrop(object sender, DragEventArgs dragEventArgs)
         {
@@ -164,14 +164,14 @@ namespace TemplateBuilder
         {
             var dataObject = (DataObject)e.DataObject;
 
-            if(dataObject.ContainsFileDropList())
-                foreach (string filename in dataObject.GetFileDropList())
-                {
-                    if(Path.GetExtension(filename) != ".dcm")
-                        continue;
-                    var fi = new FileInfo(filename);
-                    olvDicoms.AddObject(fi);
-                }
+            if (!dataObject.ContainsFileDropList()) return;
+            foreach (string filename in dataObject.GetFileDropList())
+            {
+                if(Path.GetExtension(filename) != ".dcm")
+                    continue;
+                var fi = new FileInfo(filename);
+                olvDicoms.AddObject(fi);
+            }
         }
 
         private void NewTemplate()

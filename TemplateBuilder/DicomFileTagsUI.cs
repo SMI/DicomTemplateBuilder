@@ -84,9 +84,7 @@ namespace TemplateBuilder
 
         private void olvFileTags_ItemActivate(object sender, EventArgs e)
         {
-            var node = olvFileTags.SelectedObject as TagValueNode;
-
-            if (node != null)
+            if (olvFileTags.SelectedObject is TagValueNode node)
                 MessageBox.Show(node.Value.ToString(), node.Tag,MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
