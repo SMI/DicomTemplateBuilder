@@ -73,7 +73,7 @@ namespace Repopulator
 
                 CsvFile = options.CsvFileInfo;
 
-                using (var reader = new CsvReader(CsvFile.OpenText()))
+                using (var reader = new CsvReader(CsvFile.OpenText(), System.Globalization.CultureInfo.CurrentCulture))
                 {
                     reader.Configuration.TrimOptions = TrimOptions.Trim;
                     reader.Read();
