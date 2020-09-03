@@ -281,7 +281,7 @@ namespace TemplateBuilder
                 if(done != tbDone.Text)
                     tbDone.Text = done;
 
-                string errors = string.Format("{0:n0}",nErrors);
+                string errors = $"{nErrors:n0}";
 
                 if(errors != tbErrors.Text)
                     tbErrors.Text = errors;
