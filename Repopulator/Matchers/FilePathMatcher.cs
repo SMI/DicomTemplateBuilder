@@ -15,7 +15,7 @@ namespace Repopulator.Matchers
             if(map.FilenameColumn == null)
                 throw new ArgumentException("Map did not contain file name column");
             
-            Reader = new CsvReader(map.CsvFile.OpenText());
+            Reader = new CsvReader(map.CsvFile.OpenText(),System.Globalization.CultureInfo.CurrentCulture);
             Reader.Read();
             Reader.ReadHeader();
             Reader.Configuration.TrimOptions = TrimOptions.Trim; 
