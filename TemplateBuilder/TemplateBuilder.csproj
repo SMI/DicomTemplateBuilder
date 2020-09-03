@@ -64,11 +64,11 @@
     <PackageReference Include="fo-dicom" Version="4.0.6" />
     <PackageReference Include="fo-dicom.Drawing" Version="4.0.6" />
     <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.4" />
-    <PackageReference Include="HIC.DicomTypeTranslation" Version="2.1.2" />
+    <PackageReference Include="HIC.DicomTypeTranslation" Version="2.3.1" />
     <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
     <PackageReference Include="ObjectListView.Official" Version="2.9.1" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="4.7.1" />
     <ProjectReference Include="..\Repopulator\Repopulator.csproj" />
     
     <Compile Update="Properties\Settings.Designer.cs">

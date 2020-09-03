@@ -55,9 +55,6 @@ namespace Repopulator
             SimpleConfigurator.ConfigureForTargetLogging(MemoryLogTarget,LogLevel.Trace);
 
             _logger = LogManager.GetCurrentClassLogger();
-            
-            if (!DicomDatasetHelpers.CorrectFoDicomVersion())
-                throw new ApplicationException("Incorrect fo-dicom version for the current platform");
         }
         
         public int Process(DicomRepopulatorOptions options)
