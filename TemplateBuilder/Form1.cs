@@ -308,9 +308,7 @@ namespace TemplateBuilder
 
         private void olvDicoms_ItemActivate(object sender, EventArgs e)
         {
-            var fi = olvDicoms.SelectedObject as FileInfo;
-
-            if (fi == null)
+            if (!(olvDicoms.SelectedObject is FileInfo fi))
                 return;
 
             var ui = new DicomFileTagsUI(fi);
@@ -453,9 +451,9 @@ namespace TemplateBuilder
 
         public string GetTemplateYaml()
         {
-            return string.Format(@"
-  - ColumnName: {0}
-    AllowNulls: true", Tag);
+            return $@"
+  - ColumnName: {Tag}
+    AllowNulls: true";
         }
 
     }

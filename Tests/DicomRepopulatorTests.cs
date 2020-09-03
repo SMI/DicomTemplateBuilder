@@ -394,9 +394,9 @@ namespace Tests
 
         /// <summary>
         /// Creates a new input directory with the name of the calling method (under <see cref="_inputFileBase"/>) then creates
-        /// the given dicom file (<paramref name="bytes"/>) at <paramref name="filename"/> location (which can include subdirectories)
+        /// the given dicom file (<paramref name="testFile"/>) at <paramref name="filename"/> location (which can include subdirectories)
         /// </summary>
-        /// <param name="bytes">The dicom files raw bytes</param>
+        /// <param name="testFile">The dicom file</param>
         /// <param name="filename">The filename to write out e.g. "my.dcm" or "mysubdir/my.dcm"</param>
         /// <param name="memberName"></param>
         /// <returns></returns>
@@ -407,7 +407,7 @@ namespace Tests
             Directory.CreateDirectory(inputDirPath);
             var toReturn = new FileInfo(Path.Combine(inputDirPath, filename));
             
-            toReturn.Directory.Create();
+            toReturn.Directory?.Create();
 
             return TestData.Create(toReturn, testFile);
         }

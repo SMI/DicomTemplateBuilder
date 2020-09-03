@@ -36,9 +36,9 @@ namespace RepopulatorCli
             {
                 var des = new Deserializer();
                 var state = des.Deserialize<DicomRepopulatorOptions>(File.ReadAllText(fi.FullName));
-            
-                using(var populator = new DicomRepopulatorProcessor())
-                    return populator.Process(state);
+
+                using var populator = new DicomRepopulatorProcessor();
+                return populator.Process(state);
             }
             catch (Exception e)
             {

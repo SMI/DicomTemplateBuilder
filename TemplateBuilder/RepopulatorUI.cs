@@ -276,7 +276,7 @@ namespace TemplateBuilder
                 int nErrors = (_populator?.Errors ?? 0);
                 int nInput = (_populator?.Input ?? 0);
 
-                string done = string.Format("{0:n0}",nDone);
+                string done = $"{nDone:n0}";
 
                 if(done != tbDone.Text)
                     tbDone.Text = done;
