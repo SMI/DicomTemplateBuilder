@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ...
+- Dependency updates
+- LGTM fixes
+- Report if error encountered when saving or loading a file
 
 ### Added
 
