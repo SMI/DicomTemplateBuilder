@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dicom;
-using DicomTypeTranslation.Helpers;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -28,7 +27,7 @@ namespace Repopulator
 
         public IRepopulatorMatcher Matcher { get; private set; }
 
-        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget(){Name = "DicomRepopulatorProcessor_Memory"};
+        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget {Name = "DicomRepopulatorProcessor_Memory"};
 
         private int _nInput;
         private int _nDone;
@@ -46,10 +45,7 @@ namespace Repopulator
         {
             string log = Path.Combine(currentDirectory ?? Environment.CurrentDirectory, "NLog.config");
 
-            if(File.Exists(log))
-                LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(log, false);
-            else
-                LogManager.Configuration = new LoggingConfiguration();
+            LogManager.Configuration = File.Exists(log) ? new XmlLoggingConfiguration(log) : new LoggingConfiguration();
             
             MemoryLogTarget.Layout = "${level} ${message}";
             SimpleConfigurator.ConfigureForTargetLogging(MemoryLogTarget,LogLevel.Trace);

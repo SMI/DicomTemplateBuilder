@@ -18,7 +18,7 @@ namespace RepopulatorCli
         static int Main(string[] args)
         {
             return Parser.Default.ParseArguments<RepopulatorCliOptions>(args).MapResult(
-                opts => Run(opts),
+                Run,
                 errs => -100);
         }
 
@@ -36,13 +36,13 @@ namespace RepopulatorCli
             {
                 var des = new Deserializer();
                 var state = des.Deserialize<DicomRepopulatorOptions>(File.ReadAllText(fi.FullName));
-            
-                using(var populator = new DicomRepopulatorProcessor())
-                    return populator.Process(state);
+
+                using var populator = new DicomRepopulatorProcessor();
+                return populator.Process(state);
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                Console.WriteLine(e);
                 return -555;
             }
         }

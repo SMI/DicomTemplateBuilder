@@ -14,7 +14,7 @@ namespace Repopulator.Matchers
     internal class TagMatcher : RepopulatorMatcher
     {
         private string[] _fileList;
-        private int _currentFile = 0;
+        private int _currentFile;
 
         private CsvToDicomColumn _indexer;
         private DicomTag _indexerTag;

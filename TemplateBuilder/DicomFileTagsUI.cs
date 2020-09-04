@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Dicom;
 using Dicom.Imaging;
 using DicomTypeTranslation;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace TemplateBuilder
 {
@@ -84,9 +77,7 @@ namespace TemplateBuilder
 
         private void olvFileTags_ItemActivate(object sender, EventArgs e)
         {
-            var node = olvFileTags.SelectedObject as TagValueNode;
-
-            if (node != null)
+            if (olvFileTags.SelectedObject is TagValueNode node)
                 MessageBox.Show(node.Value.ToString(), node.Tag,MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
