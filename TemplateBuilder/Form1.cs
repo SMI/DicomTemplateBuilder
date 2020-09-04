@@ -311,11 +311,10 @@ namespace TemplateBuilder
             if (!(olvDicoms.SelectedObject is FileInfo fi))
                 return;
 
-            var ui = new DicomFileTagsUI(fi);
-            ui.Dock = DockStyle.Fill;
-            var dc = new DockContent();
+            var ui = new DicomFileTagsUI(fi) {Dock = DockStyle.Fill};
+            var dc = new DockContent {TabText = fi.Name};
+            dockcontents.Add(dc);
             dc.Controls.Add(ui);
-            dc.TabText = fi.Name;
             dc.Show(dockPanel1,DockState.DockLeft);
         }
 
@@ -417,13 +416,11 @@ namespace TemplateBuilder
 
         private void miRepopulator_Click(object sender, EventArgs e)
         {
-            var ui = new RepopulatorUI();
+            var ui = new RepopulatorUI {Dock = DockStyle.Fill};
 
-            var dc = new DockContent();
-            dc.Height = ui.MinimumSize.Height;
-            ui.Dock = DockStyle.Fill;
+            var dc = new DockContent {Height = ui.MinimumSize.Height, TabText = "Repopulator"};
+            dockcontents.Add(dc);
             dc.Controls.Add(ui);
-            dc.TabText = "Repopulator";
             dc.Show(dockPanel1,DockState.Document);
         }
         

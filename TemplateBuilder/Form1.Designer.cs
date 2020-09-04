@@ -1,4 +1,6 @@
 ﻿using BrightIdeasSoftware;
+using System.Collections.Generic;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace TemplateBuilder
 {
@@ -15,6 +17,11 @@ namespace TemplateBuilder
         protected AutocompleteMenuNS.AutocompleteMenu autoComplete;
 
         /// <summary>
+        /// List of DockContents objects to clean up later
+        /// </summary>
+        protected readonly List<DockContent> dockcontents=new List<DockContent>();
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,6 +29,7 @@ namespace TemplateBuilder
         {
             if (disposing && (components != null))
             {
+                dockcontents.ForEach(dc => dc.Dispose());
                 components.Dispose();
                 autoComplete.Dispose();
             }
