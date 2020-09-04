@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Dicom;
 using NUnit.Framework;
@@ -51,10 +50,11 @@ namespace Tests
                 inputCsv,
                 null,
                 inputDicom.Directory.Parent,
-                (o) => 
-                { o.FileNameColumn = "File";
+                o =>
+                {
+                    o.FileNameColumn = "File";
                     o.DeleteAsYouGo = deleteAsYouGo;
-                    }
+                }
                 );
             
             //anonymous image should appear in the subdirectory of the out dir
@@ -83,7 +83,7 @@ namespace Tests
                 inputCsv,
                 null,
                 inputDicom.Directory.Parent,
-                (o) => o.FileNameColumn = "File");
+                o => o.FileNameColumn = "File");
             
             //anonymous image should appear in the subdirectory of the out dir
             var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", Path.GetFileName(TestData.IMG_013)));
@@ -141,7 +141,7 @@ namespace Tests
                 CreateExtraMappingsFile("ID:PatientID"), inFile.Directory,
                 
                 //Give it BasicTest.csv 
-                (o) => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
+                o => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
 
             //Anonymous dicom image should exist
             var expectedFile = new FileInfo(Path.Combine(outDir.FullName, nameof(TestData.IMG_013) + ".dcm"));
@@ -416,9 +416,11 @@ namespace Tests
         /// are no errors during the run and th
         /// </summary>
         /// <param name="expectedDone"></param>
+        /// <param name="expectedErrors"></param>
         /// <param name="inputCsv"></param>
         /// <param name="inputExtraMapping"></param>
         /// <param name="inputDicomDirectory"></param>
+        /// <param name="adjustOptions"></param>
         /// <param name="memberName"></param>
         /// <returns></returns>
         private DirectoryInfo AssertRunsSuccesfully(int expectedDone, int expectedErrors, FileInfo inputCsv, FileInfo inputExtraMapping,

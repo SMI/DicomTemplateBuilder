@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Repopulator.TagUpdaters
+﻿namespace Repopulator.TagUpdaters
 {
     /// <summary>
     /// Strategy pattern interface for classes that update <see cref="Dicom.DicomTag"/> in a <see cref="Dicom.DicomDataset"/>

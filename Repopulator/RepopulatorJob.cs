@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Dicom;
-using Repopulator.Matchers;
 
 namespace Repopulator
 {

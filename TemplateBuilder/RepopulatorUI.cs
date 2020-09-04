@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Repopulator;
-using Repopulator.Matchers;
 using YamlDotNet.Serialization;
 
 namespace TemplateBuilder
@@ -17,7 +16,7 @@ namespace TemplateBuilder
         private const string StateFile = "RepopulatorUI.yaml";
 
         public DicomRepopulatorProcessor _populator;
-        private string HelpErrorThreshold =
+        private const string HelpErrorThreshold =
             "The maximum number of errors in file processing / csv file reading before aborting the process";
         public const string HelpCopyToClipboard =
             "Copies the current log to the clipboard";
@@ -65,8 +64,8 @@ namespace TemplateBuilder
                     tbInputCsv.Text = State.InputCsv;
                     tbExtraMappings.Text = State.InputExtraMappings;
                     tbOutputFolder.Text = State.OutputFolder;
-                    nThreads.Value = Math.Min(Math.Max((decimal) nThreads.Minimum,State.NumThreads),nThreads.Maximum);
-                    nErrorThreshold.Value = Math.Min(Math.Max((decimal) nErrorThreshold.Minimum, State.ErrorThreshold),nErrorThreshold.Maximum);
+                    nThreads.Value = Math.Min(Math.Max(nThreads.Minimum,State.NumThreads),nThreads.Maximum);
+                    nErrorThreshold.Value = Math.Min(Math.Max(nErrorThreshold.Minimum, State.ErrorThreshold),nErrorThreshold.Maximum);
                     tbFilePattern.Text = State.Pattern;
                     tbFilenameColumn.Text = State.FileNameColumn;
                     cbAnonymise.Checked = State.Anonymise;
@@ -166,7 +165,7 @@ namespace TemplateBuilder
                     _populator.Process(State);
                 });
 
-            task.ContinueWith((t) =>
+            task.ContinueWith(t =>
             {
                 if(t.IsFaulted)
                     MessageBox.Show(UnpackException(t.Exception), "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -272,9 +271,9 @@ namespace TemplateBuilder
 
                 btnCopyToClipboard.Enabled = log != null;
 
-                int nDone = (_populator?.Done ?? 0);
-                int nErrors = (_populator?.Errors ?? 0);
-                int nInput = (_populator?.Input ?? 0);
+                int nDone = _populator?.Done ?? 0;
+                int nErrors = _populator?.Errors ?? 0;
+                int nInput = _populator?.Input ?? 0;
 
                 string done = $"{nDone:n0}";
 

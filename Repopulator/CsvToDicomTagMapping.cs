@@ -65,7 +65,7 @@ namespace Repopulator
             StringBuilder sb  = new StringBuilder();
             
             //how we will tie CSV rows to files
-            IRepopulatorMatcher matcher = null;
+            IRepopulatorMatcher matcher;
 
             try
             {

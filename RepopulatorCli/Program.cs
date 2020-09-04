@@ -18,7 +18,7 @@ namespace RepopulatorCli
         static int Main(string[] args)
         {
             return Parser.Default.ParseArguments<RepopulatorCliOptions>(args).MapResult(
-                opts => Run(opts),
+                Run,
                 errs => -100);
         }
 
@@ -42,7 +42,7 @@ namespace RepopulatorCli
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                Console.WriteLine(e);
                 return -555;
             }
         }

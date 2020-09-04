@@ -7,8 +7,8 @@ namespace Tests
     {
         // Paths to the test DICOM files relative to TestContext.CurrentContext.TestDirectory
         private const string TEST_DATA_DIR = "TestData";
-        public static string IMG_013 = System.IO.Path.Combine(TEST_DATA_DIR, "IM-0001-0013.dcm");
-        public static string IMG_019 = System.IO.Path.Combine(TEST_DATA_DIR, "IM-0001-0019.dcm");
+        public static string IMG_013 = Path.Combine(TEST_DATA_DIR, "IM-0001-0013.dcm");
+        public static string IMG_019 = Path.Combine(TEST_DATA_DIR, "IM-0001-0019.dcm");
 
         /// <summary>
         /// Creates the test image <see cref="IMG_013"/> in the file location specified

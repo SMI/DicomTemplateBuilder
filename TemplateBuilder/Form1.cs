@@ -33,10 +33,10 @@ namespace TemplateBuilder
         bool _setupFinished = false;
 
 
-        DockContent dcDicoms = new DockContent(){HideOnClose = true};
-        DockContent dcSql = new DockContent(){HideOnClose = true};
-        DockContent dcYaml = new DockContent(){HideOnClose = true};
-        DockContent dcTable = new DockContent(){HideOnClose = true};
+        DockContent dcDicoms = new DockContent {HideOnClose = true};
+        DockContent dcSql = new DockContent {HideOnClose = true};
+        DockContent dcYaml = new DockContent {HideOnClose = true};
+        DockContent dcTable = new DockContent {HideOnClose = true};
         
         public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
@@ -45,8 +45,8 @@ namespace TemplateBuilder
             InitializeComponent();
 
 
-            _scintillaTemplate = new Scintilla(){Dock = DockStyle.Fill};
-            _scintillaSql = new Scintilla(){Dock = DockStyle.Fill};
+            _scintillaTemplate = new Scintilla {Dock = DockStyle.Fill};
+            _scintillaSql = new Scintilla {Dock = DockStyle.Fill};
             _scintillaTemplate.AllowDrop = true;
 
             ImplementationManager.Load<MicrosoftSQLImplementation>();
@@ -76,7 +76,7 @@ namespace TemplateBuilder
 
             ContextMenuStrip = menu;
 
-            DefaultDockLocations = new Dictionary<DockContent, DockState>()
+            DefaultDockLocations = new Dictionary<DockContent, DockState>
             {
                 {dcTable, DockState.DockBottom},
                 {dcDicoms, DockState.DockRight},
@@ -85,7 +85,7 @@ namespace TemplateBuilder
             };
 
 
-            this.IsMdiContainer = true;
+            IsMdiContainer = true;
 
             dockPanel1.Dock = DockStyle.Fill;
             
@@ -124,7 +124,7 @@ namespace TemplateBuilder
         private void Scintilla_OnDragDrop(object sender, DragEventArgs dragEventArgs)
         {
             //point they are dragged over
-            var editor = ((Scintilla) sender);
+            var editor = (Scintilla) sender;
 
             if (editor.ReadOnly)
                 return;
@@ -179,9 +179,8 @@ namespace TemplateBuilder
             _filename = null;
             _scintillaTemplate.ClearAll();
 
-            var c = new ImageTableTemplateCollection();
+            var c = new ImageTableTemplateCollection {DatabaseType = DatabaseType.MicrosoftSQLServer};
 
-            c.DatabaseType = DatabaseType.MicrosoftSQLServer;
             c.Tables.Add(new ImageTableTemplate
             {
                 TableName = "MyTable",
@@ -260,8 +259,7 @@ namespace TemplateBuilder
                     TabPage tp = new TabPage(template.TableName);
                     tcDatagrids.Controls.Add(tp);
 
-                    var dg = new DataGrid();
-                    dg.Dock = DockStyle.Fill;
+                    var dg = new DataGrid {Dock = DockStyle.Fill};
                     tp.Controls.Add(dg);
                     
                     sb.AppendLine(db.Helper.GetCreateTableSql(db, template.TableName, template.GetColumns(dbType), null, false));
@@ -348,11 +346,12 @@ namespace TemplateBuilder
 
         private void OpenDicoms()
         {
-            using (var ofd = new OpenFileDialog())
+            using (var ofd = new OpenFileDialog
             {
-                ofd.Filter = "Dicom Files|*.dcm";
-                ofd.Multiselect = true;
-            
+                Filter = "Dicom Files|*.dcm",
+                Multiselect = true
+            })
+            {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     try

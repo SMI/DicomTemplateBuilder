@@ -2,7 +2,6 @@
 using Dicom;
 using NUnit.Framework;
 using Repopulator;
-using Repopulator.Matchers;
 
 namespace Tests
 {
