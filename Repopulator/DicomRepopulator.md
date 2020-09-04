@@ -23,11 +23,11 @@ The role of this component is to overwrite DicomTags in Dicom images with values
 
 Dicom Repopulator is part of DicomTemplateBuilder and can be accessed through the Window menu.  You will require a folder of dicom images that you want to repopulate and a CSV with data that should be inserted into the files.
 
-![Dicom Repopulator user interface](./images/RepopulatorUI.png)
+![Dicom Repopulator user interface](./Images/RepopulatorUI.png)
 
 Each control has a tooltip explaining what it does. Hover the cursor over the label to see the help:
 
-![Dicom Repopulator user interface](./images/help.png)
+![Dicom Repopulator user interface](./Images/help.png)
 
 Instructions:
 
@@ -69,7 +69,7 @@ The yaml file contains settings for input/output path etc and is the same file t
 
 The repopulation process uses NLog.  The NLog.config file controls where logs are generated.  For ease of use, the last executions logs are available by clicking the 'copy to clipboard' button:
 
-![Logging copy to clipboard](./images/copy-to-clipboard.png)
+![Logging copy to clipboard](./Images/copy-to-clipboard.png)
 
 ## Matching Rows to Files
 
