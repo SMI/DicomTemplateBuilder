@@ -305,7 +305,7 @@ namespace TemplateBuilder
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "DICOM Template Builder";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).EndInit();
             this.toolStrip1.ResumeLayout(false);
