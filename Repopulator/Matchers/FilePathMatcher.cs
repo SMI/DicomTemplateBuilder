@@ -2,7 +2,6 @@
 using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Dicom;
 
 namespace Repopulator.Matchers
 {

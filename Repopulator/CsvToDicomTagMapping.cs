@@ -65,7 +65,7 @@ namespace Repopulator
             StringBuilder sb  = new StringBuilder();
             
             //how we will tie CSV rows to files
-            IRepopulatorMatcher matcher = null;
+            IRepopulatorMatcher matcher;
 
             try
             {
@@ -90,22 +90,20 @@ namespace Repopulator
 
                             if (match != null)
                             {
-                                if(match.Role == ColumnRole.FilePath)
+                                switch (match.Role)
                                 {
-                                    if (FilenameColumn != null)
+                                    case ColumnRole.FilePath when FilenameColumn != null:
                                         throw new Exception("There are 2+ FilenameColumn in the CSV");
-                                    else
+                                    case ColumnRole.FilePath:
                                         FilenameColumn = match;
-                                }
-                                
-                                if(match.Role == ColumnRole.SubFolder)
-                                {
-                                    if (SubFolderColumn != null)
+                                        break;
+                                    case ColumnRole.SubFolder when SubFolderColumn != null:
                                         throw new Exception("There are 2+ SubFolderColumn in the CSV");
-                                    else
+                                    case ColumnRole.SubFolder:
                                         SubFolderColumn = match;
+                                        break;
                                 }
-                                
+
                                 if(TagColumns.Any(c=>c.TagsToPopulate.Intersect(match.TagsToPopulate).Any()))
                                     throw new Exception($"There are 2+ columns that both populate for one of the DicomTag(s) '{string.Join(",",match.TagsToPopulate)}'");
 

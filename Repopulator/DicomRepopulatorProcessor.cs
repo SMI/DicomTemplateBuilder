@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dicom;
-using DicomTypeTranslation.Helpers;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -28,7 +27,7 @@ namespace Repopulator
 
         public IRepopulatorMatcher Matcher { get; private set; }
 
-        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget(){Name = "DicomRepopulatorProcessor_Memory"};
+        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget {Name = "DicomRepopulatorProcessor_Memory"};
 
         private int _nInput;
         private int _nDone;

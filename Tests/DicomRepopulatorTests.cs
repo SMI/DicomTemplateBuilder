@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Dicom;
 using NUnit.Framework;
@@ -51,10 +50,11 @@ namespace Tests
                 inputCsv,
                 null,
                 inputDicom.Directory.Parent,
-                (o) => 
-                { o.FileNameColumn = "File";
+                o =>
+                {
+                    o.FileNameColumn = "File";
                     o.DeleteAsYouGo = deleteAsYouGo;
-                    }
+                }
                 );
             
             //anonymous image should appear in the subdirectory of the out dir
@@ -83,7 +83,7 @@ namespace Tests
                 inputCsv,
                 null,
                 inputDicom.Directory.Parent,
-                (o) => o.FileNameColumn = "File");
+                o => o.FileNameColumn = "File");
             
             //anonymous image should appear in the subdirectory of the out dir
             var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", Path.GetFileName(TestData.IMG_013)));
@@ -141,7 +141,7 @@ namespace Tests
                 CreateExtraMappingsFile("ID:PatientID"), inFile.Directory,
                 
                 //Give it BasicTest.csv 
-                (o) => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
+                o => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
 
             //Anonymous dicom image should exist
             var expectedFile = new FileInfo(Path.Combine(outDir.FullName, nameof(TestData.IMG_013) + ".dcm"));
@@ -394,9 +394,9 @@ namespace Tests
 
         /// <summary>
         /// Creates a new input directory with the name of the calling method (under <see cref="_inputFileBase"/>) then creates
-        /// the given dicom file (<paramref name="bytes"/>) at <paramref name="filename"/> location (which can include subdirectories)
+        /// the given dicom file (<paramref name="testFile"/>) at <paramref name="filename"/> location (which can include subdirectories)
         /// </summary>
-        /// <param name="bytes">The dicom files raw bytes</param>
+        /// <param name="testFile">The dicom file</param>
         /// <param name="filename">The filename to write out e.g. "my.dcm" or "mysubdir/my.dcm"</param>
         /// <param name="memberName"></param>
         /// <returns></returns>
@@ -407,7 +407,7 @@ namespace Tests
             Directory.CreateDirectory(inputDirPath);
             var toReturn = new FileInfo(Path.Combine(inputDirPath, filename));
             
-            toReturn.Directory.Create();
+            toReturn.Directory?.Create();
 
             return TestData.Create(toReturn, testFile);
         }
@@ -416,9 +416,11 @@ namespace Tests
         /// are no errors during the run and th
         /// </summary>
         /// <param name="expectedDone"></param>
+        /// <param name="expectedErrors"></param>
         /// <param name="inputCsv"></param>
         /// <param name="inputExtraMapping"></param>
         /// <param name="inputDicomDirectory"></param>
+        /// <param name="adjustOptions"></param>
         /// <param name="memberName"></param>
         /// <returns></returns>
         private DirectoryInfo AssertRunsSuccesfully(int expectedDone, int expectedErrors, FileInfo inputCsv, FileInfo inputExtraMapping,

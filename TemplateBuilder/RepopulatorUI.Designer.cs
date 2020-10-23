@@ -1,4 +1,6 @@
-﻿namespace TemplateBuilder
+﻿using ToolTip = System.Windows.Forms.ToolTip;
+
+namespace TemplateBuilder
 {
     partial class RepopulatorUI
     {
@@ -6,6 +8,8 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+        protected ToolTip tt;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -15,6 +19,7 @@
         {
             if (disposing && (components != null))
             {
+                tt.Dispose();
                 components.Dispose();
             }
             base.Dispose(disposing);
