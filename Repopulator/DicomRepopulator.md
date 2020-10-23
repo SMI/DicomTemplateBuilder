@@ -3,6 +3,10 @@
 ## Contents
 
 - [Background](#background)
+- [Usage](#usage)
+- [Saving Settings](#saving-settings)
+  - [Command Line Usage](#command-line-usage)
+- [Logging](#logging)
 - [Matching Rows to Files](#matching-rows-to-files)
   - [Match by File Path](#match-by-file-path)
     - [File Path Formats](#file-path-formats)
@@ -14,6 +18,58 @@
 ## Background
 
 The role of this component is to overwrite DicomTags in Dicom images with values provided in a CSV file.  Csv data can be at various granularities e.g. 1 row per Study or 1 row per Image.
+
+## Usage
+
+Dicom Repopulator is part of DicomTemplateBuilder and can be accessed through the Window menu.  You will require a folder of dicom images that you want to repopulate and a CSV with data that should be inserted into the files.
+
+![Dicom Repopulator user interface](./Images/RepopulatorUI.png)
+
+Each control has a tooltip explaining what it does. Hover the cursor over the label to see the help:
+
+![Dicom Repopulator user interface](./Images/help.png)
+
+Instructions:
+
+- Enter the location of your 
+
+## Saving Settings
+
+When you make changes on the user interface, these are automatically persisted into the file `RepopulatorUI.yaml`.  In addition to preventing you from loosing your settings between sessions, this file acts as a valid input for [Command Line Usage](#command-line-usage)
+
+```
+InputFolder: '\\myServer\MyProjects\123\Images'
+InputCsv: '\\myServer\eDRISExtracts\anonProj123Images.csv'
+InputExtraMappings: 
+OutputFolder: '\\myServer\MyProjects\123\Images\Done'
+NumThreads: 0
+IncludeSubdirectories: true
+Pattern: '*.dcm'
+FileNameColumn: RelativeFileArchiveURI
+Anonymise: false
+ErrorThreshold: 100
+CultureName: en-GB
+SubFolderColumn: PatientID
+DeleteAsYouGo: false
+```
+
+### Command Line Usage
+
+The repopulator can be run from the command line:
+
+```
+cd C:\Users\Thomas\Downloads\RepopulatorCli-win-x64\RepopulatorCli-win-x64
+RepopulatorCli.exe --help
+RepopulatorCli.exe -y D:\DicomTemplateBuilder\TemplateBuilder\bin\Debug\net461\RepopulatorUI.yaml
+```
+
+The yaml file contains settings for input/output path etc and is the same file that is produced for [persistence in the UI](#saving-settings)
+
+## Logging
+
+The repopulation process uses NLog.  The NLog.config file controls where logs are generated.  For ease of use, the last executions logs are available by clicking the 'copy to clipboard' button:
+
+![Logging copy to clipboard](./Images/copy-to-clipboard.png)
 
 ## Matching Rows to Files
 

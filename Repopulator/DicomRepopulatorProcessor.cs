@@ -32,6 +32,7 @@ namespace Repopulator
         private int _nInput;
         private int _nDone;
         private int _nErrors;
+        private LoggingRule _loggingRule;
 
         /// <summary>
         /// The number of images found in the input directory (optionally a recursive scan)
@@ -41,14 +42,22 @@ namespace Repopulator
         public int Done => _nDone;
         public int Errors => _nErrors;
 
-        public DicomRepopulatorProcessor(string currentDirectory = null)
+        public DicomRepopulatorProcessor()
         {
-            string log = Path.Combine(currentDirectory ?? Environment.CurrentDirectory, "NLog.config");
-
-            LogManager.Configuration = File.Exists(log) ? new XmlLoggingConfiguration(log) : new LoggingConfiguration();
-            
             MemoryLogTarget.Layout = "${level} ${message}";
-            SimpleConfigurator.ConfigureForTargetLogging(MemoryLogTarget,LogLevel.Trace);
+
+            if(LogManager.Configuration == null)
+                SimpleConfigurator.ConfigureForTargetLogging(MemoryLogTarget,LogLevel.Trace);
+            else
+            {
+                // specify what gets logged to the above target
+                _loggingRule = new LoggingRule("*", LogLevel.Debug, MemoryLogTarget);
+
+                // add target and rule to configuration
+                LogManager.Configuration.AddTarget(MemoryLogTarget.Name, MemoryLogTarget);
+                LogManager.Configuration.LoggingRules.Add(_loggingRule);
+                LogManager.ReconfigExistingLoggers();
+            }
 
             _logger = LogManager.GetCurrentClassLogger();
         }
@@ -169,6 +178,7 @@ namespace Repopulator
         public void Dispose()
         {
             LogManager.Configuration.RemoveTarget(MemoryLogTarget.Name);
+            LogManager.Configuration.LoggingRules.Remove(_loggingRule);
             MemoryLogTarget?.Dispose();
         }
     }
