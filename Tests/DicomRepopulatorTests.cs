@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Dicom;
 using NUnit.Framework;
 using Repopulator;
@@ -175,7 +176,7 @@ namespace Tests
                 NumThreads = 4
             };
 
-            int result = new DicomRepopulatorProcessor().Process(options);
+            int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
             Assert.AreEqual(0, result);
 
             Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
@@ -205,7 +206,7 @@ namespace Tests
                 NumThreads = 4
             };
 
-            int result = new DicomRepopulatorProcessor().Process(options);
+            int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
             Assert.AreEqual(0, result);
 
             Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
@@ -237,7 +238,7 @@ namespace Tests
                 NumThreads = 1
             };
 
-            int result = new DicomRepopulatorProcessor().Process(options);
+            int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
             Assert.AreEqual(0, result);
 
             Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
@@ -269,7 +270,7 @@ namespace Tests
                 NumThreads = 1
             };
 
-            int result = new DicomRepopulatorProcessor().Process(options);
+            int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
             Assert.AreEqual(0, result);
 
             Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
@@ -302,7 +303,7 @@ namespace Tests
                 NumThreads = 1
             };
 
-            int result = new DicomRepopulatorProcessor().Process(options);
+            int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
             Assert.AreEqual(0, result);
 
             Assert.True(File.Exists(expectedFile1), "Expected output file {0} to exist", expectedFile1);
@@ -346,7 +347,7 @@ namespace Tests
                 NumThreads = 4
             };
 
-            int result = new DicomRepopulatorProcessor().Process(options);
+            int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
             Assert.AreEqual(0, result);
 
             Assert.True(File.Exists(expectedFile1), "Expected output file {0} to exist", expectedFile1);
@@ -437,7 +438,7 @@ namespace Tests
                 out DicomRepopulatorOptions options,
                 out DirectoryInfo outputDirPath);
             
-            int result = processor.Process(options);
+            int result = processor.Process(options,CancellationToken.None);
             Assert.AreEqual(0, result);
             
             foreach (var log in processor.MemoryLogTarget.Logs)

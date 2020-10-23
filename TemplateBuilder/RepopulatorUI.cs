@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Repopulator;
@@ -16,6 +17,7 @@ namespace TemplateBuilder
         private const string StateFile = "RepopulatorUI.yaml";
 
         public DicomRepopulatorProcessor _populator;
+        private CancellationTokenSource _cancellationTokenSource;
         private const string HelpErrorThreshold =
             "The maximum number of errors in file processing / csv file reading before aborting the process";
         public const string HelpCopyToClipboard =
@@ -159,10 +161,13 @@ namespace TemplateBuilder
         {
             btnStart.Enabled = false;
 
+            _cancellationTokenSource = new CancellationTokenSource();
+            btnStop.Enabled = true;
+
             var task = new Task(() // lgtm[cs/local-not-disposed] - Tasks don't really need to be Disposed
                 =>
                 { using(_populator = new DicomRepopulatorProcessor())
-                    _populator.Process(State);
+                    _populator.Process(State,_cancellationTokenSource.Token);
                 });
 
             task.ContinueWith(t =>
@@ -171,6 +176,7 @@ namespace TemplateBuilder
                     MessageBox.Show(UnpackException(t.Exception), "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 btnStart.Enabled = true;
+                btnStop.Enabled = false;
             }, TaskScheduler.FromCurrentSynchronizationContext());
             
             task.Start();
@@ -339,6 +345,15 @@ namespace TemplateBuilder
         {
             State.DeleteAsYouGo = cbDeleteAsYouGo.Checked;
             SaveState();
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            if(_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                btnStop.Enabled = false;
+            }
         }
     }
 }
