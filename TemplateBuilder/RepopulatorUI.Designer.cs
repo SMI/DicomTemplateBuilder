@@ -57,6 +57,7 @@ namespace TemplateBuilder
             this.cbAnonymise = new System.Windows.Forms.CheckBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnStop = new System.Windows.Forms.Button();
             this.tbErrors = new System.Windows.Forms.TextBox();
             this.lblErrors = new System.Windows.Forms.Label();
             this.tbDone = new System.Windows.Forms.TextBox();
@@ -209,7 +210,7 @@ namespace TemplateBuilder
             // 
             this.lblProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(31, 184);
+            this.lblProgress.Location = new System.Drawing.Point(31, 197);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(58, 13);
             this.lblProgress.TabIndex = 9;
@@ -305,14 +306,26 @@ namespace TemplateBuilder
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.btnStop);
             this.panel1.Controls.Add(this.tbErrors);
             this.panel1.Controls.Add(this.lblErrors);
             this.panel1.Controls.Add(this.tbDone);
             this.panel1.Controls.Add(this.lblDone);
-            this.panel1.Location = new System.Drawing.Point(3, 214);
+            this.panel1.Location = new System.Drawing.Point(3, 227);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(744, 23);
+            this.panel1.Size = new System.Drawing.Size(744, 27);
             this.panel1.TabIndex = 14;
+            // 
+            // btnStop
+            // 
+            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStop.Location = new System.Drawing.Point(697, 0);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(40, 24);
+            this.btnStop.TabIndex = 27;
+            this.btnStop.Text = "Stop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // tbErrors
             // 
@@ -384,7 +397,7 @@ namespace TemplateBuilder
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(3, 204);
+            this.progressBar1.Location = new System.Drawing.Point(3, 217);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(747, 10);
             this.progressBar1.TabIndex = 18;
@@ -393,7 +406,7 @@ namespace TemplateBuilder
             // 
             this.btnCopyToClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCopyToClipboard.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyToClipboard.Image")));
-            this.btnCopyToClipboard.Location = new System.Drawing.Point(3, 177);
+            this.btnCopyToClipboard.Location = new System.Drawing.Point(3, 190);
             this.btnCopyToClipboard.Name = "btnCopyToClipboard";
             this.btnCopyToClipboard.Size = new System.Drawing.Size(25, 24);
             this.btnCopyToClipboard.TabIndex = 19;
@@ -517,7 +530,7 @@ namespace TemplateBuilder
             this.Controls.Add(this.btnInputFolder);
             this.MinimumSize = new System.Drawing.Size(750, 240);
             this.Name = "RepopulatorUI";
-            this.Size = new System.Drawing.Size(750, 240);
+            this.Size = new System.Drawing.Size(750, 257);
             this.Load += new System.EventHandler(this.RepopulatorUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nThreads)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -568,5 +581,6 @@ namespace TemplateBuilder
         private System.Windows.Forms.Label lblSubFolder;
         private System.Windows.Forms.TextBox tbSubFolderColumn;
         private System.Windows.Forms.CheckBox cbDeleteAsYouGo;
+        private System.Windows.Forms.Button btnStop;
     }
 }

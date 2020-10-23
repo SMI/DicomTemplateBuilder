@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using CommandLine;
 using Repopulator;
 using YamlDotNet.Serialization;
@@ -38,7 +39,7 @@ namespace RepopulatorCli
                 var state = des.Deserialize<DicomRepopulatorOptions>(File.ReadAllText(fi.FullName));
 
                 using var populator = new DicomRepopulatorProcessor();
-                return populator.Process(state);
+                return populator.Process(state,CancellationToken.None);
             }
             catch (Exception e)
             {

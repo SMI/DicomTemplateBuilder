@@ -53,7 +53,7 @@ namespace Repopulator
             _logger = LogManager.GetCurrentClassLogger();
         }
         
-        public int Process(DicomRepopulatorOptions options)
+        public int Process(DicomRepopulatorOptions options, CancellationToken token)
         {
             _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1,options.NumThreads) };
             _tagUpdater = new ParseStringsUpdater(options.Culture);
@@ -116,6 +116,13 @@ namespace Repopulator
                         _logger.Error(e);
                         Interlocked.Increment(ref _nErrors);
                     }
+                    
+                    if(token.IsCancellationRequested)
+                    {
+                        _logger.Info("User cancelled execution");
+                        return -2;
+                    }
+
                 } while (job != null && _nErrors < options.ErrorThreshold);
 
                 if(_nErrors >= options.ErrorThreshold)
