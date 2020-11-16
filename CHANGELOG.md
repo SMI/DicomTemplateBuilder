@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New option for DicomRepopulator to put images in root subfolders e.g. by PatientID
+- Added Stop button for DicomRepopulator to cancel processing
 
 ### Changed
 
