@@ -141,21 +141,19 @@ namespace Repopulator
 
             return 0;
         }
-        
-        
-            
+
+
+
         private void ProcessJob(RepopulatorJob job, DicomRepopulatorOptions options)
         {
             if(options.Anonymise)
                 _anonymizer.AnonymizeInPlace(job.File.Dataset);
 
             _tagUpdater.UpdateTags(job);
-            
+
             //the relative location in the archive
             var inputRelativePath =
             job.File.File.Name.Replace(options.DirectoryToProcessInfo.FullName, "").TrimStart(Path.DirectorySeparatorChar);
-
-            _logger.Debug("Saving output file");
 
             // Preserves any sub-directory structures
             var outPath = job.Map.SubFolderColumn != null
