@@ -162,6 +162,8 @@ namespace Repopulator
                 ? Path.Combine(options.OutputDirectoryInfo.FullName, job.Cells[job.Map.SubFolderColumn.Index],inputRelativePath)
                 : Path.Combine(options.OutputDirectoryInfo.FullName, inputRelativePath);
 
+            _logger.Debug("Output file path = " + outPath.ToString());
+
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
 
             job.File.Save(outPath);
