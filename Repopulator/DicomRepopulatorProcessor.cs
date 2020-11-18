@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dicom;
-using DicomTypeTranslation.Helpers;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -28,11 +27,12 @@ namespace Repopulator
 
         public IRepopulatorMatcher Matcher { get; private set; }
 
-        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget(){Name = "DicomRepopulatorProcessor_Memory"};
+        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget {Name = "DicomRepopulatorProcessor_Memory"};
 
         private int _nInput;
         private int _nDone;
         private int _nErrors;
+        private LoggingRule _loggingRule;
 
         /// <summary>
         /// The number of images found in the input directory (optionally a recursive scan)
@@ -42,25 +42,27 @@ namespace Repopulator
         public int Done => _nDone;
         public int Errors => _nErrors;
 
-        public DicomRepopulatorProcessor(string currentDirectory = null)
+        public DicomRepopulatorProcessor()
         {
-            string log = Path.Combine(currentDirectory ?? Environment.CurrentDirectory, "NLog.config");
-
-            if(File.Exists(log))
-                LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(log, false);
-            else
-                LogManager.Configuration = new LoggingConfiguration();
-            
             MemoryLogTarget.Layout = "${level} ${message}";
-            SimpleConfigurator.ConfigureForTargetLogging(MemoryLogTarget,LogLevel.Trace);
+
+            if(LogManager.Configuration == null)
+                SimpleConfigurator.ConfigureForTargetLogging(MemoryLogTarget,LogLevel.Trace);
+            else
+            {
+                // specify what gets logged to the above target
+                _loggingRule = new LoggingRule("*", LogLevel.Debug, MemoryLogTarget);
+
+                // add target and rule to configuration
+                LogManager.Configuration.AddTarget(MemoryLogTarget.Name, MemoryLogTarget);
+                LogManager.Configuration.LoggingRules.Add(_loggingRule);
+                LogManager.ReconfigExistingLoggers();
+            }
 
             _logger = LogManager.GetCurrentClassLogger();
-            
-            if (!DicomDatasetHelpers.CorrectFoDicomVersion())
-                throw new ApplicationException("Incorrect fo-dicom version for the current platform");
         }
         
-        public int Process(DicomRepopulatorOptions options)
+        public int Process(DicomRepopulatorOptions options, CancellationToken token)
         {
             _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1,options.NumThreads) };
             _tagUpdater = new ParseStringsUpdater(options.Culture);
@@ -123,6 +125,13 @@ namespace Repopulator
                         _logger.Error(e);
                         Interlocked.Increment(ref _nErrors);
                     }
+                    
+                    if(token.IsCancellationRequested)
+                    {
+                        _logger.Info("User cancelled execution");
+                        return -2;
+                    }
+
                 } while (job != null && _nErrors < options.ErrorThreshold);
 
                 if(_nErrors >= options.ErrorThreshold)
@@ -168,11 +177,15 @@ namespace Repopulator
 
             Interlocked.Increment(ref _nDone);
 
+            if(options.DeleteAsYouGo)
+                job.FileInfo.Delete();
+
         }
 
         public void Dispose()
         {
             LogManager.Configuration.RemoveTarget(MemoryLogTarget.Name);
+            LogManager.Configuration.LoggingRules.Remove(_loggingRule);
             MemoryLogTarget?.Dispose();
         }
     }

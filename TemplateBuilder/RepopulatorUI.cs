@@ -3,10 +3,10 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Repopulator;
-using Repopulator.Matchers;
 using YamlDotNet.Serialization;
 
 namespace TemplateBuilder
@@ -17,7 +17,8 @@ namespace TemplateBuilder
         private const string StateFile = "RepopulatorUI.yaml";
 
         public DicomRepopulatorProcessor _populator;
-        private string HelpErrorThreshold =
+        private CancellationTokenSource _cancellationTokenSource;
+        private const string HelpErrorThreshold =
             "The maximum number of errors in file processing / csv file reading before aborting the process";
         public const string HelpCopyToClipboard =
             "Copies the current log to the clipboard";
@@ -65,11 +66,12 @@ namespace TemplateBuilder
                     tbInputCsv.Text = State.InputCsv;
                     tbExtraMappings.Text = State.InputExtraMappings;
                     tbOutputFolder.Text = State.OutputFolder;
-                    nThreads.Value = Math.Min(Math.Max((decimal) nThreads.Minimum,State.NumThreads),nThreads.Maximum);
-                    nErrorThreshold.Value = Math.Min(Math.Max((decimal) nErrorThreshold.Minimum, State.ErrorThreshold),nErrorThreshold.Maximum);
+                    nThreads.Value = Math.Min(Math.Max(nThreads.Minimum,State.NumThreads),nThreads.Maximum);
+                    nErrorThreshold.Value = Math.Min(Math.Max(nErrorThreshold.Minimum, State.ErrorThreshold),nErrorThreshold.Maximum);
                     tbFilePattern.Text = State.Pattern;
                     tbFilenameColumn.Text = State.FileNameColumn;
                     cbAnonymise.Checked = State.Anonymise;
+                    cbDeleteAsYouGo.Checked = State.DeleteAsYouGo;
 
                     if (!string.IsNullOrWhiteSpace(State.CultureName))
                     {
@@ -84,12 +86,10 @@ namespace TemplateBuilder
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.Message, "Error in RepopulatorUI.yaml", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            var tt = new ToolTip();
-            tt.InitialDelay = 0;
-            tt.AutoPopDelay = 32767;
-            tt.ShowAlways = true;
+            tt = new ToolTip {InitialDelay = 0, AutoPopDelay = 32767, ShowAlways = true};
             tt.SetToolTip(btnInputFolder,HelpInputFolder);
             tt.SetToolTip(lblInputFolder,HelpInputFolder);
 
@@ -133,50 +133,50 @@ namespace TemplateBuilder
 
         private void BrowseForFolder(TextBox destinationTextBox)
         {
-            var ofd = new FolderBrowserDialog();
-            if (ofd.ShowDialog() == DialogResult.OK)
-                destinationTextBox.Text = ofd.SelectedPath;
+            using (var ofd = new FolderBrowserDialog())
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    destinationTextBox.Text = ofd.SelectedPath;
         }
 
         private void BrowseForFile(TextBox destinationTextBox, string filter)
         {
-            
-            var ofd = new OpenFileDialog();
-            ofd.CheckPathExists = true;
-
-            try
+            using (var ofd = new OpenFileDialog {CheckPathExists = true, Filter = filter, Multiselect = false})
             {
-                if (destinationTextBox.Text != null)
-                    ofd.InitialDirectory = Path.GetDirectoryName(destinationTextBox.Text);
-            }
-            catch (Exception)
-            {
-                //they typed something odd in there?
-            }
+                try
+                {
+                    if (destinationTextBox.Text != null)
+                        ofd.InitialDirectory = Path.GetDirectoryName(destinationTextBox.Text);
+                }
+                catch (Exception)
+                {
+                    //they typed something odd in there?
+                }
 
-            ofd.Filter = filter;
-            ofd.Multiselect = false;
-
-            if(ofd.ShowDialog()==DialogResult.OK)
-                destinationTextBox.Text = ofd.FileName;
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    destinationTextBox.Text = ofd.FileName;
+            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             btnStart.Enabled = false;
 
-            var task = new Task(()
+            _cancellationTokenSource = new CancellationTokenSource();
+            btnStop.Enabled = true;
+
+            var task = new Task(() // lgtm[cs/local-not-disposed] - Tasks don't really need to be Disposed
                 =>
                 { using(_populator = new DicomRepopulatorProcessor())
-                    _populator.Process(State);
+                    _populator.Process(State,_cancellationTokenSource.Token);
                 });
 
-            task.ContinueWith((t) =>
+            task.ContinueWith(t =>
             {
                 if(t.IsFaulted)
                     MessageBox.Show(UnpackException(t.Exception), "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 btnStart.Enabled = true;
+                btnStop.Enabled = false;
             }, TaskScheduler.FromCurrentSynchronizationContext());
             
             task.Start();
@@ -211,9 +211,9 @@ namespace TemplateBuilder
                 var ser = new Serializer();
                 File.WriteAllText(StateFile,ser.Serialize(State));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                
+                MessageBox.Show(e.Message, "Error in RepopulatorUI.yaml", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -277,16 +277,16 @@ namespace TemplateBuilder
 
                 btnCopyToClipboard.Enabled = log != null;
 
-                int nDone = (_populator?.Done ?? 0);
-                int nErrors = (_populator?.Errors ?? 0);
-                int nInput = (_populator?.Input ?? 0);
+                int nDone = _populator?.Done ?? 0;
+                int nErrors = _populator?.Errors ?? 0;
+                int nInput = _populator?.Input ?? 0;
 
-                string done = string.Format("{0:n0}",nDone);
+                string done = $"{nDone:n0}";
 
                 if(done != tbDone.Text)
                     tbDone.Text = done;
 
-                string errors = string.Format("{0:n0}",nErrors);
+                string errors = $"{nErrors:n0}";
 
                 if(errors != tbErrors.Text)
                     tbErrors.Text = errors;
@@ -339,6 +339,21 @@ namespace TemplateBuilder
 
             SaveState();
 
+        }
+
+        private void cbDeleteAsYouGo_CheckedChanged(object sender, EventArgs e)
+        {
+            State.DeleteAsYouGo = cbDeleteAsYouGo.Checked;
+            SaveState();
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            if(_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                btnStop.Enabled = false;
+            }
         }
     }
 }

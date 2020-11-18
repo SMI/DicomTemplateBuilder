@@ -2,7 +2,6 @@
 using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Dicom;
 
 namespace Repopulator.Matchers
 {
@@ -15,7 +14,7 @@ namespace Repopulator.Matchers
             if(map.FilenameColumn == null)
                 throw new ArgumentException("Map did not contain file name column");
             
-            Reader = new CsvReader(map.CsvFile.OpenText());
+            Reader = new CsvReader(map.CsvFile.OpenText(),System.Globalization.CultureInfo.CurrentCulture);
             Reader.Read();
             Reader.ReadHeader();
             Reader.Configuration.TrimOptions = TrimOptions.Trim; 
@@ -28,7 +27,7 @@ namespace Repopulator.Matchers
 
             var fi = new FileInfo(Path.Combine(Options.InputFolder, Reader[Map.FilenameColumn.Index]));
 
-            return new RepopulatorJob(Map,DicomFile.Open(fi.FullName),Reader.Context.Record);
+            return new RepopulatorJob(Map,fi,null,Reader.Context.Record);
         }
 
         public override void Dispose()

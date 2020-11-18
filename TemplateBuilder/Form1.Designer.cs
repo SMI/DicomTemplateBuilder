@@ -1,4 +1,6 @@
 ﻿using BrightIdeasSoftware;
+using System.Collections.Generic;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace TemplateBuilder
 {
@@ -10,6 +12,16 @@ namespace TemplateBuilder
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
+        /// Auto-completion menu
+        /// </summary>
+        protected AutocompleteMenuNS.AutocompleteMenu autoComplete;
+
+        /// <summary>
+        /// List of DockContents objects to clean up later
+        /// </summary>
+        protected readonly List<DockContent> dockcontents=new List<DockContent>();
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -17,7 +29,9 @@ namespace TemplateBuilder
         {
             if (disposing && (components != null))
             {
+                dockcontents.ForEach(dc => dc.Dispose());
                 components.Dispose();
+                autoComplete.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -291,7 +305,7 @@ namespace TemplateBuilder
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "DICOM Template Builder";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.olvDicoms)).EndInit();
             this.toolStrip1.ResumeLayout(false);

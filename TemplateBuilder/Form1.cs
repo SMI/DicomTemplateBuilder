@@ -33,10 +33,10 @@ namespace TemplateBuilder
         bool _setupFinished = false;
 
 
-        DockContent dcDicoms = new DockContent(){HideOnClose = true};
-        DockContent dcSql = new DockContent(){HideOnClose = true};
-        DockContent dcYaml = new DockContent(){HideOnClose = true};
-        DockContent dcTable = new DockContent(){HideOnClose = true};
+        DockContent dcDicoms = new DockContent {HideOnClose = true};
+        DockContent dcSql = new DockContent {HideOnClose = true};
+        DockContent dcYaml = new DockContent {HideOnClose = true};
+        DockContent dcTable = new DockContent {HideOnClose = true};
         
         public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
@@ -45,8 +45,8 @@ namespace TemplateBuilder
             InitializeComponent();
 
 
-            _scintillaTemplate = new Scintilla(){Dock = DockStyle.Fill};
-            _scintillaSql = new Scintilla(){Dock = DockStyle.Fill};
+            _scintillaTemplate = new Scintilla {Dock = DockStyle.Fill};
+            _scintillaSql = new Scintilla {Dock = DockStyle.Fill};
             _scintillaTemplate.AllowDrop = true;
 
             ImplementationManager.Load<MicrosoftSQLImplementation>();
@@ -56,7 +56,7 @@ namespace TemplateBuilder
             
             ImageManager.SetImplementation(WinFormsImageManager.Instance);
 
-            var autoComplete = new AutocompleteMenu();
+            autoComplete = new AutocompleteMenu();
 
             autoComplete.AddItem(new AutocompleteItem("Tables"));
             autoComplete.AddItem(new AutocompleteItem("TableName"));
@@ -76,7 +76,7 @@ namespace TemplateBuilder
 
             ContextMenuStrip = menu;
 
-            DefaultDockLocations = new Dictionary<DockContent, DockState>()
+            DefaultDockLocations = new Dictionary<DockContent, DockState>
             {
                 {dcTable, DockState.DockBottom},
                 {dcDicoms, DockState.DockRight},
@@ -85,7 +85,7 @@ namespace TemplateBuilder
             };
 
 
-            this.IsMdiContainer = true;
+            IsMdiContainer = true;
 
             dockPanel1.Dock = DockStyle.Fill;
             
@@ -117,14 +117,14 @@ namespace TemplateBuilder
 
         private void Scintilla_OnDragEnter(object sender, DragEventArgs dragEventArgs)
         {
-            if(dragEventArgs.Data is OLVDataObject olv)
-                if(olv.ModelObjects.OfType<TagValueNode>().Any())
-                    dragEventArgs.Effect = DragDropEffects.Copy;
+            if (!(dragEventArgs.Data is OLVDataObject olv)) return;
+            if(olv.ModelObjects.OfType<TagValueNode>().Any())
+                dragEventArgs.Effect = DragDropEffects.Copy;
         }
         private void Scintilla_OnDragDrop(object sender, DragEventArgs dragEventArgs)
         {
             //point they are dragged over
-            var editor = ((Scintilla) sender);
+            var editor = (Scintilla) sender;
 
             if (editor.ReadOnly)
                 return;
@@ -164,14 +164,14 @@ namespace TemplateBuilder
         {
             var dataObject = (DataObject)e.DataObject;
 
-            if(dataObject.ContainsFileDropList())
-                foreach (string filename in dataObject.GetFileDropList())
-                {
-                    if(Path.GetExtension(filename) != ".dcm")
-                        continue;
-                    var fi = new FileInfo(filename);
-                    olvDicoms.AddObject(fi);
-                }
+            if (!dataObject.ContainsFileDropList()) return;
+            foreach (string filename in dataObject.GetFileDropList())
+            {
+                if(Path.GetExtension(filename) != ".dcm")
+                    continue;
+                var fi = new FileInfo(filename);
+                olvDicoms.AddObject(fi);
+            }
         }
 
         private void NewTemplate()
@@ -179,9 +179,8 @@ namespace TemplateBuilder
             _filename = null;
             _scintillaTemplate.ClearAll();
 
-            var c = new ImageTableTemplateCollection();
+            var c = new ImageTableTemplateCollection {DatabaseType = DatabaseType.MicrosoftSQLServer};
 
-            c.DatabaseType = DatabaseType.MicrosoftSQLServer;
             c.Tables.Add(new ImageTableTemplate
             {
                 TableName = "MyTable",
@@ -198,18 +197,14 @@ namespace TemplateBuilder
 
         private void OpenTemplate()
         {
-            var ofd = new OpenFileDialog();
-            ofd.Filter = "Imaging Template|*.it";
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                if (!string.IsNullOrWhiteSpace(ofd.FileName))
+            using (var ofd = new OpenFileDialog { Filter = "Imaging Template|*.it" })
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
+                    if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
                     _scintillaTemplate.Text = File.ReadAllText(ofd.FileName);
                     _filename = ofd.FileName;
                     Check();
                 }
-            }
         }
 
         private void Save()
@@ -229,11 +224,9 @@ namespace TemplateBuilder
 
         private void SaveAs()
         {
-            var sfd = new SaveFileDialog();
-            sfd.Filter = "Imaging Template|*.it";
-
-            if (sfd.ShowDialog() == DialogResult.OK)
-                _filename = sfd.FileName;
+            using (var sfd = new SaveFileDialog { Filter = "Imaging Template|*.it" })
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    _filename = sfd.FileName;
         }
 
         private bool Check()
@@ -266,8 +259,7 @@ namespace TemplateBuilder
                     TabPage tp = new TabPage(template.TableName);
                     tcDatagrids.Controls.Add(tp);
 
-                    var dg = new DataGrid();
-                    dg.Dock = DockStyle.Fill;
+                    var dg = new DataGrid {Dock = DockStyle.Fill};
                     tp.Controls.Add(dg);
                     
                     sb.AppendLine(db.Helper.GetCreateTableSql(db, template.TableName, template.GetColumns(dbType), null, false));
@@ -314,16 +306,13 @@ namespace TemplateBuilder
 
         private void olvDicoms_ItemActivate(object sender, EventArgs e)
         {
-            var fi = olvDicoms.SelectedObject as FileInfo;
-
-            if (fi == null)
+            if (!(olvDicoms.SelectedObject is FileInfo fi))
                 return;
 
-            var ui = new DicomFileTagsUI(fi);
-            ui.Dock = DockStyle.Fill;
-            var dc = new DockContent();
+            var ui = new DicomFileTagsUI(fi) {Dock = DockStyle.Fill};
+            var dc = new DockContent {TabText = fi.Name};
+            dockcontents.Add(dc);
             dc.Controls.Add(ui);
-            dc.TabText = fi.Name;
             dc.Show(dockPanel1,DockState.DockLeft);
         }
 
@@ -357,11 +346,12 @@ namespace TemplateBuilder
 
         private void OpenDicoms()
         {
-            using (var ofd = new OpenFileDialog())
+            using (var ofd = new OpenFileDialog
             {
-                ofd.Filter = "Dicom Files|*.dcm";
-                ofd.Multiselect = true;
-            
+                Filter = "Dicom Files|*.dcm",
+                Multiselect = true
+            })
+            {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     try
@@ -425,13 +415,11 @@ namespace TemplateBuilder
 
         private void miRepopulator_Click(object sender, EventArgs e)
         {
-            var ui = new RepopulatorUI();
+            var ui = new RepopulatorUI {Dock = DockStyle.Fill};
 
-            var dc = new DockContent();
-            dc.Height = ui.MinimumSize.Height;
-            ui.Dock = DockStyle.Fill;
+            var dc = new DockContent {Height = ui.MinimumSize.Height, TabText = "Repopulator"};
+            dockcontents.Add(dc);
             dc.Controls.Add(ui);
-            dc.TabText = "Repopulator";
             dc.Show(dockPanel1,DockState.Document);
         }
         
@@ -459,9 +447,9 @@ namespace TemplateBuilder
 
         public string GetTemplateYaml()
         {
-            return string.Format(@"
-  - ColumnName: {0}
-    AllowNulls: true", Tag);
+            return $@"
+  - ColumnName: {Tag}
+    AllowNulls: true";
         }
 
     }

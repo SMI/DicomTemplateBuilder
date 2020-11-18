@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
-using System.Linq;
 using Dicom;
 using DicomTypeTranslation;
 using TypeGuesser;
-using TypeGuesser.Deciders;
 
 namespace Repopulator.TagUpdaters
 {
