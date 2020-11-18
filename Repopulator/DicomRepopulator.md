@@ -19,6 +19,8 @@
 
 The role of this component is to overwrite DicomTags in Dicom images with values provided in a CSV file.  Csv data can be at various granularities e.g. 1 row per Study or 1 row per Image.
 
+![Diagram showing dicom files and csv file entering the process and anonymised dicom images being extracted to an output folder](./images/repopulator-diagram.png "Inputs and outputs of Dicom Repopulator")
+
 ## Usage
 
 Dicom Repopulator is part of DicomTemplateBuilder and can be accessed through the Window menu.  You will require a folder of dicom images that you want to repopulate and a CSV with data that should be inserted into the files.
