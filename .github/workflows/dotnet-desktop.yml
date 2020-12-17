@@ -67,14 +67,16 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.404
-    - name: Install .NET Old
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 4.8
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+
+    - name: Restore NuGet
+      run: nuget restore
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
