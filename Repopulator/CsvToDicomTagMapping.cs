@@ -73,9 +73,11 @@ namespace Repopulator
 
                 CsvFile = options.CsvFileInfo;
 
-                using (var reader = new CsvReader(CsvFile.OpenText(), System.Globalization.CultureInfo.CurrentCulture))
+                using (var reader = new CsvReader(CsvFile.OpenText(), new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
                 {
-                    reader.Configuration.TrimOptions = TrimOptions.Trim;
+                    TrimOptions = TrimOptions.Trim
+                }))
+                {
                     reader.Read();
                     var couldReadHeader = reader.ReadHeader();
 
@@ -83,9 +85,9 @@ namespace Repopulator
 
                     if (couldReadHeader)
                     {
-                        for (var index = 0; index < reader.Context.HeaderRecord.Length; index++)
+                        for (var index = 0; index < reader.HeaderRecord.Length; index++)
                         {
-                            var header = reader.Context.HeaderRecord[index];
+                            var header = reader.HeaderRecord[index];
                             var match = GetKeyDicomTagAndColumnName(options, header, index,extraMappings);
 
                             if (match != null)

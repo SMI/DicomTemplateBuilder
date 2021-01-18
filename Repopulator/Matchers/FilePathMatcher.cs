@@ -14,10 +14,12 @@ namespace Repopulator.Matchers
             if(map.FilenameColumn == null)
                 throw new ArgumentException("Map did not contain file name column");
             
-            Reader = new CsvReader(map.CsvFile.OpenText(),System.Globalization.CultureInfo.CurrentCulture);
+            Reader = new CsvReader(map.CsvFile.OpenText(),new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
+            {
+                TrimOptions = TrimOptions.Trim
+            });
             Reader.Read();
             Reader.ReadHeader();
-            Reader.Configuration.TrimOptions = TrimOptions.Trim; 
         }
         
         public override RepopulatorJob Next()
@@ -27,7 +29,7 @@ namespace Repopulator.Matchers
 
             var fi = new FileInfo(Path.Combine(Options.InputFolder, Reader[Map.FilenameColumn.Index]));
 
-            return new RepopulatorJob(Map,fi,null,Reader.Context.Record);
+            return new RepopulatorJob(Map,fi,null,Reader.Parser.Record);
         }
 
         public override void Dispose()
