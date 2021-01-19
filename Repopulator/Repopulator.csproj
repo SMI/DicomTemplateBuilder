@@ -7,6 +7,9 @@
     <Copyright>Copyright ©  2019</Copyright>
     <DebugType>full</DebugType>
   </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include="..\TemplateBuilder\NLog.config" Link="NLog.config" />
   </ItemGroup>
