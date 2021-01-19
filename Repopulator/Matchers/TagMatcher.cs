@@ -33,18 +33,19 @@ namespace Repopulator.Matchers
             if(_indexer == null)
                 throw new ArgumentException("No valid indexer could be found, there must be a column in the map for either SOP, Series or Study instance UIDs");
 
-            using (var reader = new CsvReader(map.CsvFile.OpenText(), System.Globalization.CultureInfo.CurrentCulture))
+            using (var reader = new CsvReader(map.CsvFile.OpenText(), new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
             {
-                reader.Configuration.TrimOptions = TrimOptions.Trim;
-
+                TrimOptions = TrimOptions.Trim
+            }))
+            {
                 while (reader.Read())
                 {
                     string key = reader[_indexer.Index];
 
                     if(_indexerToRowMap.ContainsKey(key))
-                        throw new Exception($"Multiple Csv rows describe the same '{_indexerTag}' '{key}'.  Error was on CSV line number '{reader.Context.RawRow}'");
+                        throw new Exception($"Multiple Csv rows describe the same '{_indexerTag}' '{key}'.  Error was on CSV line number '{reader.Parser.RawRow}'");
 
-                    _indexerToRowMap.Add(key,reader.Context.Record.ToArray());
+                    _indexerToRowMap.Add(key,reader.Parser.Record.ToArray());
                 }
             }
         }
