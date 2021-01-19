@@ -45,9 +45,8 @@ namespace TemplateBuilder
             InitializeComponent();
 
 
-            _scintillaTemplate = new Scintilla {Dock = DockStyle.Fill};
-            _scintillaSql = new Scintilla {Dock = DockStyle.Fill};
-            _scintillaTemplate.AllowDrop = true;
+            _scintillaTemplate = new Scintilla {AllowDrop = true};
+            _scintillaSql = new Scintilla();
 
             ImplementationManager.Load<MicrosoftSQLImplementation>();
             ImplementationManager.Load<MySqlImplementation>();
@@ -96,12 +95,14 @@ namespace TemplateBuilder
             
             
             dcYaml.Controls.Add(_scintillaTemplate);
+            _scintillaTemplate.Dock = DockStyle.Fill;
             dcYaml.TabText = "Template (yaml)";
-            dcYaml.Show(dockPanel1,DefaultDockLocations[dcYaml]);
+            dcYaml.Show(dockPanel1, DefaultDockLocations[dcYaml]);
 
             dcSql.Controls.Add(_scintillaSql);
+            _scintillaSql.Dock = DockStyle.Fill;
             dcSql.TabText = "Template (sql)";
-            dcSql.Show(dockPanel1,DefaultDockLocations[dcSql]);
+            dcSql.Show(dockPanel1, DefaultDockLocations[dcSql]);
 
             dcTable.Controls.Add(tcDatagrids);
             dcTable.TabText = "Tag Table(s)";
