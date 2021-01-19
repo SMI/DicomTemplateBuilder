@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added logging to ProcessJob for outPath in DicomRepopulatorProcessor
 
-...
-- Dependency updates
+### Dependency updates
+
+- Bump CsvHelper from 19.0.0 to 21.0.2
+
+### Changes
+
 - LGTM fixes
 - Report if error encountered when saving or loading a file
 
