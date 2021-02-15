@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependency updates
 
-- Bump CsvHelper from 19.0.0 to 21.0.4
+- Bump CsvHelper from 19.0.0 to 23.0.0
 
 ### Changes
 
