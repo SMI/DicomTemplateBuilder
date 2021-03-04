@@ -71,7 +71,7 @@
     <PackageReference Include="DockPanelSuite" Version="3.0.6" />
     <PackageReference Include="fo-dicom" Version="4.0.7" />
     <PackageReference Include="fo-dicom.Drawing" Version="4.0.7" />
-    <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.7" />
+    <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.9" />
     <PackageReference Include="HIC.DicomTypeTranslation" Version="2.3.2" />
     <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
     <PackageReference Include="ObjectListView.Official" Version="2.9.1" />
