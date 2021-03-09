@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - LGTM fixes
 - Report if error encountered when saving or loading a file
+- Updated to dotnet 5
 
 ### Added
 
