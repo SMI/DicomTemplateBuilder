@@ -13,7 +13,17 @@ namespace TemplateBuilder
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            Application.ThreadException += Application_ThreadException;
             Application.Run(new Form1());
+        }
+
+        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            if(e.Exception.Message.Equals("Value cannot be null. (Parameter 'owningItem')"))
+                return;
+
+            throw e.Exception;
         }
     }
 }

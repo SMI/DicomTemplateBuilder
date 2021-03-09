@@ -1,5 +1,4 @@
-﻿using AutocompleteMenuNS;
-using BrightIdeasSoftware;
+﻿using BrightIdeasSoftware;
 using Dicom;
 using DicomTypeTranslation;
 using DicomTypeTranslation.TableCreation;
@@ -55,19 +54,17 @@ namespace TemplateBuilder
             
             ImageManager.SetImplementation(WinFormsImageManager.Instance);
 
-            autoComplete = new AutocompleteMenu();
+            autoComplete = new List<string>();
 
-            autoComplete.AddItem(new AutocompleteItem("Tables"));
-            autoComplete.AddItem(new AutocompleteItem("TableName"));
-            autoComplete.AddItem(new AutocompleteItem("ColumnName"));
-            autoComplete.AddItem(new AutocompleteItem("AllowNulls"));
-            autoComplete.AddItem(new AutocompleteItem("IsPrimaryKey"));
+            autoComplete.Add("Tables");
+            autoComplete.Add("TableName");
+            autoComplete.Add("ColumnName");
+            autoComplete.Add("AllowNulls");
+            autoComplete.Add("IsPrimaryKey");
 
             foreach (string keyword in DicomDictionary.Default.Select(e => e.Keyword).Distinct())
-                autoComplete.AddItem(keyword);
-            
-            autoComplete.TargetControlWrapper = new ScintillaWrapper(_scintillaTemplate);
-            
+                autoComplete.Add(keyword);
+                     
             ddDatabaseType.ComboBox.DataSource = Enum.GetValues(typeof(DatabaseType));
 
             var menu = new ContextMenuStrip();
@@ -91,11 +88,16 @@ namespace TemplateBuilder
             olvDicoms.Dock = DockStyle.Fill;
             dcDicoms.Controls.Add(olvDicoms);
             dcDicoms.TabText = "Dicom Files";
+
+            dockPanel1.Theme = new VS2015BlueTheme();
+
             dcDicoms.Show(dockPanel1,DefaultDockLocations[dcDicoms]);
             
             
             dcYaml.Controls.Add(_scintillaTemplate);
             _scintillaTemplate.Dock = DockStyle.Fill;
+            _scintillaTemplate.CharAdded += _scintillaTemplate_CharAdded;
+
             dcYaml.TabText = "Template (yaml)";
             dcYaml.Show(dockPanel1, DefaultDockLocations[dcYaml]);
 
@@ -114,6 +116,24 @@ namespace TemplateBuilder
 
             _setupFinished = true;
             Check();
+        }
+
+        private void _scintillaTemplate_CharAdded(object sender, CharAddedEventArgs e)
+        {
+            var scintilla = (Scintilla)sender;
+
+            // Find the word start
+            var currentPos = scintilla.CurrentPosition;
+            var wordStartPos = scintilla.WordStartPosition(currentPos, false);
+
+            // Display the autocompletion list
+            var lenEntered = currentPos - wordStartPos;
+            if (lenEntered > 0)
+            {
+                if (!scintilla.AutoCActive)
+                    scintilla.AutoCShow(lenEntered, string.Join(' ',autoComplete.OrderBy(a=>a).ToArray()));
+            }
+        
         }
 
         private void Scintilla_OnDragEnter(object sender, DragEventArgs dragEventArgs)
@@ -260,7 +280,7 @@ namespace TemplateBuilder
                     TabPage tp = new TabPage(template.TableName);
                     tcDatagrids.Controls.Add(tp);
 
-                    var dg = new DataGrid {Dock = DockStyle.Fill};
+                    var dg = new DataGridView {Dock = DockStyle.Fill};
                     tp.Controls.Add(dg);
                     
                     sb.AppendLine(db.Helper.GetCreateTableSql(db, template.TableName, template.GetColumns(dbType), null, false));
