@@ -202,17 +202,45 @@ namespace TemplateBuilder
 
             var c = new ImageTableTemplateCollection {DatabaseType = DatabaseType.MicrosoftSQLServer};
 
-            c.Tables.Add(new ImageTableTemplate
-            {
-                TableName = "MyTable",
-                Columns = 
-                new[]
-            {
-                new ImageColumnTemplate(DicomTag.SOPInstanceUID){AllowNulls = false,IsPrimaryKey = true},
-                new ImageColumnTemplate(ImagingTableCreation.GetRelativeFileArchiveURIColumn(false,false))
-            } });
+            c.Tables.Add(
+                new ImageTableTemplate { TableName = "StudyTable", Columns =  
+                new[] {
+                        new ImageColumnTemplate(DicomTag.StudyInstanceUID){AllowNulls = false,IsPrimaryKey = true},
+                        new ImageColumnTemplate(DicomTag.StudyDescription){AllowNulls = true},
+                        new ImageColumnTemplate(DicomTag.StudyDate){AllowNulls = true}
+                      }
+                });
+
+            c.Tables.Add(
+                new ImageTableTemplate
+                {
+                    TableName = "SeriesTable",
+                    Columns =
+                new[] {
+                        new ImageColumnTemplate(DicomTag.StudyInstanceUID){AllowNulls = false },
+                        new ImageColumnTemplate(DicomTag.SeriesInstanceUID){AllowNulls = false,IsPrimaryKey = true},
+                        new ImageColumnTemplate(DicomTag.SeriesDescription){AllowNulls = true},
+                        new ImageColumnTemplate(DicomTag.SeriesDate){AllowNulls = true}
+                      }
+                });
+
+            c.Tables.Add(
+                new ImageTableTemplate
+                {
+                    TableName = "ImageTable",
+                    Columns =
+                new[] {
+                        new ImageColumnTemplate(DicomTag.SeriesInstanceUID){AllowNulls = false},
+                        new ImageColumnTemplate(DicomTag.SOPInstanceUID){AllowNulls = false,IsPrimaryKey = true},
+                        new ImageColumnTemplate(DicomTag.ImageType){AllowNulls = true},
+                        new ImageColumnTemplate(ImagingTableCreation.GetRelativeFileArchiveURIColumn(false,false))
+                      }
+                });
 
             _scintillaTemplate.Text = c.Serialize();
+
+            
+            dcYaml.Show(dockPanel1, DefaultDockLocations[dcYaml]);
         }
 
 
