@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net48</TargetFramework>
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AssemblyTitle>TemplateBuilder</AssemblyTitle>
     <Product>TemplateBuilder</Product>
     <Copyright>Copyright ©  2018</Copyright>
+    <UseWindowsForms>true</UseWindowsForms>
     <Prefer32Bit>false</Prefer32Bit>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DebugType>full</DebugType>
@@ -29,22 +31,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="Form1.cs" />
     <Compile Update="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Form</SubType>
@@ -66,17 +53,17 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <PackageReference Include="AutoCompleteMenu-ScintillaNET" Version="1.6.2" />
-    <PackageReference Include="CsvHelper" Version="21.0.2" />
-    <PackageReference Include="DockPanelSuite" Version="3.0.6" />
+    <PackageReference Include="CsvHelper" Version="26.0.1" />
+    <PackageReference Include="DockPanelSuite" Version="3.1.0-beta7" />
+    <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.0-beta7" />
     <PackageReference Include="fo-dicom" Version="4.0.7" />
     <PackageReference Include="fo-dicom.Drawing" Version="4.0.7" />
-    <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.7" />
-    <PackageReference Include="HIC.DicomTypeTranslation" Version="2.3.1" />
-    <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
+    <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.9" />
+    <PackageReference Include="HIC.DicomTypeTranslation" Version="2.3.2" />
     <PackageReference Include="ObjectListView.Official" Version="2.9.1" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
+    <PackageReference Include="fernandreu.ScintillaNET" Version="4.0.4" />
     <ProjectReference Include="..\Repopulator\Repopulator.csproj" />
     
     <Compile Update="Properties\Settings.Designer.cs">

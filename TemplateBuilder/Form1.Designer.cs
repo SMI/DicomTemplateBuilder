@@ -14,7 +14,7 @@ namespace TemplateBuilder
         /// <summary>
         /// Auto-completion menu
         /// </summary>
-        protected AutocompleteMenuNS.AutocompleteMenu autoComplete;
+        protected List<string> autoComplete;
 
         /// <summary>
         /// List of DockContents objects to clean up later
@@ -31,7 +31,6 @@ namespace TemplateBuilder
             {
                 dockcontents.ForEach(dc => dc.Dispose());
                 components.Dispose();
-                autoComplete.Dispose();
             }
             base.Dispose(disposing);
         }

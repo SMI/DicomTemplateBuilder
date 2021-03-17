@@ -12,12 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependency updates
 
-- Bump CsvHelper from 19.0.0 to 21.0.2
+- Bump CsvHelper from 19.0.0 to 23.0.0
 
 ### Changes
 
 - LGTM fixes
 - Report if error encountered when saving or loading a file
+- Updated to dotnet 5
 
 ### Added
 
