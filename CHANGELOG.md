@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2020-03-26
+
 ### Added
 
 - Added logging to ProcessJob for outPath in DicomRepopulatorProcessor
@@ -53,7 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial version
 
 
-[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.1.0...develop
+[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.0.0...develop
+[2.0.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.0...v1.0.1
