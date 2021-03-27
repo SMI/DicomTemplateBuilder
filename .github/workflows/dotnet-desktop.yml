@@ -115,6 +115,15 @@ jobs:
     # Remove the pfx
     - name: Remove the pfx
       run: Remove-Item -path GitHubActionsWorkflow.pfx
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      if: contains(github.ref, 'refs/tags/v')
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/*.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
     #- name: Upload build artifacts
