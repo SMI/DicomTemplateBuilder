@@ -14,7 +14,7 @@
     <Content Include="..\TemplateBuilder\NLog.config" Link="NLog.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="27.0.2" />
+    <PackageReference Include="CsvHelper" Version="27.0.3" />
     <PackageReference Include="HIC.DicomTypeTranslation" Version="2.3.2" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.*" />
     <PackageReference Include="Microsoft.CSharp" Version="4.*" />
