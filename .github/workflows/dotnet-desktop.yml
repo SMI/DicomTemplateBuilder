@@ -83,7 +83,7 @@ jobs:
       uses: coverallsapp/github-action@v1.1.1
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: ${{steps.coverlet.outputs.coverageFile}}
+        path-to-lcov: Tests/lcov.info
   
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
