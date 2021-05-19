@@ -76,6 +76,9 @@ jobs:
         output: 'lcov.info'
         outputFormat: 'lcov'
         excludes: '[test]test.*'
+    - name: Check lcov
+      shell: cmd
+      run: dir Tests
     - name: Upload coverage report
       uses: coverallsapp/github-action@v1.1.1
       with:
