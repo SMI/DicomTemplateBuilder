@@ -66,10 +66,20 @@ jobs:
     - name: Restore NuGet
       run: nuget restore
 
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test
-
+    # Execute all unit tests in the solution via coverlet for coverage info
+    - name : coverlet
+      uses: b3b00/coverlet-action@1.1.0
+      with:
+        testProject: 'Tests/Tests.csproj'
+        output: 'lcov.info'
+        outputFormat: 'lcov'
+        excludes: '[test]test.*'
+    - name: Upload coverage report
+      uses: coverallsapp/github-action@v1.1.1
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN }} 
+        path-to-lcov: Tests/lcov.info
+  
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
       run: dotnet build -c Release --verbosity quiet
