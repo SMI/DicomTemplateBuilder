@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed navigate to online templates not working after dotnet core update
+
 ## [2.0.0] - 2020-03-26
 
 ### Added

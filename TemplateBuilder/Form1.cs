@@ -21,6 +21,7 @@ using FAnsi.Implementations.Oracle;
 using FAnsi.Implementations.PostgreSql;
 using WeifenLuo.WinFormsUI.Docking;
 using DatabaseType = FAnsi.DatabaseType;
+using System.Runtime.InteropServices;
 
 namespace TemplateBuilder
 {
@@ -373,7 +374,36 @@ namespace TemplateBuilder
 
         private void GoToOnlineTemplates()
         {
-            Process.Start("https://github.com/HicServices/DicomTypeTranslation/tree/develop/Templates");
+            OpenBrowser("https://github.com/HicServices/DicomTypeTranslation/tree/develop/Templates");
+        }
+
+        public static void OpenBrowser(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         private void ddDatabaseType_SelectedIndexChanged(object sender, EventArgs e)
