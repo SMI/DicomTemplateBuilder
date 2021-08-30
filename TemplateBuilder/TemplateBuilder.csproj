@@ -54,7 +54,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <PackageReference Include="CsvHelper" Version="27.1.1" />
-    <PackageReference Include="DockPanelSuite" Version="3.1.0-beta7" />
+    <PackageReference Include="DockPanelSuite" Version="3.1.0" />
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.0-beta7" />
     <PackageReference Include="fo-dicom" Version="4.0.7" />
     <PackageReference Include="fo-dicom.Drawing" Version="4.0.7" />
