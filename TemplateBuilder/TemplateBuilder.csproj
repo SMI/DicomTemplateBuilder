@@ -63,7 +63,7 @@
     <PackageReference Include="ObjectListView.Official" Version="2.9.1" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
-    <PackageReference Include="fernandreu.ScintillaNET" Version="4.0.4" />
+    <PackageReference Include="fernandreu.ScintillaNET" Version="4.2.0" />
     <ProjectReference Include="..\Repopulator\Repopulator.csproj" />
     
     <Compile Update="Properties\Settings.Designer.cs">
