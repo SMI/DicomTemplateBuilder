@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump fernandreu.ScintillaNET from 4.0.4 to 4.2.0
 
 
-## [2.0.0] - 2020-03-26
+## [2.0.0] - 2021-03-27
 
 ### Added
 
