@@ -23,9 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump System.Drawing.Common from 5.0.2 to 6.0.0
 - Bump fernandreu.ScintillaNET from 4.0.4 to 4.2.0
 
-
 ## [2.0.0] - 2021-03-27
 
+### Fixed
+
+- Fixed navigate to online templates not working after dotnet core update
+- 
 ### Added
 
 - Added logging to ProcessJob for outPath in DicomRepopulatorProcessor
