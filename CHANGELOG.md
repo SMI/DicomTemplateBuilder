@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2022-02-08
+
+### Changes
+
+- Using .Net 5.0
+
+### Dependency updates
+
+- Bump CsvHelper from 26.1.0 to 27.2.1
+- Bump HIC.DicomTypeTranslation from 2.3.2 to 3.0.0
+- Bump DockPanelSuite from 3.1.0-beta7 to 3.1.0
+- Bump fo-dicom from 4.0.7 to 4.0.8
+- Bump fo-dicom.Drawing from 4.0.7 to 4.0.8
+- Bump HIC.DicomTypeTranslation from 2.3.2 to 3.0.0
+- Bump System.Drawing.Common from 5.0.2 to 6.0.0
+- Bump fernandreu.ScintillaNET from 4.0.4 to 4.2.0
+
+
 ## [2.0.0] - 2020-03-26
 
 ### Added
@@ -55,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial version
 
 
-[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.0.0...develop
+[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.1.0...develop
+[2.1.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.1...v1.0.2
