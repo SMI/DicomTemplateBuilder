@@ -53,17 +53,17 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <PackageReference Include="CsvHelper" Version="26.1.0" />
-    <PackageReference Include="DockPanelSuite" Version="3.1.0-beta7" />
-    <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.0-beta7" />
-    <PackageReference Include="fo-dicom" Version="4.0.7" />
-    <PackageReference Include="fo-dicom.Drawing" Version="4.0.7" />
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
+    <PackageReference Include="DockPanelSuite" Version="3.1.0" />
+    <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.0" />
+    <PackageReference Include="fo-dicom" Version="5.0.2" />
+    <PackageReference Include="fo-dicom.Drawing" Version="4.0.8" />
     <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.9" />
-    <PackageReference Include="HIC.DicomTypeTranslation" Version="2.3.2" />
+    <PackageReference Include="HIC.DicomTypeTranslation" Version="3.0.0" />
     <PackageReference Include="ObjectListView.Official" Version="2.9.1" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
-    <PackageReference Include="fernandreu.ScintillaNET" Version="4.0.4" />
+    <PackageReference Include="fernandreu.ScintillaNET" Version="4.2.0" />
     <ProjectReference Include="..\Repopulator\Repopulator.csproj" />
     
     <Compile Update="Properties\Settings.Designer.cs">
