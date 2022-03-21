@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Dicom;
+using FellowOakDicom;
 
 namespace Repopulator.Matchers
 {

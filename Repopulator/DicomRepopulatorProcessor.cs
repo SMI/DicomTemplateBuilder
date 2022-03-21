@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Dicom;
+using FellowOakDicom;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -27,7 +27,7 @@ namespace Repopulator
 
         public IRepopulatorMatcher Matcher { get; private set; }
 
-        public MemoryTarget MemoryLogTarget { get; } = new MemoryTarget {Name = "DicomRepopulatorProcessor_Memory"};
+        public MemoryTarget MemoryLogTarget { get; } = new() {Name = "DicomRepopulatorProcessor_Memory"};
 
         private int _nInput;
         private int _nDone;
@@ -51,7 +51,7 @@ namespace Repopulator
             else
             {
                 // specify what gets logged to the above target
-                _loggingRule = new LoggingRule("*", LogLevel.Debug, MemoryLogTarget);
+                _loggingRule = new("*", LogLevel.Debug, MemoryLogTarget);
 
                 // add target and rule to configuration
                 LogManager.Configuration.AddTarget(MemoryLogTarget.Name, MemoryLogTarget);
@@ -64,7 +64,7 @@ namespace Repopulator
         
         public int Process(DicomRepopulatorOptions options, CancellationToken token)
         {
-            _parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1,options.NumThreads) };
+            _parallelOptions = new() { MaxDegreeOfParallelism = Math.Max(1,options.NumThreads) };
             _tagUpdater = new ParseStringsUpdater(options.Culture);
             _anonymizer = options.Anonymise ? new DicomAnonymizer() : null;
 
@@ -86,7 +86,7 @@ namespace Repopulator
             try
             {
                 if(!map.BuildMap(options,out string log))
-                    throw new Exception("Failed to build map:" + log);
+                    throw new("Failed to build map:" + log);
                 
                 _logger.Info("Map built succesfully:" + log);
             }
@@ -104,7 +104,7 @@ namespace Repopulator
             using (Matcher = factory.Create(map, options))
             {
                 if (Matcher == null)
-                    throw new Exception("No suitable IRepopulatorMatcher could be built, ensure you have either file paths or instance UIDs in your csv file / extra mappings (otherwise we have no way to match rows to files)");
+                    throw new("No suitable IRepopulatorMatcher could be built, ensure you have either file paths or instance UIDs in your csv file / extra mappings (otherwise we have no way to match rows to files)");
 
                 _nInput = Matcher.GetInputFileCount();
 
@@ -135,7 +135,7 @@ namespace Repopulator
                 } while (job != null && _nErrors < options.ErrorThreshold);
 
                 if(_nErrors >= options.ErrorThreshold)
-                    throw new Exception("Error threshold reached");
+                    throw new("Error threshold reached");
             }
             
             var sb = new StringBuilder();

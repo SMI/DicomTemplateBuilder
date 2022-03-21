@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dicom;
+using FellowOakDicom;
 
 namespace Repopulator
 {
@@ -52,7 +52,7 @@ namespace Repopulator
 
             Name = colName;
             Index = index;
-            TagsToPopulate = new HashSet<DicomTag>(mappedTags?? new DicomTag[0]);
+            TagsToPopulate = new(mappedTags?? Array.Empty<DicomTag>());
             Role = role;
         }
     }

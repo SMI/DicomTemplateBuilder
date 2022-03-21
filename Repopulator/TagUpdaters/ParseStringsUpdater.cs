@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Dicom;
+using FellowOakDicom;
 using DicomTypeTranslation;
 using TypeGuesser;
 
@@ -28,7 +28,7 @@ namespace Repopulator.TagUpdaters
         
         public ParseStringsUpdater(CultureInfo culture)
         {
-            _factory = new TypeDeciderFactory(culture);
+            _factory = new(culture);
         }
 
         protected override void UpdateTag(DicomTag dicomTag, DicomDataset dataset, string cellValue)
@@ -50,7 +50,7 @@ namespace Repopulator.TagUpdaters
         {
             private static IDataTypeSize _instance = new Ignore();
             
-            public DecimalSize Size { get; set; } = new DecimalSize();
+            public DecimalSize Size { get; set; } = new();
             public int? Width { get; set; }
             public bool Unicode { get; set; }
             public static IDataTypeSize Me => _instance;

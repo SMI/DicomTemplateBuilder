@@ -1,5 +1,5 @@
 ﻿using System;
-using Dicom;
+using FellowOakDicom;
 using NUnit.Framework;
 using Repopulator;
 

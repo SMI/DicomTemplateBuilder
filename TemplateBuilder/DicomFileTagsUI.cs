@@ -3,9 +3,11 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
-using Dicom;
-using Dicom.Imaging;
+using FellowOakDicom;
 using DicomTypeTranslation;
+using FellowOakDicom.Imaging;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace TemplateBuilder
 {
@@ -33,18 +35,12 @@ namespace TemplateBuilder
 
                 try
                 {
-                    using (var renderedImage = new DicomImage(dicom.Dataset).RenderImage())
-                    {
-                        var bmp = renderedImage.As<Bitmap>();
-
-                        DicomImage = new Bitmap(bmp.Width, bmp.Height);
-                        
-                        using(Graphics g = Graphics.FromImage(DicomImage))
-                            g.DrawImage(bmp,new Point(0,0));
-
-                        pictureBox1.Image = DicomImage;
-                    }
-                    
+                    using var renderedImage = new DicomImage(dicom.Dataset).RenderImage().AsSharpImage();
+                    using MemoryStream ms = new();
+                    renderedImage.Save(ms,renderedImage.GetConfiguration().ImageFormatsManager.FindEncoder(PngFormat.Instance));
+                    ms.Seek(0, SeekOrigin.Begin);
+                    DicomImage = new(ms);
+                    pictureBox1.Image = DicomImage;
                 }
                 catch (Exception)
                 {

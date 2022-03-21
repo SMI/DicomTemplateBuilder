@@ -1,5 +1,5 @@
 ﻿using BrightIdeasSoftware;
-using Dicom;
+using FellowOakDicom;
 using DicomTypeTranslation;
 using DicomTypeTranslation.TableCreation;
 using FAnsi.Discovery;
@@ -22,6 +22,7 @@ using FAnsi.Implementations.PostgreSql;
 using WeifenLuo.WinFormsUI.Docking;
 using DatabaseType = FAnsi.DatabaseType;
 using System.Runtime.InteropServices;
+using FellowOakDicom.Imaging;
 
 namespace TemplateBuilder
 {
@@ -33,10 +34,10 @@ namespace TemplateBuilder
         bool _setupFinished = false;
 
 
-        DockContent dcDicoms = new DockContent {HideOnClose = true};
-        DockContent dcSql = new DockContent {HideOnClose = true};
-        DockContent dcYaml = new DockContent {HideOnClose = true};
-        DockContent dcTable = new DockContent {HideOnClose = true};
+        DockContent dcDicoms = new() {HideOnClose = true};
+        DockContent dcSql = new() {HideOnClose = true};
+        DockContent dcYaml = new() {HideOnClose = true};
+        DockContent dcTable = new() {HideOnClose = true};
         
         public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
@@ -45,17 +46,19 @@ namespace TemplateBuilder
             InitializeComponent();
 
 
-            _scintillaTemplate = new Scintilla {AllowDrop = true};
-            _scintillaSql = new Scintilla();
+            _scintillaTemplate = new() {AllowDrop = true};
+            _scintillaSql = new();
 
             ImplementationManager.Load<MicrosoftSQLImplementation>();
             ImplementationManager.Load<MySqlImplementation>();
             ImplementationManager.Load<OracleImplementation>();
             ImplementationManager.Load<PostgreSqlImplementation>();
             
-            ImageManager.SetImplementation(WinFormsImageManager.Instance);
+            new DicomSetupBuilder()
+                .RegisterServices(s => s.AddFellowOakDicom().AddImageManager<ImageSharpImageManager>())
+                .Build();
 
-            autoComplete = new List<string>();
+            autoComplete = new();
 
             autoComplete.Add("Tables");
             autoComplete.Add("TableName");
@@ -73,7 +76,7 @@ namespace TemplateBuilder
 
             ContextMenuStrip = menu;
 
-            DefaultDockLocations = new Dictionary<DockContent, DockState>
+            DefaultDockLocations = new()
             {
                 {dcTable, DockState.DockBottom},
                 {dcDicoms, DockState.DockRight},
@@ -159,7 +162,7 @@ namespace TemplateBuilder
             if(nodes == null || nodes.Length == 0)
                 return;
 
-            var clientPoint = editor.PointToClient(new Point(dragEventArgs.X, dragEventArgs.Y));
+            var clientPoint = editor.PointToClient(new(dragEventArgs.X, dragEventArgs.Y));
             //get where the mouse is hovering over
             int pos = editor.CharPositionFromPoint(clientPoint.X, clientPoint.Y);
             
@@ -204,7 +207,8 @@ namespace TemplateBuilder
             var c = new ImageTableTemplateCollection {DatabaseType = DatabaseType.MicrosoftSQLServer};
 
             c.Tables.Add(
-                new ImageTableTemplate { TableName = "StudyTable", Columns =  
+                new()
+                { TableName = "StudyTable", Columns =  
                 new[] {
                         new ImageColumnTemplate(DicomTag.StudyInstanceUID){AllowNulls = false,IsPrimaryKey = true},
                         new ImageColumnTemplate(DicomTag.StudyDescription){AllowNulls = true},
@@ -213,7 +217,7 @@ namespace TemplateBuilder
                 });
 
             c.Tables.Add(
-                new ImageTableTemplate
+                new()
                 {
                     TableName = "SeriesTable",
                     Columns =
@@ -226,7 +230,7 @@ namespace TemplateBuilder
                 });
 
             c.Tables.Add(
-                new ImageTableTemplate
+                new()
                 {
                     TableName = "ImageTable",
                     Columns =
@@ -247,14 +251,14 @@ namespace TemplateBuilder
 
         private void OpenTemplate()
         {
-            using (var ofd = new OpenFileDialog { Filter = "Imaging Template|*.it" })
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
-                    _scintillaTemplate.Text = File.ReadAllText(ofd.FileName);
-                    _filename = ofd.FileName;
-                    Check();
-                }
+            using var ofd = new OpenFileDialog { Filter = "Imaging Template|*.it" };
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
+                _scintillaTemplate.Text = File.ReadAllText(ofd.FileName);
+                _filename = ofd.FileName;
+                Check();
+            }
         }
 
         private void Save()
@@ -274,9 +278,9 @@ namespace TemplateBuilder
 
         private void SaveAs()
         {
-            using (var sfd = new SaveFileDialog { Filter = "Imaging Template|*.it" })
-                if (sfd.ShowDialog() == DialogResult.OK)
-                    _filename = sfd.FileName;
+            using var sfd = new SaveFileDialog { Filter = "Imaging Template|*.it" };
+            if (sfd.ShowDialog() == DialogResult.OK)
+                _filename = sfd.FileName;
         }
 
         private bool Check()
@@ -296,7 +300,7 @@ namespace TemplateBuilder
 
                 _scintillaTemplate.GotoPosition(oldLine);
 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
 
                 var helper = ImplementationManager.GetImplementation(dbType).GetServerHelper();
                 var server = new DiscoveredServer(helper.GetConnectionStringBuilder("localhost", null,null,null).ConnectionString,dbType);
@@ -306,7 +310,7 @@ namespace TemplateBuilder
 
                 foreach (ImageTableTemplate template in collection.Tables)
                 {
-                    TabPage tp = new TabPage(template.TableName);
+                    TabPage tp = new(template.TableName);
                     tcDatagrids.Controls.Add(tp);
 
                     var dg = new DataGridView {Dock = DockStyle.Fill};
@@ -316,7 +320,7 @@ namespace TemplateBuilder
 
                     if(olvDicoms.Objects != null)
                     {
-                        DataTable dtAll = new DataTable();
+                        DataTable dtAll = new();
 
                         foreach (var col in template.Columns)
                             dtAll.Columns.Add(col.ColumnName);
@@ -356,7 +360,7 @@ namespace TemplateBuilder
 
         private void olvDicoms_ItemActivate(object sender, EventArgs e)
         {
-            if (!(olvDicoms.SelectedObject is FileInfo fi))
+            if (olvDicoms.SelectedObject is not FileInfo fi)
                 return;
 
             var ui = new DicomFileTagsUI(fi) {Dock = DockStyle.Fill};
@@ -425,36 +429,33 @@ namespace TemplateBuilder
 
         private void OpenDicoms()
         {
-            using (var ofd = new OpenFileDialog
+            using var ofd = new OpenFileDialog
             {
                 Filter = "Dicom Files|*.dcm",
                 Multiselect = true
-            })
+            };
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
-                if (ofd.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    try
-                    {
-                        _setupFinished = false;
-                        olvDicoms.BeginUpdate();
+                    _setupFinished = false;
+                    olvDicoms.BeginUpdate();
 
-                        foreach (var f in ofd.FileNames)
-                        {
-                            var fi = new FileInfo(f);
-                            if (fi.Exists)
-                                olvDicoms.AddObject(fi);
-                        }
-                    }
-                    finally
+                    foreach (var f in ofd.FileNames)
                     {
-                        olvDicoms.EndUpdate();
-                        _setupFinished = true;
+                        var fi = new FileInfo(f);
+                        if (fi.Exists)
+                            olvDicoms.AddObject(fi);
                     }
-                
-                    Check();
                 }
+                finally
+                {
+                    olvDicoms.EndUpdate();
+                    _setupFinished = true;
+                }
+                
+                Check();
             }
-            
         }
 
         private void btnOnlineTemplates_Click(object sender, EventArgs e)
