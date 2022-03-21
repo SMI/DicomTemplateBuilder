@@ -62,9 +62,16 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-
-    - name: Restore NuGet
-      run: nuget restore
+    - uses: actions/cache@v2
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+  
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: dotnet build -c Release --verbosity quiet
 
     # Execute all unit tests in the solution via coverlet for coverage info
     - name : coverlet
@@ -79,10 +86,6 @@ jobs:
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
         path-to-lcov: Tests/lcov.info
-  
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
-      run: dotnet build -c Release --verbosity quiet
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
