@@ -33,16 +33,16 @@ namespace Repopulator
         public bool DeleteAsYouGo;
 
         [YamlIgnore]
-        public DirectoryInfo OutputDirectoryInfo => new DirectoryInfo(OutputFolder);
+        public DirectoryInfo OutputDirectoryInfo => new(OutputFolder);
         
         [YamlIgnore]
-        public DirectoryInfo DirectoryToProcessInfo => new DirectoryInfo(InputFolder);
+        public DirectoryInfo DirectoryToProcessInfo => new(InputFolder);
         
         [YamlIgnore]
-        public FileInfo CsvFileInfo => new FileInfo(InputCsv);
+        public FileInfo CsvFileInfo => new(InputCsv);
 
         [YamlIgnore]
-        public FileInfo ExtraMappings => new FileInfo(InputExtraMappings);
+        public FileInfo ExtraMappings => new(InputExtraMappings);
 
         
     }

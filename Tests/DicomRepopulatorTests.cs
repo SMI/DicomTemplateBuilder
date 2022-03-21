@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-using Dicom;
+using FellowOakDicom;
 using NUnit.Framework;
 using Repopulator;
 
@@ -71,7 +71,7 @@ namespace Tests
         public void Test_RelativePath_InCsv(string csvPath)
         {
             //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
-            var inputDicom = TestData.Create(new FileInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory,nameof(Test_RelativePath_InCsv),"subdir", Path.GetFileName(TestData.IMG_013))),TestData.IMG_013);
+            var inputDicom = TestData.Create(new(Path.Combine(TestContext.CurrentContext.WorkDirectory,nameof(Test_RelativePath_InCsv),"subdir", Path.GetFileName(TestData.IMG_013))),TestData.IMG_013);
             
             //Create a CSV with the full path to the image
             var inputCsv = CreateInputCsvFile(
@@ -161,7 +161,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+            TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "KeyNotFirstColumn");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -192,7 +192,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+            TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "DateRepopulation");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -224,7 +224,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+            TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "OneCsvColumnToMultipleDicomTags");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -256,7 +256,7 @@ namespace Tests
             const string testFileName = IM_0001_0013_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+            TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
 
             string outputDirPath = Path.Combine(_outputFileBase, "SpacesInCsvHeaderTest");
             string expectedFile = Path.Combine(outputDirPath, testFileName);
@@ -287,8 +287,8 @@ namespace Tests
             const string testFileName2 = IM_0001_0019_NAME;
 
             Directory.CreateDirectory(inputDirPath);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName1)), TestData.IMG_013,true);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, testFileName2)), TestData.IMG_013,false);
+            TestData.Create(new(Path.Combine(inputDirPath, testFileName1)), TestData.IMG_013,true);
+            TestData.Create(new(Path.Combine(inputDirPath, testFileName2)), TestData.IMG_013,false);
 
             string outputDirPath = Path.Combine(_outputFileBase, "MultipleFilesSameSeriesTest");
             string expectedFile1 = Path.Combine(outputDirPath, testFileName1);
@@ -326,10 +326,10 @@ namespace Tests
 
             Directory.CreateDirectory(Path.Combine(inputDirPath, "Series1"));
             Directory.CreateDirectory(Path.Combine(inputDirPath, "Series2"));
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName1)), TestData.IMG_013,true);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", testFileName2)), TestData.IMG_013,false);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName1)), TestData.IMG_019,true);
-            TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", testFileName2)), TestData.IMG_019,false);
+            TestData.Create(new(Path.Combine(inputDirPath, "Series1", testFileName1)), TestData.IMG_013,true);
+            TestData.Create(new(Path.Combine(inputDirPath, "Series1", testFileName2)), TestData.IMG_013,false);
+            TestData.Create(new(Path.Combine(inputDirPath, "Series2", testFileName1)), TestData.IMG_019,true);
+            TestData.Create(new(Path.Combine(inputDirPath, "Series2", testFileName2)), TestData.IMG_019,false);
 
             string outputDirPath = Path.Combine(_seriesFilesBase, "TestOutput");
             string expectedFile1 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID1/Series1" : "Series1", testFileName1);
@@ -390,7 +390,7 @@ namespace Tests
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory,filename);
             File.WriteAllLines(filePath,contents);
 
-            return new FileInfo(filePath);
+            return new(filePath);
         }
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace Tests
             out DicomRepopulatorOptions options,
             out DirectoryInfo outputDirPath)
         {
-            outputDirPath = new DirectoryInfo(Path.Combine(_outputFileBase, memberName));
+            outputDirPath = new(Path.Combine(_outputFileBase, memberName));
 
             //delete old content
             if(Directory.Exists(outputDirPath.FullName))
@@ -464,7 +464,7 @@ namespace Tests
             Directory.CreateDirectory(outputDirPath.FullName);
             
 
-            options = new DicomRepopulatorOptions
+            options = new()
             {
                 InputCsv = inputCsv?.FullName,
                 InputFolder = inputDicomDirectory?.FullName,
@@ -475,7 +475,7 @@ namespace Tests
 
             adjustOptions?.Invoke(options);
 
-            return new DicomRepopulatorProcessor();
+            return new();
         }
 
     }

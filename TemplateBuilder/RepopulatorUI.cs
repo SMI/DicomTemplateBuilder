@@ -52,7 +52,7 @@ namespace TemplateBuilder
         {
             InitializeComponent();
 
-            State = new DicomRepopulatorOptions();
+            State = new();
 
             try
             {
@@ -76,7 +76,7 @@ namespace TemplateBuilder
                     if (!string.IsNullOrWhiteSpace(State.CultureName))
                     {
                         tbCulture.Text = State.CultureName;
-                        State.Culture = new CultureInfo(State.CultureName);
+                        State.Culture = new(State.CultureName);
                     }
                     else
                         tbCulture.Text = State.Culture.DisplayName;
@@ -89,7 +89,7 @@ namespace TemplateBuilder
                 MessageBox.Show(e.Message, "Error in RepopulatorUI.yaml", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            tt = new ToolTip {InitialDelay = 0, AutoPopDelay = 32767, ShowAlways = true};
+            tt = new() {InitialDelay = 0, AutoPopDelay = 32767, ShowAlways = true};
             tt.SetToolTip(btnInputFolder,HelpInputFolder);
             tt.SetToolTip(lblInputFolder,HelpInputFolder);
 
@@ -133,40 +133,38 @@ namespace TemplateBuilder
 
         private void BrowseForFolder(TextBox destinationTextBox)
         {
-            using (var ofd = new FolderBrowserDialog())
-                if (ofd.ShowDialog() == DialogResult.OK)
-                    destinationTextBox.Text = ofd.SelectedPath;
+            using var ofd = new FolderBrowserDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+                destinationTextBox.Text = ofd.SelectedPath;
         }
 
         private void BrowseForFile(TextBox destinationTextBox, string filter)
         {
-            using (var ofd = new OpenFileDialog {CheckPathExists = true, Filter = filter, Multiselect = false})
+            using var ofd = new OpenFileDialog {CheckPathExists = true, Filter = filter, Multiselect = false};
+            try
             {
-                try
-                {
-                    if (destinationTextBox.Text != null)
-                        ofd.InitialDirectory = Path.GetDirectoryName(destinationTextBox.Text);
-                }
-                catch (Exception)
-                {
-                    //they typed something odd in there?
-                }
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                    destinationTextBox.Text = ofd.FileName;
+                if (destinationTextBox.Text != null)
+                    ofd.InitialDirectory = Path.GetDirectoryName(destinationTextBox.Text);
             }
+            catch (Exception)
+            {
+                //they typed something odd in there?
+            }
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+                destinationTextBox.Text = ofd.FileName;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             btnStart.Enabled = false;
 
-            _cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new();
             btnStop.Enabled = true;
 
             var task = new Task(() // lgtm[cs/local-not-disposed] - Tasks don't really need to be Disposed
                 =>
-                { using(_populator = new DicomRepopulatorProcessor())
+                { using(_populator = new())
                     _populator.Process(State,_cancellationTokenSource.Token);
                 });
 
@@ -328,7 +326,7 @@ namespace TemplateBuilder
         {
             try
             {
-                State.Culture = new CultureInfo(tbCulture.Text);
+                State.Culture = new(tbCulture.Text);
                 State.CultureName = tbCulture.Text;
                 tbCulture.ForeColor = Color.Black;
             }

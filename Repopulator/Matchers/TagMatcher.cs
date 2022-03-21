@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Dicom;
+using FellowOakDicom;
 
 namespace Repopulator.Matchers
 {
@@ -22,7 +22,7 @@ namespace Repopulator.Matchers
         /// <summary>
         /// Map of all the InstanceUIDs described in the CSV and the row values on that CSV line
         /// </summary>
-        Dictionary<string,string[]> _indexerToRowMap = new Dictionary<string, string[]>();
+        Dictionary<string,string[]> _indexerToRowMap = new();
         
         public TagMatcher(CsvToDicomTagMapping map, DicomRepopulatorOptions options):base(map,options)
         {
@@ -33,20 +33,18 @@ namespace Repopulator.Matchers
             if(_indexer == null)
                 throw new ArgumentException("No valid indexer could be found, there must be a column in the map for either SOP, Series or Study instance UIDs");
 
-            using (var reader = new CsvReader(map.CsvFile.OpenText(), new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
+            using var reader = new CsvReader(map.CsvFile.OpenText(), new(System.Globalization.CultureInfo.CurrentCulture)
             {
                 TrimOptions = TrimOptions.Trim
-            }))
+            });
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    string key = reader[_indexer.Index];
+                string key = reader[_indexer.Index];
 
-                    if(_indexerToRowMap.ContainsKey(key))
-                        throw new Exception($"Multiple Csv rows describe the same '{_indexerTag}' '{key}'.  Error was on CSV line number '{reader.Parser.RawRow}'");
+                if(_indexerToRowMap.ContainsKey(key))
+                    throw new($"Multiple Csv rows describe the same '{_indexerTag}' '{key}'.  Error was on CSV line number '{reader.Parser.RawRow}'");
 
-                    _indexerToRowMap.Add(key,reader.Parser.Record.ToArray());
-                }
+                _indexerToRowMap.Add(key,reader.Parser.Record.ToArray());
             }
         }
 
@@ -83,9 +81,9 @@ namespace Repopulator.Matchers
                 var seek = df.Dataset.GetValue<string>(_indexerTag, 0);
 
                 if(!_indexerToRowMap.ContainsKey(seek))
-                    throw new Exception($"Csv did not contain a value for {_indexerTag} {seek} which was found in file '{_fileList[_currentFile]}'");
+                    throw new($"Csv did not contain a value for {_indexerTag} {seek} which was found in file '{_fileList[_currentFile]}'");
 
-                return new RepopulatorJob(Map,currentFile,df,_indexerToRowMap[seek]);
+                return new(Map,currentFile,df,_indexerToRowMap[seek]);
             }
             finally
             {

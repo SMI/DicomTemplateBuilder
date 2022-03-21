@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Dicom;
+using FellowOakDicom;
 using Repopulator.Matchers;
 
 namespace Repopulator
@@ -28,7 +28,7 @@ namespace Repopulator
         /// Columns which contain dicom tag values.  This is not all the columns in the CSV.  It does not include <see cref="FilenameColumn"/>
         /// or any columns which could not be mapped;
         /// </summary>
-        public List<CsvToDicomColumn> TagColumns = new List<CsvToDicomColumn>();
+        public List<CsvToDicomColumn> TagColumns = new();
 
         /// <summary>
         /// The file that was read during <see cref="BuildMap"/>
@@ -62,7 +62,7 @@ namespace Repopulator
         {
             Clear();
 
-            StringBuilder sb  = new StringBuilder();
+            StringBuilder sb  = new();
             
             //how we will tie CSV rows to files
             IRepopulatorMatcher matcher;
@@ -73,7 +73,7 @@ namespace Repopulator
 
                 CsvFile = options.CsvFileInfo;
 
-                using (var reader = new CsvReader(CsvFile.OpenText(), new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
+                using (var reader = new CsvReader(CsvFile.OpenText(), new(System.Globalization.CultureInfo.CurrentCulture)
                 {
                     TrimOptions = TrimOptions.Trim
                 }))
@@ -95,19 +95,19 @@ namespace Repopulator
                                 switch (match.Role)
                                 {
                                     case ColumnRole.FilePath when FilenameColumn != null:
-                                        throw new Exception("There are 2+ FilenameColumn in the CSV");
+                                        throw new("There are 2+ FilenameColumn in the CSV");
                                     case ColumnRole.FilePath:
                                         FilenameColumn = match;
                                         break;
                                     case ColumnRole.SubFolder when SubFolderColumn != null:
-                                        throw new Exception("There are 2+ SubFolderColumn in the CSV");
+                                        throw new("There are 2+ SubFolderColumn in the CSV");
                                     case ColumnRole.SubFolder:
                                         SubFolderColumn = match;
                                         break;
                                 }
 
                                 if(TagColumns.Any(c=>c.TagsToPopulate.Intersect(match.TagsToPopulate).Any()))
-                                    throw new Exception($"There are 2+ columns that both populate for one of the DicomTag(s) '{string.Join(",",match.TagsToPopulate)}'");
+                                    throw new($"There are 2+ columns that both populate for one of the DicomTag(s) '{string.Join(",",match.TagsToPopulate)}'");
 
                                 TagColumns.Add(match);
                             
@@ -146,7 +146,7 @@ namespace Repopulator
 
         private Dictionary<string, HashSet<DicomTag>> GetExtraMappings(DicomRepopulatorOptions state)
         {
-            Dictionary<string, HashSet<DicomTag>> toReturn = new Dictionary<string, HashSet<DicomTag>>(StringComparer.CurrentCultureIgnoreCase);
+            Dictionary<string, HashSet<DicomTag>> toReturn = new(StringComparer.CurrentCultureIgnoreCase);
 
             if(string.IsNullOrWhiteSpace(state.InputExtraMappings))
                 return null;
@@ -163,17 +163,17 @@ namespace Repopulator
                     continue;
 
                 if(pair.Length != 2)
-                    throw new Exception($"Bad line in extra mappings file (line number {lineNumber}).  Line did not match expected format 'ColumnName:TagName'");
+                    throw new($"Bad line in extra mappings file (line number {lineNumber}).  Line did not match expected format 'ColumnName:TagName'");
 
 
                 var found = DicomDictionary.Default.SingleOrDefault(entry => string.Equals(entry.Keyword ,pair[1],StringComparison.CurrentCultureIgnoreCase));
 
                 if (found == null)
-                    throw new Exception(
+                    throw new(
                         $"Bad tag '{pair[1]}' on line number {lineNumber} of ExtraMappings file '{extraMappingsFile.FullName}'. It is not a valid DicomTag name");
 
                 if(!toReturn.ContainsKey(pair[0]))
-                    toReturn.Add(pair[0],new HashSet<DicomTag>());
+                    toReturn.Add(pair[0],new());
 
                 toReturn[pair[0]].Add(found.Tag);
             }
@@ -188,23 +188,23 @@ namespace Repopulator
         {
             CsvToDicomColumn toReturn = null;
             if(columnName.Equals(state.FileNameColumn,StringComparison.CurrentCultureIgnoreCase))
-                toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.FilePath);
+                toReturn = new(columnName,index,ColumnRole.FilePath);
             
             if(columnName.Equals(state.SubFolderColumn, StringComparison.CurrentCultureIgnoreCase))
-                toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.SubFolder);
+                toReturn = new(columnName,index,ColumnRole.SubFolder);
 
             var found = DicomDictionary.Default.SingleOrDefault(entry => string.Equals(entry.Keyword ,columnName,StringComparison.CurrentCultureIgnoreCase));
 
             if(found != null)
                 if (toReturn == null)
-                    toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.None,found.Tag); 
+                    toReturn = new(columnName,index,ColumnRole.None,found.Tag); 
                 else
                     toReturn.TagsToPopulate.Add(found.Tag); //it's a file path AND a tag! ok...
                 
 
             if (extraMappings != null && extraMappings.ContainsKey(columnName))
                 if(toReturn == null)
-                    toReturn = new CsvToDicomColumn(columnName,index,ColumnRole.None,extraMappings[columnName].ToArray());
+                    toReturn = new(columnName,index,ColumnRole.None,extraMappings[columnName].ToArray());
                 else
                     toReturn.TagsToPopulate.UnionWith(extraMappings[columnName]);
 
