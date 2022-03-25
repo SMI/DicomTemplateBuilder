@@ -5,8 +5,6 @@ on: push
 jobs:
   build:
     runs-on: windows-latest
-    env:
-
     steps:
     - name: Checkout
       uses: actions/checkout@v2
