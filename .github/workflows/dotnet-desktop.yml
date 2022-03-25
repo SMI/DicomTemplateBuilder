@@ -1,55 +1,11 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow will build, test, sign and package a WPF or Windows Forms desktop application
-# built on .NET Core.
-# To learn how to migrate your existing application to .NET Core,
-# refer to https://docs.microsoft.com/en-us/dotnet/desktop-wpf/migration/convert-project-from-net-framework
-#
-# To configure this workflow:
-#
-# 1. Configure environment variables
-# GitHub sets default environment variables for every workflow run.
-# Replace the variables relative to your project in the "env" section below.
-#
-# 2. Signing
-# Generate a signing certificate in the Windows Application
-# Packaging Project or add an existing signing certificate to the project.
-# Next, use PowerShell to encode the .pfx file using Base64 encoding
-# by running the following Powershell script to generate the output string:
-#
-# $pfx_cert = Get-Content '.\SigningCertificate.pfx' -Encoding Byte
-# [System.Convert]::ToBase64String($pfx_cert) | Out-File 'SigningCertificate_Encoded.txt'
-#
-# Open the output file, SigningCertificate_Encoded.txt, and copy the
-# string inside. Then, add the string to the repo as a GitHub secret
-# and name it "Base64_Encoded_Pfx."
-# For more information on how to configure your signing certificate for
-# this workflow, refer to https://github.com/microsoft/github-actions-for-desktop-apps#signing
-#
-# Finally, add the signing certificate password to the repo as a secret and name it "Pfx_Key".
-# See "Build the Windows Application Packaging project" below to see how the secret is used.
-#
-# For more information on GitHub Actions, refer to https://github.com/features/actions
-# For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
-# refer to https://github.com/microsoft/github-actions-for-desktop-apps
-
 name: .NET Core Desktop
 
 on: push
 
 jobs:
-
   build:
-
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
+    runs-on: windows-latest
     env:
-      Solution_Name: TemplateBuilder.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: Tests/Tests.csproj                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
     - name: Checkout
@@ -61,7 +17,7 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
     - uses: actions/cache@v2
       with:
         path: ~/.nuget/packages
@@ -69,11 +25,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
   
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
+    - name: Build the application
       run: dotnet build -c Release --verbosity quiet
 
-    # Execute all unit tests in the solution via coverlet for coverage info
     - name : coverlet
       uses: b3b00/coverlet-action@1.1.0
       with:
@@ -81,6 +35,52 @@ jobs:
         output: 'lcov.info'
         outputFormat: 'lcov'
         excludes: '[test]test.*'
+    - name: Upload coverage report
+      uses: coverallsapp/github-action@v1.1.1
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN }} 
+        path-to-lcov: Tests/lcov.info
+
+    # Decode the base 64 encoded pfx and save the Signing_Certificate
+    - name: Decode the pfx
+      run: |
+        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.DIGICERT_PFX }}")
+        $certificatePath = Join-Path -Path . -ChildPath GitHubActionsWorkflow.pfx
+        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+
+    - name: Publish
+      run: |
+        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-win-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r win-x64
+        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-lin-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r linux-x64
+        dotnet publish TemplateBuilder/TemplateBuilder.csproj -o template-builder -r win-x64
+      
+    - name: Sign
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe" Sign /f GitHubActionsWorkflow.pfx /p ${{ secrets.DIGICERT_PASSWORD }} /fd sha256 /tr http://timestamp.digicert.com /td sha256 RepopulatorCli-win-x64/RepopulatorCli.exe template-builder/TemplateBuilder.exe template-builder/TypeGuesser.dll template-builder/Repopulator.dll template-builder/Fansi*.dll template-builder/BadMedicine*.dll template-builder/DicomTypeTranslation.dll
+        md dist
+        powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-win-x64', 'dist/RepopulatorCli-win-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-lin-x64', 'dist/RepopulatorCli-lin-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('template-builder', 'dist/template-builder.zip'); }"
+
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist
+        path: |
+          dist
+
+    # Remove the pfx
+    - name: Remove the pfx
+      run: Remove-Item -path GitHubActionsWorkflow.pfx
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      if: contains(github.ref, 'refs/tags/v')
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/*.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
+.*'
     - name: Upload coverage report
       uses: coverallsapp/github-action@v1.1.1
       with:
