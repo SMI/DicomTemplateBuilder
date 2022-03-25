@@ -10,12 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Dicom.Imaging;
 using FAnsi.Implementations.MySql;
 using FAnsi.Implementations.Oracle;
 using FAnsi.Implementations.PostgreSql;
@@ -23,6 +22,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using DatabaseType = FAnsi.DatabaseType;
 using System.Runtime.InteropServices;
 using FellowOakDicom.Imaging;
+using System.IO.Compression;
 
 namespace TemplateBuilder
 {
@@ -142,8 +142,8 @@ namespace TemplateBuilder
 
         private void Scintilla_OnDragEnter(object sender, DragEventArgs dragEventArgs)
         {
-            if (!(dragEventArgs.Data is OLVDataObject olv)) return;
-            if(olv.ModelObjects.OfType<TagValueNode>().Any())
+            if (dragEventArgs.Data is not OLVDataObject olv) return;
+            if (olv.ModelObjects.OfType<TagValueNode>().Any())
                 dragEventArgs.Effect = DragDropEffects.Copy;
         }
         private void Scintilla_OnDragDrop(object sender, DragEventArgs dragEventArgs)
