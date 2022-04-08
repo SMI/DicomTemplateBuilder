@@ -60,7 +60,7 @@ jobs:
         powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-win-x64', 'dist/RepopulatorCli-win-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-lin-x64', 'dist/RepopulatorCli-lin-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('template-builder', 'dist/template-builder.zip'); }"
 
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: dist
         path: |
