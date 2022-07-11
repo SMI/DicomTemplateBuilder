@@ -35,7 +35,7 @@ namespace Repopulator.Matchers
 
             var conf = new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
             {
-                TrimOptions=TrimOptions.Trim;
+                TrimOptions=TrimOptions.Trim
             };
             using var reader = new CsvReader(map.CsvFile.OpenText(), conf);
             while (reader.Read())
