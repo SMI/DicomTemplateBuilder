@@ -15,5 +15,4 @@ updates:
       interval: "daily"
     target-branch: develop
     reviewers:
-    - tznind
     - jas88
