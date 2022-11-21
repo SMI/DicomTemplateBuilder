@@ -6,9 +6,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2022-11-21
+
+- Bump CsvHelper from 27.2.1 to 30.0.1
+- Bump CommandLineParser from 2.8.0 to 2.9.1
+- Bump fo-dicom from 5.0.2 to 5.0.3
+- Bump fo-dicom.Imaging.ImageSharp from 5.0.2 to 5.0.3
+- Bump HIC.DicomTypeTranslation from 4.0.0 to 4.0.1
+- Bump HIC.BadMedicine.Dicom from 0.0.11 to 0.0.15
+- Bump HIC.DicomTypeTranslation from 4.0.0 to 4.0.1
+- Bump System.Drawing.Common from 6.0.0 to 7.0.0
+- Bump System.Threading.AccessControl from 6.0.0 to 7.0.0
+- Bump coverallsapp/github-action from 1.1.1 to 1.1.3 
+- Bump b3b00/coverlet-action from 1.1.0 to 11.9 
+- Bump actions/checkout from 2 to 3 
+- Bump actions/setup-dotnet from 1 to 2 
+- Bump actions/cache from 2 to 3 
+- Bump actions/upload-artifact from 2 to 3 
+- Bump actions/setup-dotnet from 2 to 3 
+
 ## [2.2.0] - 2022-03-31
 
+### Changes
+
 - Using .Net 6.0
+- Bump HIC.DicomTypeTranslation from 3.0.0 to 4.0.0
+- Replace fo-dicom.Drawing 4.0.8 with fo-dicom.Imaging.ImageSharp 5.0.2
+- Bump HIC.BadMedicine.Dicom from 0.0.9 to 0.0.11
+- Bump HIC.DicomTypeTranslation from 3.0.0 to 4.0.0
+- Add System.Threading.AccessControl 6.0.0
 
 ## [2.1.0] - 2022-02-08
 
@@ -80,7 +106,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial version
 
 
-[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.2.0...develop
+[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.2.1...develop
+[2.2.1]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.1.0...v2.0.0
