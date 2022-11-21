@@ -7,16 +7,16 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
     # Install the .NET Core workload
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
@@ -27,14 +27,14 @@ jobs:
       run: dotnet build -c Release --verbosity quiet
 
     - name : coverlet
-      uses: b3b00/coverlet-action@1.1.0
+      uses: b3b00/coverlet-action@11.9
       with:
         testProject: 'Tests/Tests.csproj'
         output: 'lcov.info'
         outputFormat: 'lcov'
         excludes: '[test]test.*'
     - name: Upload coverage report
-      uses: coverallsapp/github-action@v1.1.1
+      uses: coverallsapp/github-action@1.1.3
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
         path-to-lcov: Tests/lcov.info
@@ -60,7 +60,7 @@ jobs:
         powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-win-x64', 'dist/RepopulatorCli-win-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-lin-x64', 'dist/RepopulatorCli-lin-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('template-builder', 'dist/template-builder.zip'); }"
 
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: dist
         path: |
