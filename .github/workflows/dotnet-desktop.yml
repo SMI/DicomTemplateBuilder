@@ -4,8 +4,11 @@ on: push
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
+    - name: Find signtool.exe
+      run: where /r %systemdrive% signtool.exe
+      
     - name: Checkout
       uses: actions/checkout@v3
       with:
@@ -16,12 +19,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-    - uses: actions/cache@v3
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
   
     - name: Build the application
       run: dotnet build -c Release --verbosity quiet
@@ -39,6 +36,12 @@ jobs:
         github-token: ${{secrets.GITHUB_TOKEN }} 
         path-to-lcov: Tests/lcov.info
 
+    - name: Publish
+      run: |
+        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-win-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r win-x64
+        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-lin-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r linux-x64
+        dotnet publish TemplateBuilder/TemplateBuilder.csproj -o template-builder -c Release -p:PublishSingleFile=true --self-contained true -r win-x64
+      
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
       run: |
@@ -46,17 +49,11 @@ jobs:
         $certificatePath = Join-Path -Path . -ChildPath GitHubActionsWorkflow.pfx
         [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
 
-    - name: Publish
-      run: |
-        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-win-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r win-x64
-        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-lin-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r linux-x64
-        dotnet publish TemplateBuilder/TemplateBuilder.csproj -o template-builder -c Release -p:PublishSingleFile=true --self-contained true -r win-x64
-      
     - name: Sign
       shell: cmd
       run: |
         signtool.exe Sign /f GitHubActionsWorkflow.pfx /p ${{ secrets.DIGICERT_PASSWORD }} /fd sha256 /tr http://timestamp.digicert.com /td sha256 RepopulatorCli-win-x64/RepopulatorCli.exe template-builder/TemplateBuilder.exe template-builder/TypeGuesser.dll template-builder/Repopulator.dll template-builder/Fansi*.dll template-builder/BadMedicine*.dll template-builder/DicomTypeTranslation.dll
-        md dist
+        mkdir -p dist
         powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-win-x64', 'dist/RepopulatorCli-win-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-lin-x64', 'dist/RepopulatorCli-lin-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('template-builder', 'dist/template-builder.zip'); }"
 
     - name: Archive production artifacts
