@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Find signtool.exe
+      shell: cmd
       run: where /r %systemdrive% signtool.exe
       
     - name: Checkout
