@@ -6,9 +6,10 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Find signtool.exe
+    - id: signtool
+      name: Find signtool.exe
       shell: cmd
-      run: where /r %systemdrive% signtool.exe
+      run: where /f /r "%programfiles(x86)%\windows kits\10\bin" signtool.exe|for /f "delims=" %s in ('find "\x64\"') do @echo signtool=%s > %GITHUB_OUTPUT%
       
     - name: Checkout
       uses: actions/checkout@v3
@@ -53,7 +54,7 @@ jobs:
     - name: Sign
       shell: cmd
       run: |
-        signtool.exe Sign /f GitHubActionsWorkflow.pfx /p ${{ secrets.DIGICERT_PASSWORD }} /fd sha256 /tr http://timestamp.digicert.com /td sha256 RepopulatorCli-win-x64/RepopulatorCli.exe template-builder/TemplateBuilder.exe template-builder/TypeGuesser.dll template-builder/Repopulator.dll template-builder/Fansi*.dll template-builder/BadMedicine*.dll template-builder/DicomTypeTranslation.dll
+        ${{steps.signtool.outputs.signtool}} Sign /f GitHubActionsWorkflow.pfx /p ${{ secrets.DIGICERT_PASSWORD }} /fd sha256 /tr http://timestamp.digicert.com /td sha256 RepopulatorCli-win-x64/RepopulatorCli.exe template-builder/TemplateBuilder.exe template-builder/TypeGuesser.dll template-builder/Repopulator.dll template-builder/Fansi*.dll template-builder/BadMedicine*.dll template-builder/DicomTypeTranslation.dll
         mkdir -p dist
         powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-win-x64', 'dist/RepopulatorCli-win-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('RepopulatorCli-lin-x64', 'dist/RepopulatorCli-lin-x64.zip');  [IO.Compression.ZipFile]::CreateFromDirectory('template-builder', 'dist/template-builder.zip'); }"
 
