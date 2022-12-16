@@ -9,7 +9,7 @@ jobs:
     - id: signtool
       name: Find signtool.exe
       shell: cmd
-      run: where /f /r "%programfiles(x86)%\windows kits\10\bin" signtool.exe|for /f "delims=" %s in ('find "\x64\"') do @echo signtool=%s > %GITHUB_OUTPUT%
+      run: where /f /r "%programfiles(x86)%\windows kits\10\bin" signtool.exe|for /f "delims=" %%s in ('find "\x64\"') do @echo signtool=%%s > %GITHUB_OUTPUT%
       
     - name: Checkout
       uses: actions/checkout@v3
