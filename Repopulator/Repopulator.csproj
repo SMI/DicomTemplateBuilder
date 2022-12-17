@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>3b0e5ac1-5439-470c-832d-7de566b22cd8</ProjectGuid>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>Repopulator</AssemblyTitle>
     <Product>Repopulator</Product>
     <Copyright>Copyright ©  2019</Copyright>
-    <DebugType>full</DebugType>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <LangVersion>9.0</LangVersion>
