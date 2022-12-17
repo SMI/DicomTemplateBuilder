@@ -42,7 +42,7 @@ jobs:
       
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
-      run: '[IO.File]::WriteAllBytes(Join-Path -Path . -ChildPath GitHubActionsWorkflow.pfx, [System.Convert]::FromBase64String("${{ secrets.DIGICERT_PFX }}"))'
+      run: '[IO.File]::WriteAllBytes((Join-Path -Path . -ChildPath GitHubActionsWorkflow.pfx), [System.Convert]::FromBase64String("${{ secrets.DIGICERT_PFX }}"))'
     - name: Sign, delete signing key and compress results
       shell: cmd
       run: |
