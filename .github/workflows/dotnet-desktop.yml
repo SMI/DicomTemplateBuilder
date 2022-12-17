@@ -22,21 +22,17 @@ jobs:
       with:
         dotnet-version: 7.0.x
   
-    - name: Build the application
-      run: dotnet build -c Release --verbosity quiet
+    - name: Build and test the application
+      shell: cmd
+      run: |
+        dotnet test --nologo --verbosity minimal --collect:"XPlat Code Coverage" --settings coverlet.runsettings -c Release --results-directory coverage
+        for /r coverage %%f in (coverage.*) do @move %%f lcov.info
 
-    - name : coverlet
-      uses: b3b00/coverlet-action@11.9
-      with:
-        testProject: 'Tests/Tests.csproj'
-        output: 'lcov.info'
-        outputFormat: 'lcov'
-        excludes: '[test]test.*'
     - name: Upload coverage report
       uses: coverallsapp/github-action@1.1.3
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: Tests/lcov.info
+        path-to-lcov: lcov.info
 
     - name: Publish
       run: |
