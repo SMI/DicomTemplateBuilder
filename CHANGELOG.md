@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.2] - 2022-12-17
+
+- Fix Authenticode signing of Windows exe files
+- Build on .Net 7.0 rather than 6.0
+
 ## [2.2.1] - 2022-11-21
 
 - Bump CsvHelper from 27.2.1 to 30.0.1
