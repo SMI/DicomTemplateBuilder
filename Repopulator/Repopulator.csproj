@@ -5,7 +5,7 @@
     <AssemblyTitle>Repopulator</AssemblyTitle>
     <Product>Repopulator</Product>
     <Copyright>Copyright ©  2019</Copyright>
-    <DebugType>full</DebugType>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <LangVersion>9.0</LangVersion>
