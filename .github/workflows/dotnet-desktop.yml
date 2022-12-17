@@ -42,20 +42,16 @@ jobs:
       
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
-      run: |
-        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.DIGICERT_PFX }}")
-        $certificatePath = Join-Path -Path . -ChildPath GitHubActionsWorkflow.pfx
-        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-    - name: Sign
+      run: [IO.File]::WriteAllBytes(Join-Path -Path . -ChildPath GitHubActionsWorkflow.pfx, [System.Convert]::FromBase64String("${{ secrets.DIGICERT_PFX }}"))
+    - name: Sign, delete signing key and compress results
       shell: cmd
       run: |
         ${{steps.signtool.outputs.signtool}} Sign /f GitHubActionsWorkflow.pfx /p ${{ secrets.DIGICERT_PASSWORD }} /fd sha256 /tr http://timestamp.digicert.com /td sha256 RepopulatorCli-win-x64/RepopulatorCli.exe template-builder/TemplateBuilder.exe
+        del GitHubActionsWorkflow.pfx
         mkdir -p dist
         7z a -bd -mx=9 dist/RepopulatorCli-win-x64.zip RepopulatorCli-win-x64
         7z a -bd -mx=9 dist/RepopulatorCli-lin-x64.zip RepopulatorCli-lin-x64
         7z a -bd -mx=9 dist/template-builder.zip template-builder
-    - name: Remove the pfx
-      run: Remove-Item -path GitHubActionsWorkflow.pfx
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
