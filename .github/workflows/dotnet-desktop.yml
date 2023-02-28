@@ -29,7 +29,7 @@ jobs:
         for /r coverage %%f in (coverage.*) do @move %%f lcov.info
 
     - name: Upload coverage report
-      uses: coverallsapp/github-action@v1.2.0
+      uses: coverallsapp/github-action@v1.2.3
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
         path-to-lcov: lcov.info
