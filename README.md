@@ -1,9 +1,9 @@
 # DicomTemplateBuilder
 
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/HicServices/DicomTemplateBuilder.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/HicServices/DicomTemplateBuilder/alerts/) 
-[![Coverage Status](https://coveralls.io/repos/github/HicServices/DicomTemplateBuilder/badge.svg?branch=feature/coverage)](https://coveralls.io/github/HicServices/DicomTemplateBuilder)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/SMI/DicomTemplateBuilder.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SMI/DicomTemplateBuilder/alerts/) 
+[![Coverage Status](https://coveralls.io/repos/github/SMI/DicomTemplateBuilder/badge.svg?branch=feature/coverage)](https://coveralls.io/github/SMI/DicomTemplateBuilder)
 
-[Dicom Template Builder](https://github.com/HicServices/DicomTemplateBuilder/releases) is a small windows application to assist researchers in building simple relational database schemas for storing DICOM images.
+[Dicom Template Builder](https://github.com/SMI/DicomTemplateBuilder/releases) is a small windows application to assist researchers in building simple relational database schemas for storing DICOM images.
 
 It supports:
 
@@ -25,7 +25,7 @@ The following open source libraries are used by the application:
 - [DockPanelSuite](https://github.com/dockpanelsuite/dockpanelsuite)
 - [ObjectListView.Official](http://objectlistview.sourceforge.net/cs/index.html)
 - [fo-dicom.Drawing](https://github.com/fo-dicom/fo-dicom)
-- [HIC.DicomTypeTranslation](https://github.com/HicServices/DicomTypeTranslation)
+- [HIC.DicomTypeTranslation](https://github.com/SMI/DicomTypeTranslation)
 - [HIC.FAnsiSql](https://github.com/HicServices/FAnsiSql)
 
 ## Icons

@@ -380,7 +380,7 @@ public partial class Form1 : Form
 
     private void GoToOnlineTemplates()
     {
-        OpenBrowser("https://github.com/HicServices/DicomTypeTranslation/tree/develop/Templates");
+        OpenBrowser("https://github.com/SMI/DicomTypeTranslation/tree/develop/Templates");
     }
 
     public static void OpenBrowser(string url)
