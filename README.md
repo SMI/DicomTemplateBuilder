@@ -1,7 +1,7 @@
 # DicomTemplateBuilder
 
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/SMI/DicomTemplateBuilder.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SMI/DicomTemplateBuilder/alerts/) 
-[![Coverage Status](https://coveralls.io/repos/github/SMI/DicomTemplateBuilder/badge.svg?branch=feature/coverage)](https://coveralls.io/github/SMI/DicomTemplateBuilder)
+[![CodeQL](https://github.com/SMI/DicomTemplateBuilder/actions/workflows/codeql.yml/badge.svg)](https://github.com/SMI/DicomTemplateBuilder/actions/workflows/codeql.yml)
+[![Coverage Status](https://coveralls.io/repos/github/SMI/DicomTemplateBuilder/badge.svg)](https://coveralls.io/github/SMI/DicomTemplateBuilder)
 
 [Dicom Template Builder](https://github.com/SMI/DicomTemplateBuilder/releases) is a small windows application to assist researchers in building simple relational database schemas for storing DICOM images.
 
