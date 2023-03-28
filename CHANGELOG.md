@@ -111,13 +111,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial version
 
 
-[Unreleased]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.2.1...develop
-[2.2.1]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.2.0...v2.2.1
-[2.2.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.1.0...v2.2.0
-[2.1.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v2.0.0...v2.1.0
-[2.0.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.1.0...v2.0.0
-[1.1.0]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.2...v1.1.0
-[1.0.2]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/HicServices/DicomTemplateBuilder/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/HicServices/DicomTemplateBuilder/tree/v1.0.0
-[DicomTypeTranslation]: https://github.com/HicServices/DicomTypeTranslation
+[Unreleased]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.2.1...develop
+[2.2.1]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.2.0...v2.2.1
+[2.2.0]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/SMI/DicomTemplateBuilder/compare/v1.1.0...v2.0.0
+[1.1.0]: https://github.com/SMI/DicomTemplateBuilder/compare/v1.0.2...v1.1.0
+[1.0.2]: https://github.com/SMI/DicomTemplateBuilder/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/SMI/DicomTemplateBuilder/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/SMI/DicomTemplateBuilder/tree/v1.0.0
+[DicomTypeTranslation]: https://github.com/SMI/DicomTypeTranslation
