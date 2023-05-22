@@ -36,9 +36,9 @@ jobs:
 
     - name: Publish
       run: |
-        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-win-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r win-x64
-        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-lin-x64 -c Release -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r linux-x64
-        dotnet publish TemplateBuilder/TemplateBuilder.csproj -o template-builder -c Release -p:PublishSingleFile=true --self-contained true -r win-x64
+        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-win-x64 -c Release -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r win-x64
+        dotnet publish RepopulatorCli/RepopulatorCli.csproj -o RepopulatorCli-lin-x64 -c Release -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained true -r linux-x64
+        dotnet publish TemplateBuilder/TemplateBuilder.csproj -o template-builder -c Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --self-contained true -r win-x64
       
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
