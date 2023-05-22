@@ -9,6 +9,9 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    target-branch: develop
+    reviewers:
+    - jas88
   - package-ecosystem: nuget
     directory: "/" # Location of package manifests
     schedule:
