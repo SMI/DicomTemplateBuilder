@@ -12,7 +12,7 @@ jobs:
       run: where /f /r "%programfiles(x86)%\windows kits\10\bin" signtool.exe|for /f "delims=" %%s in ('find "\x64\"') do @echo signtool=%%s > %GITHUB_OUTPUT%
       
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
