@@ -27,6 +27,7 @@ jobs:
       run: |
         dotnet test --nologo --verbosity minimal --collect:"XPlat Code Coverage" --settings coverlet.runsettings -c Release --results-directory coverage
         for /r coverage %%f in (coverage.*) do @move %%f lcov.info
+        dir lcov.info
 
     - name: Upload coverage report
       uses: coverallsapp/github-action@v2.2.3
