@@ -27,7 +27,7 @@ jobs:
       run: |
         dotnet test --nologo --verbosity minimal --collect:"XPlat Code Coverage" --settings coverlet.runsettings -c Release --results-directory coverage
         for /r coverage %%f in (coverage.*) do @move %%f lcov.bad
-        perl -pe "$_=~s/https:\/\/raw\.githubusercontent\.com\/HicServices\/DicomTemplateBuilder\/[0-9a-fA-F]+\///g;" < lcov.bad > lcov.info
+        perl lcov-fix.pl < lcov.bad > lcov.info
         dir lcov.*
 
     - name: Upload coverage report
