@@ -28,8 +28,6 @@ jobs:
         dotnet test --nologo --verbosity minimal --collect:"XPlat Code Coverage" --settings coverlet.runsettings -c Release --results-directory coverage
         for /r coverage %%f in (coverage.*) do @move %%f lcov.bad
         perl lcov-fix.pl < lcov.bad > lcov.info
-        type lcov.bad
-        dir lcov.*
 
     - name: Upload coverage report
       uses: coverallsapp/github-action@v2.2.3
