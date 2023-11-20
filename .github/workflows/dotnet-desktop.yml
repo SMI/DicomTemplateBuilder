@@ -26,11 +26,12 @@ jobs:
       shell: cmd
       run: |
         dotnet test --nologo --verbosity minimal --collect:"XPlat Code Coverage" --settings coverlet.runsettings -c Release --results-directory coverage
-        for /r coverage %%f in (coverage.*) do @move %%f lcov.info
-        dir lcov.info
+        for /r coverage %%f in (coverage.*) do @move %%f lcov.bad
+        perl -p "$_=~s/https:\/\/raw\.githubusercontent\.com\/HicServices\/DicomTemplateBuilder\/[0-9a-fA-F]+\///g;" < lcov.bad > lcov.info
+        dir lcov.*
 
     - name: Upload coverage report
-      uses: coverallsapp/github-action@v2.2.1
+      uses: coverallsapp/github-action@v2.2.3
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
         path-to-lcov: lcov.info
