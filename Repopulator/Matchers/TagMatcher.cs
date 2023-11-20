@@ -18,12 +18,12 @@ namespace Repopulator.Matchers
 
         private CsvToDicomColumn _indexer;
         private DicomTag _indexerTag;
-        
+
         /// <summary>
         /// Map of all the InstanceUIDs described in the CSV and the row values on that CSV line
         /// </summary>
         Dictionary<string,string[]> _indexerToRowMap = new();
-        
+
         public TagMatcher(CsvToDicomTagMapping map, DicomRepopulatorOptions options):base(map,options)
         {
             _fileList = GetFileList().ToArray();
@@ -60,7 +60,7 @@ namespace Repopulator.Matchers
         private CsvToDicomColumn GetIndexer(CsvToDicomTagMapping map, DicomTag tag)
         {
             var match = map.TagColumns.FirstOrDefault(c => c.TagsToPopulate.Contains(tag));
-           
+
             if (match == null)
                 return null;
 

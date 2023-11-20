@@ -23,7 +23,7 @@ namespace Repopulator
         /// The column of the CSV which records.  The column should be a top level subfolder under which to create files e.g. PatientID
         /// </summary>
         public CsvToDicomColumn SubFolderColumn;
-        
+
         /// <summary>
         /// Columns which contain dicom tag values.  This is not all the columns in the CSV.  It does not include <see cref="FilenameColumn"/>
         /// or any columns which could not be mapped;
@@ -63,7 +63,7 @@ namespace Repopulator
             Clear();
 
             StringBuilder sb  = new();
-            
+
             //how we will tie CSV rows to files
             IRepopulatorMatcher matcher;
 
@@ -111,8 +111,8 @@ namespace Repopulator
                                     throw new($"There are 2+ columns that both populate for one of the DicomTag(s) '{string.Join(",",match.TagsToPopulate)}'");
 
                                 TagColumns.Add(match);
-                            
-                                
+
+
                                 sb.AppendLine($"Validated header '{header}'");
                             }
                             else
@@ -125,7 +125,7 @@ namespace Repopulator
                 }
 
                 IsBuilt = true;
-                
+
                 var matcherFactory = new MatcherFactory();
                 using(matcher = matcherFactory.Create(this,options))
                     sb.AppendLine($"Matching Strategy is: { matcher?.ToString() ?? "No Strategy Found"}");
@@ -136,14 +136,14 @@ namespace Repopulator
                 log = sb.ToString();
                 return false;
             }
-            
+
             log = sb.ToString();
 
 
             return TagColumns.Count > 0 && matcher != null;
         }
 
-        
+
 
         private Dictionary<string, HashSet<DicomTag>> GetExtraMappings(DicomRepopulatorOptions state)
         {
@@ -158,7 +158,7 @@ namespace Repopulator
             foreach (string[] pair in File.ReadAllLines(extraMappingsFile.FullName).Select(l => l.Split(new []{':'},StringSplitOptions.RemoveEmptyEntries)))
             {
                 lineNumber++;
-                
+
                 //ignore blank lines
                 if(pair.Length == 0)
                     continue;
@@ -190,7 +190,7 @@ namespace Repopulator
             CsvToDicomColumn toReturn = null;
             if(columnName.Equals(state.FileNameColumn,StringComparison.CurrentCultureIgnoreCase))
                 toReturn = new(columnName,index,ColumnRole.FilePath);
-            
+
             if(columnName.Equals(state.SubFolderColumn, StringComparison.CurrentCultureIgnoreCase))
                 toReturn = new(columnName,index,ColumnRole.SubFolder);
 
@@ -198,10 +198,10 @@ namespace Repopulator
 
             if(found != null)
                 if (toReturn == null)
-                    toReturn = new(columnName,index,ColumnRole.None,found.Tag); 
+                    toReturn = new(columnName,index,ColumnRole.None,found.Tag);
                 else
                     toReturn.TagsToPopulate.Add(found.Tag); //it's a file path AND a tag! ok...
-                
+
 
             if (extraMappings != null && extraMappings.ContainsKey(columnName))
                 if(toReturn == null)

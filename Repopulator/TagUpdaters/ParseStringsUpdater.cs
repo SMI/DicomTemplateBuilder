@@ -25,7 +25,7 @@ namespace Repopulator.TagUpdaters
     class ParseStringsUpdater : TagUpdater
     {
         private TypeDeciderFactory _factory;
-        
+
         public ParseStringsUpdater(CultureInfo culture)
         {
             _factory = new(culture);
@@ -37,19 +37,19 @@ namespace Repopulator.TagUpdaters
                 dicomTag.DictionaryEntry.ValueMultiplicity)?.CSharpType;
 
             object writeValue = cellValue;
-            
+
             //if it's a supported type e.g. DateTime parse it
             if (cSharpType != null && _factory.IsSupported(cSharpType))
                 if (_factory.Dictionary[cSharpType].IsAcceptableAsType(cellValue, Ignore.Me ))
                     writeValue = _factory.Dictionary[cSharpType].Parse(cellValue);
-            
+
             dataset.Remove(dicomTag);
             DicomTypeTranslaterWriter.SetDicomTag(dataset,dicomTag,writeValue);
         }
         private class Ignore : IDataTypeSize
         {
             private static IDataTypeSize _instance = new Ignore();
-            
+
             public DecimalSize Size { get; set; } = new();
             public int? Width { get; set; }
             public bool Unicode { get; set; }

@@ -9,7 +9,7 @@ namespace Repopulator
     public enum ColumnRole
     {
         None = 0,
-        
+
         /// <summary>
         /// The column that contains the alleged location of dcm files on disk
         /// </summary>
@@ -26,7 +26,7 @@ namespace Repopulator
         public string Name { get; }
         public int Index { get; }
         public HashSet<DicomTag> TagsToPopulate { get; }
-        
+
         public ColumnRole Role { get; }
 
         public CsvToDicomColumn(string colName, int index, ColumnRole role,params DicomTag[] mappedTags)
@@ -44,7 +44,7 @@ namespace Repopulator
 
             if (mappedTags != null)
             {
-                var sq = mappedTags.FirstOrDefault(t => t.DictionaryEntry.ValueRepresentations.Contains(DicomVR.SQ)); 
+                var sq = mappedTags.FirstOrDefault(t => t.DictionaryEntry.ValueRepresentations.Contains(DicomVR.SQ));
                 if(sq != null)
                     throw new ArgumentException($"Sequence tags are not supported ({sq.DictionaryEntry.Keyword})");
             }

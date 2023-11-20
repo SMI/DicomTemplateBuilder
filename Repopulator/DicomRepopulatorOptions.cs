@@ -34,16 +34,16 @@ namespace Repopulator
 
         [YamlIgnore]
         public DirectoryInfo OutputDirectoryInfo => new(OutputFolder);
-        
+
         [YamlIgnore]
         public DirectoryInfo DirectoryToProcessInfo => new(InputFolder);
-        
+
         [YamlIgnore]
         public FileInfo CsvFileInfo => new(InputCsv);
 
         [YamlIgnore]
         public FileInfo ExtraMappings => new(InputExtraMappings);
 
-        
+
     }
 }
