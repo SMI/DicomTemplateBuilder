@@ -40,7 +40,7 @@ public partial class Form1 : Form
     DockContent dcSql = new() {HideOnClose = true};
     DockContent dcYaml = new() {HideOnClose = true};
     DockContent dcTable = new() {HideOnClose = true};
-        
+
     public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
     public Form1()
@@ -55,7 +55,7 @@ public partial class Form1 : Form
         ImplementationManager.Load<MySqlImplementation>();
         ImplementationManager.Load<OracleImplementation>();
         ImplementationManager.Load<PostgreSqlImplementation>();
-            
+
         new DicomSetupBuilder()
             .RegisterServices(s => s.AddFellowOakDicom().AddImageManager<ImageSharpImageManager>())
             .Build();
@@ -70,7 +70,7 @@ public partial class Form1 : Form
 
         foreach (string keyword in DicomDictionary.Default.Select(e => e.Keyword).Distinct())
             autoComplete.Add(keyword);
-                     
+
         ddDatabaseType.ComboBox.DataSource = Enum.GetValues(typeof(DatabaseType));
 
         var menu = new ContextMenuStrip();
@@ -90,7 +90,7 @@ public partial class Form1 : Form
         IsMdiContainer = true;
 
         dockPanel1.Dock = DockStyle.Fill;
-            
+
         olvDicoms.Dock = DockStyle.Fill;
         dcDicoms.Controls.Add(olvDicoms);
         dcDicoms.TabText = "Dicom Files";
@@ -98,8 +98,8 @@ public partial class Form1 : Form
         dockPanel1.Theme = new VS2015BlueTheme();
 
         dcDicoms.Show(dockPanel1,DefaultDockLocations[dcDicoms]);
-            
-            
+
+
         dcYaml.Controls.Add(_scintillaTemplate);
         _scintillaTemplate.Dock = DockStyle.Fill;
         _scintillaTemplate.CharAdded += _scintillaTemplate_CharAdded;
@@ -139,7 +139,7 @@ public partial class Form1 : Form
             if (!scintilla.AutoCActive)
                 scintilla.AutoCShow(lenEntered, string.Join(' ',autoComplete.OrderBy(a=>a).ToArray()));
         }
-        
+
     }
 
     private void Scintilla_OnDragEnter(object sender, DragEventArgs dragEventArgs)
@@ -156,7 +156,7 @@ public partial class Form1 : Form
         if (editor.ReadOnly)
             return;
 
-        TagValueNode[] nodes = null; 
+        TagValueNode[] nodes = null;
 
         if (dragEventArgs.Data is OLVDataObject olv)
             nodes = olv.ModelObjects.OfType<TagValueNode>().ToArray();
@@ -167,7 +167,7 @@ public partial class Form1 : Form
         var clientPoint = editor.PointToClient(new(dragEventArgs.X, dragEventArgs.Y));
         //get where the mouse is hovering over
         int pos = editor.CharPositionFromPoint(clientPoint.X, clientPoint.Y);
-            
+
         //if it has a Form give it focus
         var form = editor.FindForm();
 
@@ -176,7 +176,7 @@ public partial class Form1 : Form
             form.Activate();
             editor.Focus();
         }
-            
+
         editor.InsertText(pos,string.Join(Environment.NewLine,nodes.Select(n=>n.GetTemplateYaml())));
     }
 
@@ -210,7 +210,7 @@ public partial class Form1 : Form
 
         c.Tables.Add(
             new()
-            { TableName = "StudyTable", Columns =  
+            { TableName = "StudyTable", Columns =
                 new[] {
                     new ImageColumnTemplate(DicomTag.StudyInstanceUID){AllowNulls = false,IsPrimaryKey = true},
                     new ImageColumnTemplate(DicomTag.StudyDescription){AllowNulls = true},
@@ -246,7 +246,7 @@ public partial class Form1 : Form
 
         _scintillaTemplate.Text = c.Serialize();
 
-            
+
         dcYaml.Show(dockPanel1, DefaultDockLocations[dcYaml]);
     }
 
@@ -288,10 +288,10 @@ public partial class Form1 : Form
     private bool Check()
     {
         bool noTemplate = string.IsNullOrWhiteSpace(_scintillaTemplate.Text);
-            
+
         if (noTemplate)
             return false;
-            
+
         try
         {
             var dbType = (DatabaseType) ddDatabaseType.ComboBox.SelectedItem;
@@ -317,7 +317,7 @@ public partial class Form1 : Form
 
                 var dg = new DataGridView {Dock = DockStyle.Fill};
                 tp.Controls.Add(dg);
-                    
+
                 sb.AppendLine(db.Helper.GetCreateTableSql(db, template.TableName, template.GetColumns(dbType), null, false));
 
                 if(olvDicoms.Objects != null)
@@ -327,7 +327,7 @@ public partial class Form1 : Form
                     foreach (var col in template.Columns)
                         dtAll.Columns.Add(col.ColumnName);
 
-                        
+
                     foreach (FileInfo fi in olvDicoms.Objects)
                     {
                         var dicom = DicomFile.Open(fi.FullName);
@@ -337,12 +337,12 @@ public partial class Form1 : Form
                         foreach (DicomItem item in dicom.Dataset)
                         {
                             var colName = DicomTypeTranslaterReader.GetColumnNameForTag(item.Tag,false);
-                                
+
                             if(dtAll.Columns.Contains(colName))
                                 dr[colName] = DicomTypeTranslater.Flatten(DicomTypeTranslaterReader.GetCSharpValue(dicom.Dataset, item));
                         }
                     }
-                        
+
                     dg.DataSource = dtAll;
                 }
             }
@@ -376,7 +376,7 @@ public partial class Form1 : Form
     {
 
     }
-        
+
 
     private void GoToOnlineTemplates()
     {
@@ -455,7 +455,7 @@ public partial class Form1 : Form
                 olvDicoms.EndUpdate();
                 _setupFinished = true;
             }
-                
+
             Check();
         }
     }
@@ -474,7 +474,7 @@ public partial class Form1 : Form
     {
         SaveAs();
     }
-        
+
     private void WindowClicked(object sender, EventArgs e)
     {
         DockContent dc = null;
@@ -504,7 +504,7 @@ public partial class Form1 : Form
         dc.Controls.Add(ui);
         dc.Show(dockPanel1,DockState.Document);
     }
-        
+
     private void miNewTemplate_Click(object sender, EventArgs e)
     {
         NewTemplate();

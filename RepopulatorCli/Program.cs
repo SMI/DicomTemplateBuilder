@@ -9,11 +9,11 @@ namespace RepopulatorCli;
 
 class RepopulatorCliOptions
 {
-        
+
     [Option('y', Required = true, HelpText = "The yaml file describing which directory to process with what csv etc")]
     public string YamlFile { get; set; }
 }
-    
+
 class Program
 {
     static int Main(string[] args)

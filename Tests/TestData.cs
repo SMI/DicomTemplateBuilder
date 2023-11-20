@@ -20,7 +20,7 @@ public sealed class TestData
     public static FileInfo Create(FileInfo fileInfo, string testFile=null,bool cleanDirectory = true)
     {
         var from = Path.Combine(TestContext.CurrentContext.TestDirectory, testFile??IMG_013);
-            
+
         if(fileInfo.Directory != null)
             if(!fileInfo.Directory.Exists)
                 fileInfo.Directory.Create();
@@ -34,7 +34,7 @@ public sealed class TestData
                     foreach(var d in fileInfo.Directory.EnumerateDirectories())
                         d.Delete();
                 }
-                        
+
             }
 
         File.Copy(from,fileInfo.FullName,true);

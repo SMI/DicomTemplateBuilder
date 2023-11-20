@@ -61,7 +61,7 @@ namespace Repopulator
 
             _logger = LogManager.GetCurrentClassLogger();
         }
-        
+
         public int Process(DicomRepopulatorOptions options, CancellationToken token)
         {
             _parallelOptions = new() { MaxDegreeOfParallelism = Math.Max(1,options.NumThreads) };
@@ -70,24 +70,24 @@ namespace Repopulator
 
             if(!options.OutputDirectoryInfo.Exists)
                 options.OutputDirectoryInfo.Create();
-            
+
             _logger.Debug("Checking output directory for contents");
             if (options.OutputDirectoryInfo.EnumerateFileSystemInfos().Any())
             {
                 _logger.Error("Output directory " + options.OutputDirectoryInfo.FullName + " is not empty");
                 return -1;
             }
-            
+
             _logger.Info("Starting to process");
             _stopwatch = Stopwatch.StartNew();
-            
+
             //build map from the CSV headers
             var map = new CsvToDicomTagMapping();
             try
             {
                 if(!map.BuildMap(options,out string log))
                     throw new("Failed to build map:" + log);
-                
+
                 _logger.Info("Map built succesfully:" + log);
             }
             catch (ApplicationException e)
@@ -116,7 +116,7 @@ namespace Repopulator
                     try
                     {
                         job = Matcher.Next();
-                    
+
                         if(job != null)
                             ProcessJob(job, options);
                     }
@@ -125,7 +125,7 @@ namespace Repopulator
                         _logger.Error(e);
                         Interlocked.Increment(ref _nErrors);
                     }
-                    
+
                     if(token.IsCancellationRequested)
                     {
                         _logger.Info("User cancelled execution");
@@ -137,7 +137,7 @@ namespace Repopulator
                 if(_nErrors >= options.ErrorThreshold)
                     throw new("Error threshold reached");
             }
-            
+
             var sb = new StringBuilder();
             sb.AppendLine("\n=== Finished processing ===");
             sb.AppendLine("Total input files: " + _nInput);

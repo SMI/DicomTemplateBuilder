@@ -17,7 +17,7 @@ public partial class DicomFileTagsUI : UserControl
 {
     private readonly FileInfo _fileInfo;
     private Bitmap DicomImage;
-        
+
     public DicomFileTagsUI(FileInfo fileInfo)
     {
         _fileInfo = fileInfo;
@@ -28,9 +28,9 @@ public partial class DicomFileTagsUI : UserControl
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-            
+
         olvFileTags.ClearObjects();
-            
+
         try
         {
             var dicom = DicomFile.Open(_fileInfo.FullName,FileReadOption.ReadAll);
@@ -53,7 +53,7 @@ public partial class DicomFileTagsUI : UserControl
             foreach (DicomItem item in dicom.Dataset)
             {
                 var value = DicomTypeTranslater.Flatten(DicomTypeTranslaterReader.GetCSharpValue(dicom.Dataset, item));
-                
+
                 olvFileTags.AddObject(new TagValueNode(item.Tag, value));
             }
         }
@@ -62,9 +62,9 @@ public partial class DicomFileTagsUI : UserControl
             MessageBox.Show(exception.ToString(), "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-            
-            
-            
+
+
+
     }
 
     private void tbFilter_TextChanged(object sender, EventArgs e)

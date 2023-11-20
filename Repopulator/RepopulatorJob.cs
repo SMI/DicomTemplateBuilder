@@ -6,7 +6,7 @@ namespace Repopulator
     public class RepopulatorJob
     {
         public CsvToDicomTagMapping Map { get; }
-        
+
         /// <summary>
         /// Original file read during construction
         /// </summary>

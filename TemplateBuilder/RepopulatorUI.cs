@@ -23,7 +23,7 @@ public partial class RepopulatorUI : UserControl
         "Copies the current log to the clipboard";
     public const string HelpFilePattern =
         "The search pattern to use to identify dicom files in the input directory, defaults to *.dcm.  Set to * if you lack file extensions";
-    public const string HelpInputCsv = 
+    public const string HelpInputCsv =
         "Csv file which contains anonymous values that you want to insert into dicom files.  Column headers must match dicom tags or you must provide ExtraMappings";
     public const string HelpExtraMappings =
         "Optional, allows you to have non dicom tag headers in your CSV file and still map them to 1+ dicom tags. e.g. \"MyFunkyHeader:SOPInstanceUID\"";
@@ -104,7 +104,7 @@ public partial class RepopulatorUI : UserControl
 
         tt.SetToolTip(btnOutputFolder,HelpOutputFolder);
         tt.SetToolTip(lblOutputFolder,HelpOutputFolder);
-            
+
         tt.SetToolTip(btnCopyToClipboard,HelpCopyToClipboard);
 
         tt.SetToolTip(lblErrorThreshold,HelpErrorThreshold);
@@ -116,7 +116,7 @@ public partial class RepopulatorUI : UserControl
 
         tt.SetToolTip(lblSubFolder,HelpSubFolderColumn);
     }
-        
+
 
     private void btnBrowse_Click(object sender, EventArgs e)
     {
@@ -175,7 +175,7 @@ public partial class RepopulatorUI : UserControl
             btnStart.Enabled = true;
             btnStop.Enabled = false;
         }, TaskScheduler.FromCurrentSynchronizationContext());
-            
+
         task.Start();
     }
 
@@ -231,7 +231,7 @@ public partial class RepopulatorUI : UserControl
         State.NumThreads = (int) nThreads.Value;
         SaveState();
     }
-        
+
     private void nErrorThreshold_ValueChanged(object sender, EventArgs e)
     {
         State.ErrorThreshold = (int) nErrorThreshold.Value;
@@ -287,9 +287,9 @@ public partial class RepopulatorUI : UserControl
 
             if(errors != tbErrors.Text)
                 tbErrors.Text = errors;
-                
+
             int processed = nDone + nErrors;
-                
+
             progressBar1.Style = ProgressBarStyle.Continuous;
 
             if (nInput > 0)
@@ -297,8 +297,8 @@ public partial class RepopulatorUI : UserControl
                 progressBar1.Maximum = nInput;
                 progressBar1.Value = Math.Min(processed,nInput);
             }
-                
-                
+
+
         }
         catch (Exception)
         {
@@ -311,7 +311,7 @@ public partial class RepopulatorUI : UserControl
 
     private void RepopulatorUI_Load(object sender, EventArgs e)
     {
-            
+
     }
 
     private void btnCopyToClipboard_Click(object sender, EventArgs e)
