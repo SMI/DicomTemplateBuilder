@@ -19,8 +19,7 @@ class Program
     static int Main(string[] args)
     {
         return Parser.Default.ParseArguments<RepopulatorCliOptions>(args).MapResult(
-            Run,
-            errs => -100);
+            Run, static errs => -100);
     }
 
     private static int Run(RepopulatorCliOptions opts)

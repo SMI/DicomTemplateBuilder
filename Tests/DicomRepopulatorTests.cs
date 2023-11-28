@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using FellowOakDicom;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Repopulator;
 
 namespace Tests;
@@ -37,8 +38,8 @@ public class DicomRepopulatorTests
     public void Test_AbsolutePath_InCsv(bool deleteAsYouGo)
     {
         //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
-        var inputDicom = CreateInputFile(TestData.IMG_013,
-            Path.Combine("subdir", nameof(TestData.IMG_013) +".dcm"));
+        var inputDicom = CreateInputFile(TestData.Img013,
+            Path.Combine("subdir", nameof(TestData.Img013) +".dcm"));
 
         //Create a CSV with the full path to the image
         var inputCsv = CreateInputCsvFile(
@@ -61,10 +62,10 @@ public class DicomRepopulatorTests
         );
 
         //anonymous image should appear in the subdirectory of the out dir
-        var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestData.IMG_013) + ".dcm"));
+        var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", nameof(TestData.Img013) + ".dcm"));
         FileAssert.Exists(expectedOutFile);
 
-        Assert.AreEqual(!deleteAsYouGo,File.Exists(inputDicom.FullName));
+        Assert.That(File.Exists(inputDicom.FullName), Is.EqualTo(!deleteAsYouGo));
     }
 
     [TestCase("./subdir/IM-0001-0013.dcm")]
@@ -73,7 +74,7 @@ public class DicomRepopulatorTests
     public void Test_RelativePath_InCsv(string csvPath)
     {
         //Create a dicom file in the input dir /subdir/IM_0001_0013.dcm
-        var inputDicom = TestData.Create(new(Path.Combine(TestContext.CurrentContext.WorkDirectory,nameof(Test_RelativePath_InCsv),"subdir", Path.GetFileName(TestData.IMG_013))),TestData.IMG_013);
+        var inputDicom = TestData.Create(new FileInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory,nameof(Test_RelativePath_InCsv),"subdir", Path.GetFileName(TestData.Img013))),TestData.Img013);
 
         //Create a CSV with the full path to the image
         var inputCsv = CreateInputCsvFile(
@@ -85,30 +86,34 @@ public class DicomRepopulatorTests
             0,
             inputCsv,
             null,
-            inputDicom.Directory.Parent,
-            o => o.FileNameColumn = "File");
+            inputDicom.Directory?.Parent, static o => o.FileNameColumn = "File");
 
         //anonymous image should appear in the subdirectory of the out dir
-        var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", Path.GetFileName(TestData.IMG_013)));
+        var expectedOutFile = new FileInfo(Path.Combine(outDir.FullName, "subdir", Path.GetFileName(TestData.Img013)));
         FileAssert.Exists(expectedOutFile);
     }
 
     [Test]
     public void Test_StudyDateTag_GoodData()
     {
-        var inputDicom = CreateInputFile(TestData.IMG_013, "mydicom.dcm");
+        var inputDicom = CreateInputFile(TestData.Img013, "mydicom.dcm");
         var inputCsv = CreateInputCsvFile(
-            $@"RelativeFileArchiveURI,PatientID,StudyDate
-{inputDicom.FullName},ABC123,2001-01-01");
+            $"""
+             RelativeFileArchiveURI,PatientID,StudyDate
+             {inputDicom.FullName},ABC123,2001-01-01
+             """);
 
         var outDir = AssertRunsSuccesfully(1,0,inputCsv,null,inputDicom.Directory);
 
         var fi = new FileInfo (Path.Combine(outDir.FullName,"mydicom.dcm"));
         FileAssert.Exists(fi);
 
-        DicomFile file = DicomFile.Open(fi.FullName);
-        Assert.AreEqual("ABC123", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
-        Assert.AreEqual(new DateTime(2001,1,1), file.Dataset.GetValue<DateTime>(DicomTag.StudyDate, 0));
+        var file = DicomFile.Open(fi.FullName);
+        Assert.Multiple(() =>
+        {
+            Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("ABC123"));
+            Assert.That(file.Dataset.GetValue<DateTime>(DicomTag.StudyDate, 0), Is.EqualTo(new DateTime(2001, 1, 1)));
+        });
 
     }
 
@@ -116,7 +121,7 @@ public class DicomRepopulatorTests
     [Test]
     public void Test_StudyDateTag_BadData()
     {
-        var inputDicom = CreateInputFile(TestData.IMG_013, "mydicom.dcm");
+        var inputDicom = CreateInputFile(TestData.Img013, "mydicom.dcm");
         var inputCsv = CreateInputCsvFile(
             $@"RelativeFileArchiveURI,PatientID,StudyDate
 {inputDicom.FullName},ABC123,Lolz");
@@ -127,16 +132,19 @@ public class DicomRepopulatorTests
         var fi = new FileInfo (Path.Combine(outDir.FullName,"mydicom.dcm"));
         FileAssert.Exists(fi);
 
-        DicomFile file = DicomFile.Open(fi.FullName);
-        Assert.AreEqual("ABC123", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
-        Assert.AreEqual(new DateTime(2001,1,1), file.Dataset.GetValue<DateTime>(DicomTag.StudyDate, 0));
+        var file = DicomFile.Open(fi.FullName);
+        Assert.Multiple(() =>
+        {
+            Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("ABC123"));
+            Assert.That(file.Dataset.GetValue<DateTime>(DicomTag.StudyDate, 0), Is.EqualTo(new DateTime(2001, 1, 1)));
+        });
 
     }
 
     [Test]
     public void SingleFileBasicOperationTest()
     {
-        var inFile = CreateInputFile(TestData.IMG_013,nameof(TestData.IMG_013) +".dcm");
+        var inFile = CreateInputFile(TestData.Img013,nameof(TestData.Img013) +".dcm");
 
         var outDir = AssertRunsSuccesfully(1, 0,null,
 
@@ -144,29 +152,28 @@ public class DicomRepopulatorTests
             CreateExtraMappingsFile("ID:PatientID"), inFile.Directory,
 
             //Give it BasicTest.csv
-            o => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
+            static o => o.InputCsv= Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicTest.csv"));
 
         //Anonymous dicom image should exist
-        var expectedFile = new FileInfo(Path.Combine(outDir.FullName, nameof(TestData.IMG_013) + ".dcm"));
+        var expectedFile = new FileInfo(Path.Combine(outDir.FullName, nameof(TestData.Img013) + ".dcm"));
         FileAssert.Exists(expectedFile);
 
         //it should have the patient ID from the csv
-        DicomFile file = DicomFile.Open(expectedFile.FullName);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        var file = DicomFile.Open(expectedFile.FullName);
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
     }
 
     [TestCase(true)]
     [TestCase(false)]
     public void KeyNotFirstColumn(bool runSecondaryAnon)
     {
-        string inputDirPath = Path.Combine(_inputFileBase, "KeyNotFirstColumn");
-        const string testFileName = IM_0001_0013_NAME;
+        var inputDirPath = Path.Combine(_inputFileBase, "KeyNotFirstColumn");
 
         Directory.CreateDirectory(inputDirPath);
-        TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, IM_0001_0013_NAME)), TestData.Img013);
 
-        string outputDirPath = Path.Combine(_outputFileBase, "KeyNotFirstColumn");
-        string expectedFile = Path.Combine(outputDirPath, testFileName);
+        var outputDirPath = Path.Combine(_outputFileBase, "KeyNotFirstColumn");
+        var expectedFile = Path.Combine(outputDirPath, IM_0001_0013_NAME);
 
         var options = new DicomRepopulatorOptions
         {
@@ -178,26 +185,28 @@ public class DicomRepopulatorTests
             NumThreads = 4
         };
 
-        int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
-        Assert.AreEqual(0, result);
+        var result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(0));
 
-        Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
+            Assert.That(File.Exists(expectedFile), Is.True, $"Expected output file {expectedFile} to exist");
+        });
 
-        DicomFile file = DicomFile.Open(expectedFile);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        var file = DicomFile.Open(expectedFile);
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
     }
 
     [Test]
     public void DateRepopulation()
     {
-        string inputDirPath = Path.Combine(_inputFileBase, "DateRepopulation");
-        const string testFileName = IM_0001_0013_NAME;
+        var inputDirPath = Path.Combine(_inputFileBase, "DateRepopulation");
 
         Directory.CreateDirectory(inputDirPath);
-        TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, IM_0001_0013_NAME)), TestData.Img013);
 
-        string outputDirPath = Path.Combine(_outputFileBase, "DateRepopulation");
-        string expectedFile = Path.Combine(outputDirPath, testFileName);
+        var outputDirPath = Path.Combine(_outputFileBase, "DateRepopulation");
+        var expectedFile = Path.Combine(outputDirPath, IM_0001_0013_NAME);
 
         var options = new DicomRepopulatorOptions
         {
@@ -208,28 +217,33 @@ public class DicomRepopulatorTests
             NumThreads = 4
         };
 
-        int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
-        Assert.AreEqual(0, result);
+        var result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(0));
 
-        Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
+            Assert.That(File.Exists(expectedFile), Is.True, $"Expected output file {expectedFile} to exist");
+        });
 
-        DicomFile file = DicomFile.Open(expectedFile);
+        var file = DicomFile.Open(expectedFile);
 
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
-        Assert.AreEqual("20180601", file.Dataset.GetValue<string>(DicomTag.StudyDate, 0));
+        Assert.Multiple(() =>
+        {
+            Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
+            Assert.That(file.Dataset.GetValue<string>(DicomTag.StudyDate, 0), Is.EqualTo("20180601"));
+        });
     }
 
     [Test]
     public void OneCsvColumnToMultipleDicomTags()
     {
-        string inputDirPath = Path.Combine(_inputFileBase, "OneCsvColumnToMultipleDicomTags");
-        const string testFileName = IM_0001_0013_NAME;
+        var inputDirPath = Path.Combine(_inputFileBase, "OneCsvColumnToMultipleDicomTags");
 
         Directory.CreateDirectory(inputDirPath);
-        TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, IM_0001_0013_NAME)), TestData.Img013);
 
-        string outputDirPath = Path.Combine(_outputFileBase, "OneCsvColumnToMultipleDicomTags");
-        string expectedFile = Path.Combine(outputDirPath, testFileName);
+        var outputDirPath = Path.Combine(_outputFileBase, "OneCsvColumnToMultipleDicomTags");
+        var expectedFile = Path.Combine(outputDirPath, IM_0001_0013_NAME);
 
         var options = new DicomRepopulatorOptions
         {
@@ -240,28 +254,33 @@ public class DicomRepopulatorTests
             NumThreads = 1
         };
 
-        int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
-        Assert.AreEqual(0, result);
+        var result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(0));
 
-        Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
+            Assert.That(File.Exists(expectedFile), Is.True, $"Expected output file {expectedFile} to exist");
+        });
 
-        DicomFile file = DicomFile.Open(expectedFile);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
-        Assert.AreEqual("20180601", file.Dataset.GetValue<string>(DicomTag.StudyDate, 0));
-        Assert.AreEqual("20180601", file.Dataset.GetValue<string>(DicomTag.SeriesDate, 0));
+        var file = DicomFile.Open(expectedFile);
+        Assert.Multiple(() =>
+        {
+            Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
+            Assert.That(file.Dataset.GetValue<string>(DicomTag.StudyDate, 0), Is.EqualTo("20180601"));
+            Assert.That(file.Dataset.GetValue<string>(DicomTag.SeriesDate, 0), Is.EqualTo("20180601"));
+        });
     }
 
     [Test]
     public void SpacesInCsvHeaderTest()
     {
-        string inputDirPath = Path.Combine(_inputFileBase, "SpacesInCsvHeaderTest");
-        const string testFileName = IM_0001_0013_NAME;
+        var inputDirPath = Path.Combine(_inputFileBase, "SpacesInCsvHeaderTest");
 
         Directory.CreateDirectory(inputDirPath);
-        TestData.Create(new(Path.Combine(inputDirPath, testFileName)), TestData.IMG_013);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, IM_0001_0013_NAME)), TestData.Img013);
 
-        string outputDirPath = Path.Combine(_outputFileBase, "SpacesInCsvHeaderTest");
-        string expectedFile = Path.Combine(outputDirPath, testFileName);
+        var outputDirPath = Path.Combine(_outputFileBase, "SpacesInCsvHeaderTest");
+        var expectedFile = Path.Combine(outputDirPath, IM_0001_0013_NAME);
 
         var options = new DicomRepopulatorOptions
         {
@@ -272,29 +291,30 @@ public class DicomRepopulatorTests
             NumThreads = 1
         };
 
-        int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
-        Assert.AreEqual(0, result);
+        var result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(0));
 
-        Assert.True(File.Exists(expectedFile), "Expected output file {0} to exist", expectedFile);
+            Assert.That(File.Exists(expectedFile), Is.True, $"Expected output file {expectedFile} to exist");
+        });
 
-        DicomFile file = DicomFile.Open(expectedFile);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        var file = DicomFile.Open(expectedFile);
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
     }
 
     [Test]
     public void MultipleFilesSameSeriesTest()
     {
-        string inputDirPath = Path.Combine(_inputFileBase, "MultipleFilesSameSeriesTest");
-        const string testFileName1 = IM_0001_0013_NAME;
-        const string testFileName2 = IM_0001_0019_NAME;
+        var inputDirPath = Path.Combine(_inputFileBase, "MultipleFilesSameSeriesTest");
 
         Directory.CreateDirectory(inputDirPath);
-        TestData.Create(new(Path.Combine(inputDirPath, testFileName1)), TestData.IMG_013,true);
-        TestData.Create(new(Path.Combine(inputDirPath, testFileName2)), TestData.IMG_013,false);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, IM_0001_0013_NAME)), TestData.Img013,true);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, IM_0001_0019_NAME)), TestData.Img013,false);
 
-        string outputDirPath = Path.Combine(_outputFileBase, "MultipleFilesSameSeriesTest");
-        string expectedFile1 = Path.Combine(outputDirPath, testFileName1);
-        string expectedFile2 = Path.Combine(outputDirPath, testFileName2);
+        var outputDirPath = Path.Combine(_outputFileBase, "MultipleFilesSameSeriesTest");
+        var expectedFile1 = Path.Combine(outputDirPath, IM_0001_0013_NAME);
+        var expectedFile2 = Path.Combine(outputDirPath, IM_0001_0019_NAME);
 
         var options = new DicomRepopulatorOptions
         {
@@ -305,39 +325,40 @@ public class DicomRepopulatorTests
             NumThreads = 1
         };
 
-        int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
-        Assert.AreEqual(0, result);
+        var result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(0));
 
-        Assert.True(File.Exists(expectedFile1), "Expected output file {0} to exist", expectedFile1);
-        Assert.True(File.Exists(expectedFile2), "Expected output file {0} to exist", expectedFile2);
+            Assert.That(File.Exists(expectedFile1), Is.True, $"Expected output file {expectedFile1} to exist");
+            Assert.That(File.Exists(expectedFile2), Is.True, $"Expected output file {expectedFile2} to exist");
+        });
 
-        DicomFile file = DicomFile.Open(expectedFile1);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        var file = DicomFile.Open(expectedFile1);
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
 
         file = DicomFile.Open(expectedFile2);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
     }
 
     [TestCase(true)]
     [TestCase(false)]
     public void MultipleSeriesTest(bool useSubfolder)
     {
-        string inputDirPath = Path.Combine(_seriesFilesBase, "TestInput");
-        const string testFileName1 = IM_0001_0013_NAME;
-        const string testFileName2 = IM_0001_0019_NAME;
+        var inputDirPath = Path.Combine(_seriesFilesBase, "TestInput");
 
         Directory.CreateDirectory(Path.Combine(inputDirPath, "Series1"));
         Directory.CreateDirectory(Path.Combine(inputDirPath, "Series2"));
-        TestData.Create(new(Path.Combine(inputDirPath, "Series1", testFileName1)), TestData.IMG_013,true);
-        TestData.Create(new(Path.Combine(inputDirPath, "Series1", testFileName2)), TestData.IMG_013,false);
-        TestData.Create(new(Path.Combine(inputDirPath, "Series2", testFileName1)), TestData.IMG_019,true);
-        TestData.Create(new(Path.Combine(inputDirPath, "Series2", testFileName2)), TestData.IMG_019,false);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", IM_0001_0013_NAME)), TestData.Img013,true);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series1", IM_0001_0019_NAME)), TestData.Img013,false);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", IM_0001_0013_NAME)), TestData.Img019,true);
+        TestData.Create(new FileInfo(Path.Combine(inputDirPath, "Series2", IM_0001_0019_NAME)), TestData.Img019,false);
 
-        string outputDirPath = Path.Combine(_seriesFilesBase, "TestOutput");
-        string expectedFile1 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID1/Series1" : "Series1", testFileName1);
-        string expectedFile2 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID1/Series1" : "Series1", testFileName2);
-        string expectedFile3 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID2/Series2" : "Series2", testFileName1);
-        string expectedFile4 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID2/Series2" : "Series2", testFileName2);
+        var outputDirPath = Path.Combine(_seriesFilesBase, "TestOutput");
+        var expectedFile1 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID1/Series1" : "Series1", IM_0001_0013_NAME);
+        var expectedFile2 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID1/Series1" : "Series1", IM_0001_0019_NAME);
+        var expectedFile3 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID2/Series2" : "Series2", IM_0001_0013_NAME);
+        var expectedFile4 = Path.Combine(outputDirPath, useSubfolder? "NewPatientID2/Series2" : "Series2", IM_0001_0019_NAME);
 
         var options = new DicomRepopulatorOptions
         {
@@ -349,32 +370,35 @@ public class DicomRepopulatorTests
             NumThreads = 4
         };
 
-        int result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
-        Assert.AreEqual(0, result);
+        var result = new DicomRepopulatorProcessor().Process(options,CancellationToken.None);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(0));
 
-        Assert.True(File.Exists(expectedFile1), "Expected output file {0} to exist", expectedFile1);
-        Assert.True(File.Exists(expectedFile2), "Expected output file {0} to exist", expectedFile2);
-        Assert.True(File.Exists(expectedFile3), "Expected output file {0} to exist", expectedFile3);
-        Assert.True(File.Exists(expectedFile4), "Expected output file {0} to exist", expectedFile4);
+            Assert.That(File.Exists(expectedFile1), Is.True, $"Expected output file {expectedFile1} to exist");
+            Assert.That(File.Exists(expectedFile2), Is.True, $"Expected output file {expectedFile2} to exist");
+            Assert.That(File.Exists(expectedFile3), Is.True, $"Expected output file {expectedFile3} to exist");
+            Assert.That(File.Exists(expectedFile4), Is.True, $"Expected output file {expectedFile4} to exist");
+        });
 
-        DicomFile file = DicomFile.Open(expectedFile1);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        var file = DicomFile.Open(expectedFile1);
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
 
         file = DicomFile.Open(expectedFile2);
-        Assert.AreEqual("NewPatientID1", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID1"));
 
         file = DicomFile.Open(expectedFile3);
-        Assert.AreEqual("NewPatientID2", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID2"));
 
         file = DicomFile.Open(expectedFile4);
-        Assert.AreEqual("NewPatientID2", file.Dataset.GetValue<string>(DicomTag.PatientID, 0));
+        Assert.That(file.Dataset.GetValue<string>(DicomTag.PatientID, 0), Is.EqualTo("NewPatientID2"));
     }
     /// <summary>
     /// Writes the supplied string to "ExtraMappings.txt" in the test directory and returns the path to the file
     /// </summary>
     /// <param name="contents"></param>
     /// <returns></returns>
-    private FileInfo CreateExtraMappingsFile(params string[] contents)
+    private static FileInfo CreateExtraMappingsFile(params string[] contents)
     {
         return GenerateTextFile(contents, "ExtraMappings.txt");
     }
@@ -382,17 +406,17 @@ public class DicomRepopulatorTests
     /// <summary>
     /// Writes the supplied string to "Map.csv" in the test directory and returns the path to the file
     /// </summary>
-    private FileInfo CreateInputCsvFile(params string[] contents)
+    private static FileInfo CreateInputCsvFile(params string[] contents)
     {
         return GenerateTextFile(contents, "Map.csv");
     }
 
-    private FileInfo GenerateTextFile(string[] contents, string filename)
+    private static FileInfo GenerateTextFile(string[] contents, string filename)
     {
         var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory,filename);
         File.WriteAllLines(filePath,contents);
 
-        return new(filePath);
+        return new FileInfo(filePath);
     }
 
     /// <summary>
@@ -405,7 +429,7 @@ public class DicomRepopulatorTests
     /// <returns></returns>
     private FileInfo CreateInputFile(string testFile,string filename,[System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
     {
-        string inputDirPath = Path.Combine(_inputFileBase, memberName);
+        var inputDirPath = Path.Combine(_inputFileBase, memberName);
 
         Directory.CreateDirectory(inputDirPath);
         var toReturn = new FileInfo(Path.Combine(inputDirPath, filename));
@@ -437,17 +461,20 @@ public class DicomRepopulatorTests
             inputDicomDirectory,
             adjustOptions,
             memberName,
-            out DicomRepopulatorOptions options,
-            out DirectoryInfo outputDirPath);
+            out var options,
+            out var outputDirPath);
 
-        int result = processor.Process(options,CancellationToken.None);
-        Assert.AreEqual(0, result);
+        var result = processor.Process(options,CancellationToken.None);
+        Assert.That(result, Is.EqualTo(0));
 
         foreach (var log in processor.MemoryLogTarget.Logs)
             Console.WriteLine(log);
 
-        Assert.AreEqual(expectedErrors,processor.Errors,"Expected error count was not correct");
-        Assert.AreEqual(expectedDone,processor.Done, "Expected success count was not correct");
+        Assert.Multiple(() =>
+        {
+            Assert.That(processor.Errors, Is.EqualTo(expectedErrors), "Expected error count was not correct");
+            Assert.That(processor.Done, Is.EqualTo(expectedDone), "Expected success count was not correct");
+        });
 
         return outputDirPath;
     }
@@ -457,7 +484,7 @@ public class DicomRepopulatorTests
         out DicomRepopulatorOptions options,
         out DirectoryInfo outputDirPath)
     {
-        outputDirPath = new(Path.Combine(_outputFileBase, memberName));
+        outputDirPath = new DirectoryInfo(Path.Combine(_outputFileBase, memberName));
 
         //delete old content
         if(Directory.Exists(outputDirPath.FullName))
@@ -466,7 +493,7 @@ public class DicomRepopulatorTests
         Directory.CreateDirectory(outputDirPath.FullName);
 
 
-        options = new()
+        options = new DicomRepopulatorOptions
         {
             InputCsv = inputCsv?.FullName,
             InputFolder = inputDicomDirectory?.FullName,
@@ -477,7 +504,7 @@ public class DicomRepopulatorTests
 
         adjustOptions?.Invoke(options);
 
-        return new();
+        return new DicomRepopulatorProcessor();
     }
 
 }
