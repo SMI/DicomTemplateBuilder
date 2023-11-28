@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using FellowOakDicom;
 using NLog;
 using NLog.Config;
@@ -20,7 +19,6 @@ namespace Repopulator
 
         private Stopwatch _stopwatch;
 
-        private ParallelOptions _parallelOptions;
         private DicomAnonymizer _anonymizer;
 
         private ITagUpdater _tagUpdater;
@@ -32,7 +30,7 @@ namespace Repopulator
         private int _nInput;
         private int _nDone;
         private int _nErrors;
-        private LoggingRule _loggingRule;
+        private readonly LoggingRule _loggingRule;
 
         /// <summary>
         /// The number of images found in the input directory (optionally a recursive scan)
@@ -51,7 +49,7 @@ namespace Repopulator
             else
             {
                 // specify what gets logged to the above target
-                _loggingRule = new("*", LogLevel.Debug, MemoryLogTarget);
+                _loggingRule = new LoggingRule("*", LogLevel.Debug, MemoryLogTarget);
 
                 // add target and rule to configuration
                 LogManager.Configuration.AddTarget(MemoryLogTarget.Name, MemoryLogTarget);
@@ -64,7 +62,6 @@ namespace Repopulator
 
         public int Process(DicomRepopulatorOptions options, CancellationToken token)
         {
-            _parallelOptions = new() { MaxDegreeOfParallelism = Math.Max(1,options.NumThreads) };
             _tagUpdater = new ParseStringsUpdater(options.Culture);
             _anonymizer = options.Anonymise ? new DicomAnonymizer() : null;
 
@@ -85,8 +82,8 @@ namespace Repopulator
             var map = new CsvToDicomTagMapping();
             try
             {
-                if(!map.BuildMap(options,out string log))
-                    throw new("Failed to build map:" + log);
+                if(!map.BuildMap(options,out var log))
+                    throw new Exception("Failed to build map:" + log);
 
                 _logger.Info("Map built succesfully:" + log);
             }
@@ -99,12 +96,10 @@ namespace Repopulator
             var csvFile = options.CsvFileInfo;
             _logger.Info("Starting " + csvFile.FullName);
 
-            var factory = new MatcherFactory();
-
-            using (Matcher = factory.Create(map, options))
+            using (Matcher = MatcherFactory.Create(map, options))
             {
                 if (Matcher == null)
-                    throw new("No suitable IRepopulatorMatcher could be built, ensure you have either file paths or instance UIDs in your csv file / extra mappings (otherwise we have no way to match rows to files)");
+                    throw new Exception("No suitable IRepopulatorMatcher could be built, ensure you have either file paths or instance UIDs in your csv file / extra mappings (otherwise we have no way to match rows to files)");
 
                 _nInput = Matcher.GetInputFileCount();
 
@@ -135,7 +130,7 @@ namespace Repopulator
                 } while (job != null && _nErrors < options.ErrorThreshold);
 
                 if(_nErrors >= options.ErrorThreshold)
-                    throw new("Error threshold reached");
+                    throw new Exception("Error threshold reached");
             }
 
             var sb = new StringBuilder();
@@ -184,6 +179,7 @@ namespace Repopulator
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             LogManager.Configuration.RemoveTarget(MemoryLogTarget.Name);
             LogManager.Configuration.LoggingRules.Remove(_loggingRule);
             MemoryLogTarget?.Dispose();

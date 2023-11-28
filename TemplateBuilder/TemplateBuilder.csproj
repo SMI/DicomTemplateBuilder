@@ -61,6 +61,10 @@
     <PackageReference Include="fo-dicom.Imaging.ImageSharp" Version="5.1.0" />
     <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.16" />
     <PackageReference Include="HIC.DicomTypeTranslation" Version="4.0.3" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.10.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="ObjectListView.Repack.NET6Plus" Version="2.9.4" />
     <PackageReference Include="fernandreu.ScintillaNET" Version="4.2.0" />
     <ProjectReference Include="..\Repopulator\Repopulator.csproj" />

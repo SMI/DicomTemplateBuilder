@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,7 +21,6 @@ using WeifenLuo.WinFormsUI.Docking;
 using DatabaseType = FAnsi.DatabaseType;
 using System.Runtime.InteropServices;
 using FellowOakDicom.Imaging;
-using System.IO.Compression;
 using System.Runtime.Versioning;
 
 namespace TemplateBuilder;
@@ -31,15 +29,15 @@ namespace TemplateBuilder;
 public partial class Form1 : Form
 {
     private string _filename;
-    private Scintilla _scintillaTemplate;
-    private Scintilla _scintillaSql;
+    private readonly Scintilla _scintillaTemplate;
+    private readonly Scintilla _scintillaSql;
     bool _setupFinished = false;
 
 
-    DockContent dcDicoms = new() {HideOnClose = true};
-    DockContent dcSql = new() {HideOnClose = true};
-    DockContent dcYaml = new() {HideOnClose = true};
-    DockContent dcTable = new() {HideOnClose = true};
+    readonly DockContent dcDicoms = new() {HideOnClose = true};
+    readonly DockContent dcSql = new() {HideOnClose = true};
+    readonly DockContent dcYaml = new() {HideOnClose = true};
+    readonly DockContent dcTable = new() {HideOnClose = true};
 
     public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
@@ -48,8 +46,8 @@ public partial class Form1 : Form
         InitializeComponent();
 
 
-        _scintillaTemplate = new() {AllowDrop = true};
-        _scintillaSql = new();
+        _scintillaTemplate = new Scintilla {AllowDrop = true};
+        _scintillaSql = new Scintilla();
 
         ImplementationManager.Load<MicrosoftSQLImplementation>();
         ImplementationManager.Load<MySqlImplementation>();
@@ -57,16 +55,17 @@ public partial class Form1 : Form
         ImplementationManager.Load<PostgreSqlImplementation>();
 
         new DicomSetupBuilder()
-            .RegisterServices(s => s.AddFellowOakDicom().AddImageManager<ImageSharpImageManager>())
+            .RegisterServices(static s => s.AddFellowOakDicom().AddImageManager<ImageSharpImageManager>())
             .Build();
 
-        autoComplete = new();
-
-        autoComplete.Add("Tables");
-        autoComplete.Add("TableName");
-        autoComplete.Add("ColumnName");
-        autoComplete.Add("AllowNulls");
-        autoComplete.Add("IsPrimaryKey");
+        autoComplete = new List<string>
+        {
+            "Tables",
+            "TableName",
+            "ColumnName",
+            "AllowNulls",
+            "IsPrimaryKey"
+        };
 
         foreach (string keyword in DicomDictionary.Default.Select(e => e.Keyword).Distinct())
             autoComplete.Add(keyword);
@@ -83,7 +82,7 @@ public partial class Form1 : Form
             {dcTable, DockState.DockBottom},
             {dcDicoms, DockState.DockRight},
             {dcSql, DockState.Document},
-            {dcYaml, DockState.Document},
+            {dcYaml, DockState.Document}
         };
 
 
@@ -378,12 +377,12 @@ public partial class Form1 : Form
     }
 
 
-    private void GoToOnlineTemplates()
+    private static void GoToOnlineTemplates()
     {
         OpenBrowser("https://github.com/SMI/DicomTypeTranslation/tree/develop/Templates");
     }
 
-    public static void OpenBrowser(string url)
+    private static void OpenBrowser(string url)
     {
         try
         {

@@ -10,7 +10,7 @@ namespace Repopulator.TagUpdaters
         public virtual void UpdateTags(RepopulatorJob job)
         {
             foreach (var col in job.Map.TagColumns)
-                foreach (DicomTag dicomTag in col.TagsToPopulate)
+                foreach (var dicomTag in col.TagsToPopulate)
                     UpdateTag(dicomTag, job.File.Dataset, job.Cells[col.Index]);
         }
 
@@ -24,11 +24,11 @@ namespace Repopulator.TagUpdaters
     /// </summary>
     class ParseStringsUpdater : TagUpdater
     {
-        private TypeDeciderFactory _factory;
+        private readonly TypeDeciderFactory _factory;
 
         public ParseStringsUpdater(CultureInfo culture)
         {
-            _factory = new(culture);
+            _factory = new TypeDeciderFactory(culture);
         }
 
         protected override void UpdateTag(DicomTag dicomTag, DicomDataset dataset, string cellValue)
@@ -48,7 +48,7 @@ namespace Repopulator.TagUpdaters
         }
         private class Ignore : IDataTypeSize
         {
-            private static IDataTypeSize _instance = new Ignore();
+            private static readonly IDataTypeSize _instance = new Ignore();
 
             public DecimalSize Size { get; set; } = new();
             public int? Width { get; set; }
@@ -59,7 +59,7 @@ namespace Repopulator.TagUpdaters
 
 
     /// <summary>
-    /// Updater which calls <see cref="DicomDataset.AddOrUpdate(Dicom.DicomItem[])"/> directly with the string value.  This
+    /// Updater which calls <see cref="DicomDataset.AddOrUpdate(FellowOakDicom.DicomItem[])"/> directly with the string value.  This
     /// can result in successful writes that break on read attempts in downstream components
     /// </summary>
     class NaiveUpdater : TagUpdater

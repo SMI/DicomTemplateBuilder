@@ -9,7 +9,8 @@ namespace Repopulator.Matchers
     {
         protected DicomRepopulatorOptions Options { get; }
         protected CsvToDicomTagMapping Map { get; }
-        public RepopulatorMatcher(CsvToDicomTagMapping map, DicomRepopulatorOptions options)
+
+        protected RepopulatorMatcher(CsvToDicomTagMapping map, DicomRepopulatorOptions options)
         {
             Options = options;
             Map = map;

@@ -130,14 +130,14 @@ public partial class RepopulatorUI : UserControl
             BrowseForFolder(tbOutputFolder);
     }
 
-    private void BrowseForFolder(TextBox destinationTextBox)
+    private static void BrowseForFolder(TextBox destinationTextBox)
     {
         using var ofd = new FolderBrowserDialog();
         if (ofd.ShowDialog() == DialogResult.OK)
             destinationTextBox.Text = ofd.SelectedPath;
     }
 
-    private void BrowseForFile(TextBox destinationTextBox, string filter)
+    private static void BrowseForFile(TextBox destinationTextBox, string filter)
     {
         using var ofd = new OpenFileDialog {CheckPathExists = true, Filter = filter, Multiselect = false};
         try
@@ -179,9 +179,9 @@ public partial class RepopulatorUI : UserControl
         task.Start();
     }
 
-    private string UnpackException(AggregateException exception)
+    private static string UnpackException(AggregateException exception)
     {
-        return string.Join(Environment.NewLine,exception.InnerExceptions.Select(e=>e.Message));
+        return string.Join(Environment.NewLine,exception.InnerExceptions.Select(static e=>e.Message));
     }
 
     private void tb_TextChanged(object sender, EventArgs e)

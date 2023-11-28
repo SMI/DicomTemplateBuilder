@@ -18,7 +18,7 @@ namespace Repopulator
         /// <summary>
         /// The column should be a top level subfolder under which to create files e.g. PatientID
         /// </summary>
-        SubFolder,
+        SubFolder
     }
 
     public class CsvToDicomColumn
@@ -44,7 +44,7 @@ namespace Repopulator
 
             if (mappedTags != null)
             {
-                var sq = mappedTags.FirstOrDefault(t => t.DictionaryEntry.ValueRepresentations.Contains(DicomVR.SQ));
+                var sq = mappedTags.FirstOrDefault(static t => t.DictionaryEntry.ValueRepresentations.Contains(DicomVR.SQ));
                 if(sq != null)
                     throw new ArgumentException($"Sequence tags are not supported ({sq.DictionaryEntry.Keyword})");
             }
@@ -52,7 +52,7 @@ namespace Repopulator
 
             Name = colName;
             Index = index;
-            TagsToPopulate = new(mappedTags?? Array.Empty<DicomTag>());
+            TagsToPopulate = new HashSet<DicomTag>(mappedTags?? Array.Empty<DicomTag>());
             Role = role;
         }
     }
