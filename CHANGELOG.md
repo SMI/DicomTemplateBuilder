@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.3] - 2024-03-19
+
+- Build on .Net 7.0 rather than 6.0
+- Bump CsvHelper from 30.0.1 to 31.0.2
+- Bump fo-dicom from 5.0.3 to 5.1.2
+- Bump fo-dicom.Imaging.ImageSharp from 5.0.3 to 5.1.2
+- Bump HIC.BadMedicine.Dicom from 0.0.15 to 0.0.16
+- Bump HIC.DicomTypeTranslation from 4.0.1 to 4.0.3
+- Bump System.Resources.Extensions from 4.6.0 to 7.0.0
+- Bump System.Threading.AccessControl from 7.0.0 to 8.0.0
+
 ## [2.2.2] - 2022-12-17
 
 - Fix Authenticode signing of Windows exe files
@@ -111,7 +122,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial version
 
 
-[Unreleased]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.2.1...develop
+[Unreleased]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.2.3...main
+[2.2.3]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.2.2...v2.2.3
+[2.2.2]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.2.1...v2.2.2
 [2.2.1]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/SMI/DicomTemplateBuilder/compare/v2.0.0...v2.1.0
