@@ -1,5 +1,9 @@
 using System.Reflection;
 
+#if WINDOWS
+[assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("windows")]
+#endif
+
 [assembly: AssemblyCompany("Health Informatics Centre, University of Dundee")]
 [assembly: AssemblyProduct("Dicom Template Builder")]
 [assembly: AssemblyCopyright("Copyright (c) 2018 - 2019")]
