@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.3] - 2024-03-19
 
-- Build on .Net 7.0 rather than 6.0
+- Build on .Net 8.0 rather than 7.0
 - Bump CsvHelper from 30.0.1 to 31.0.2
 - Bump fo-dicom from 5.0.3 to 5.1.2
 - Bump fo-dicom.Imaging.ImageSharp from 5.0.3 to 5.1.2
