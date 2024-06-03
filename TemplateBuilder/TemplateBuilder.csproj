@@ -59,7 +59,7 @@
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.0" />
     <PackageReference Include="fo-dicom" Version="5.1.2" />
     <PackageReference Include="fo-dicom.Imaging.ImageSharp" Version="5.1.2" />
-    <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.0.16" />
+    <PackageReference Include="HIC.BadMedicine.Dicom" Version="0.1.0" />
     <PackageReference Include="HIC.DicomTypeTranslation" Version="4.1.1" />
     <PackageReference Include="ObjectListView.Repack.NET6Plus" Version="2.9.4" />
     <PackageReference Include="fernandreu.ScintillaNET" Version="4.2.0" />
