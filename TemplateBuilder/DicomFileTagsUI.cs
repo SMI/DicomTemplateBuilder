@@ -9,6 +9,7 @@ using FellowOakDicom.Imaging;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Formats.Png;
 using System.Runtime.Versioning;
+using SixLabors.ImageSharp.Formats;
 
 namespace TemplateBuilder;
 
@@ -39,7 +40,7 @@ public partial class DicomFileTagsUI : UserControl
             {
                 using var renderedImage = new DicomImage(dicom.Dataset).RenderImage().AsSharpImage();
                 using MemoryStream ms = new();
-                renderedImage.Save(ms,renderedImage.GetConfiguration().ImageFormatsManager.GetEncoder(PngFormat.Instance));
+                renderedImage.Save(ms,new ImageFormatManager().GetEncoder(PngFormat.Instance));
                 ms.Seek(0, SeekOrigin.Begin);
                 DicomImage = new Bitmap(ms);
                 pictureBox1.Image = DicomImage;

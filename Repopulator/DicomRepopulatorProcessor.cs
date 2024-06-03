@@ -44,8 +44,8 @@ namespace Repopulator
         {
             MemoryLogTarget.Layout = "${level} ${message}";
 
-            if(LogManager.Configuration == null)
-                SimpleConfigurator.ConfigureForTargetLogging(MemoryLogTarget,LogLevel.Trace);
+            if (LogManager.Configuration == null)
+                LogManager.Setup().LoadConfiguration(c=>c.ForLogger(LogLevel.Trace).WriteTo(MemoryLogTarget));
             else
             {
                 // specify what gets logged to the above target
