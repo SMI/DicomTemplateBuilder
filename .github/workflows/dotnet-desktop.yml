@@ -30,7 +30,7 @@ jobs:
         perl lcov-fix.pl < lcov.bad > lcov.info
 
     - name: Upload coverage report
-      uses: coverallsapp/github-action@v2.3.0
+      uses: coverallsapp/github-action@v2.3.1
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
         path-to-lcov: lcov.info
