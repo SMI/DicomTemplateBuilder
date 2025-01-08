@@ -6,21 +6,12 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - id: signtool
-      name: Find signtool.exe
-      shell: cmd
-      run: where /f /r "%programfiles(x86)%\windows kits\10\bin" signtool.exe|for /f "delims=" %%s in ('find "\x64\"') do @echo signtool=%%s > %GITHUB_OUTPUT%
-      
+
     - name: Checkout
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    # Install the .NET Core workload
     - name: Install .NET 8 SDK
       uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
   
     - name: Build and test the application
       shell: cmd
