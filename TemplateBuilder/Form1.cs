@@ -1,27 +1,28 @@
 ﻿using BrightIdeasSoftware;
-using FellowOakDicom;
-using DicomTypeTranslation;
+using DatabaseType = FAnsi.DatabaseType;
 using DicomTypeTranslation.TableCreation;
+using DicomTypeTranslation;
 using FAnsi.Discovery;
 using FAnsi.Implementation;
 using FAnsi.Implementations.MicrosoftSQL;
+using FAnsi.Implementations.MySql;
+using FAnsi.Implementations.Oracle;
+using FAnsi.Implementations.PostgreSql;
+using FellowOakDicom.Imaging;
+using FellowOakDicom;
 using ScintillaNET;
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Windows.Forms;
-using FAnsi.Implementations.MySql;
-using FAnsi.Implementations.Oracle;
-using FAnsi.Implementations.PostgreSql;
+using System;
 using WeifenLuo.WinFormsUI.Docking;
-using DatabaseType = FAnsi.DatabaseType;
-using System.Runtime.InteropServices;
-using FellowOakDicom.Imaging;
-using System.Runtime.Versioning;
 
 namespace TemplateBuilder;
 
@@ -39,6 +40,7 @@ public partial class Form1 : Form
     readonly DockContent dcYaml = new() {HideOnClose = true};
     readonly DockContent dcTable = new() {HideOnClose = true};
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
     public Form1()

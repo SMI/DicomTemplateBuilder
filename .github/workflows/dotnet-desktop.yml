@@ -10,7 +10,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install .NET 8 SDK
+    - name: Install .NET SDK
       uses: actions/setup-dotnet@v4
   
     - name: Build and test the application
