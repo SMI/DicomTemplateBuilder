@@ -39,6 +39,7 @@ public partial class Form1 : Form
     readonly DockContent dcYaml = new() {HideOnClose = true};
     readonly DockContent dcTable = new() {HideOnClose = true};
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Dictionary<DockContent,DockState> DefaultDockLocations { get; set; }
 
     public Form1()
