@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>3b0e5ac1-5439-470c-832d-7de566b22cd8</ProjectGuid>
     <AssemblyTitle>Repopulator</AssemblyTitle>
@@ -10,7 +10,7 @@
     <Content Include="..\TemplateBuilder\NLog.config" Link="NLog.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="CsvHelper" Version="33.1.0" />
     <PackageReference Include="HIC.DicomTypeTranslation" Version="4.1.5" />
   </ItemGroup>
   <ItemGroup>
